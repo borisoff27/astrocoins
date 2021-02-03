@@ -1,5 +1,6 @@
 """
     1. Ррасчет процентов
+    2. Удаление записи из словаря после удаления строки
 """
 
 from PyQt5.QtWidgets import *
@@ -51,6 +52,7 @@ for d in dates.keys():
     dates[d] = days
     start_day = start_day.addDays(1)
 
+
 class PaddingDelegate(QStyledItemDelegate):  # отступ вначале ячейки таблицы
     def __init__(self, padding=1, parent=None):
         super(PaddingDelegate, self).__init__(parent)
@@ -99,12 +101,13 @@ class TableWidget(QTableWidget):
     #         print("Left button click!")
     #     return QTableWidget.mousePressEvent(self, event)
 
+
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
         # переменные
-        self.groups_btn_list = [] # список кнопок выбора текущей группы сегодня
-        self.achievement_chb_list = [] # список чекбоксов для выбора достижения
+        self.groups_btn_list = []  # список кнопок выбора текущей группы сегодня
+        self.achievement_chb_list = []  # список чекбоксов для выбора достижения
 
         # виджеты
         self.groups_list_layout = QHBoxLayout()
@@ -221,21 +224,14 @@ class MainWidget(QWidget):
                 self.open_table()
 
     def pupils_load(self):
-        group = {None: []}
-        filename = str(self.group_name_lbl.text()) + ".json"
+        # group = {None: []}
+        # filename = str(self.group_name_lbl.text()) + ".json"
         with open("data.json", 'r', encoding="utf-8") as file:
             group = json.load(file)
-        for row in range(self.table.rowCount()):
-            if self.table.item(row, 0) is not None:
-                if self.table.item(row, 0).text() in group[str(self.group_name_lbl.text())]:
-                    group[str(self.group_name_lbl.text())].remove(self.table.item(row, 0).text())
-            else:
-                break
-
+        row = 0
         for p in group[str(self.group_name_lbl.text())]:
             if self.table.item(row, 0) is not None:
-                row += 1
-                continue
+                return
             else:
                 self.table.setItem(row, 0, QTableWidgetItem(p))
             row += 1
@@ -290,7 +286,7 @@ class MainWidget(QWidget):
             group_dates.insert(0, "Фамилия Имя")
             self.table.setHorizontalHeaderLabels(group_dates)
         except:
-            print("Что-то не так")
+            print("Что-то не так при создании шаблона страницы")
         else:
             try:
                 self.open_file()
@@ -298,17 +294,14 @@ class MainWidget(QWidget):
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
                     for col in range(1, self.table.columnCount()):
-                        print(self.pupil[pup])
-                        print(self.table.horizontalHeaderItem(col).text())
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]
-                            self.table.setItem(row, col, QTableWidgetItem(str(len(value)*10)))
+                            self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10)))
                     row += 1
-            except:
-                print("Опять что-то не так")
+            except :
+                print("Опять что-то не так, но уже при загрузке данных из файла")
             finally:
                 self.pupils_load()
-
 
     def cell_fill(self):
         # обработка нажатия на каждый чекбокс
@@ -323,7 +316,8 @@ class MainWidget(QWidget):
                     if chb.checkState():
                         points += 1
                         self.pupil[key][value].append(chb.text())
-                self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(points*10)))
+                self.table.setItem(self.table.currentRow(), self.table.currentColumn(),
+                                   QTableWidgetItem(str(points * 10)))
             except:
                 print("Нужно выбрать ячейку")
 
@@ -343,7 +337,6 @@ class MainWidget(QWidget):
                         chb.setCheckState(0)
         except:
             pass
-
 
     def test(self):
         pass
