@@ -1,6 +1,7 @@
 """
-    1. Ррасчет процентов
-    2. Удаление записи из словаря после удаления строки
+    1. Запись замечаний в файл
+    2. Переделать список достижений в файле в двумерный список для второго элмента - замечаний
+    3.
 """
 
 from PyQt5.QtWidgets import *
@@ -90,6 +91,7 @@ class TableWidget(QTableWidget):
 
         if action == del_row_menu:
             current_row_index = self.currentRow()
+            del main_win.pupil[self.item(current_row_index, 0).text()]
             self.removeRow(current_row_index)
             self.setRowCount(10)
 
@@ -119,6 +121,12 @@ class MainWidget(QWidget):
         self.table = TableWidget(10, 1)
         self.add_table_col_btn = QPushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
+        self.reprimands_amount = QLineEdit()
+        self.reprimands_amount.setReadOnly(True)
+        self.reprimands_amount.setText("0")
+        self.reprimands_amount.setAlignment(Qt.AlignCenter)
+        self.inc_repr_btn = QPushButton("▲")
+        self.dec_repr_btn = QPushButton("▼")
         self.save_btn = QPushButton("Сохранить")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
@@ -157,13 +165,19 @@ class MainWidget(QWidget):
             chb.setStyleSheet(achievement_style_sheet)
             self.achievement_chb_list.append(chb)
             achievements_layout.addWidget(self.achievement_chb_list[_])
-        achievements_layout.addWidget(self.save_btn)
+
+        reprimand_layout = QHBoxLayout()
+        reprimand_layout.addWidget(QLabel("Количество замечаний:"))
+        reprimand_layout.addWidget(self.reprimands_amount)
+        reprimand_layout.addWidget(self.inc_repr_btn)
+        reprimand_layout.addWidget(self.dec_repr_btn)
+        achievements_layout.addLayout(reprimand_layout)
         self.achievements_gb.setLayout(achievements_layout)
 
         table_layout = QVBoxLayout()
         table_layout.addLayout(nav_layout)
         table_layout.addWidget(self.table)
-        table_layout.addWidget(self.add_table_col_btn)
+        table_layout.addWidget(self.save_btn)
 
         top_layout = QHBoxLayout()
         top_layout.addLayout(table_layout, stretch=2)
@@ -216,6 +230,7 @@ class MainWidget(QWidget):
         finally:
             for chb in self.achievement_chb_list:
                 chb.setCheckState(0)
+            self.reprimands_amount.setText("0")
 
     def button_click(self):
         for b in self.groups_btn_list:
@@ -237,13 +252,6 @@ class MainWidget(QWidget):
             row += 1
 
     def save_table_to_file(self):
-        # t = self.table
-        # self.pupil.clear()
-        # for row in range(t.rowCount()):
-        #     self.pupil[self.group_name_lbl.text()] = []
-        #     for col in range(1, t.columnCount()):
-        #         if t.item(row, col) is not None:
-        #             self.pupil[self.group_name_lbl.text()].append(t.item(row, col).text())
         try:
             if len(self.pupil) > 0:
                 filename = str(self.group_name_lbl.text()) + ".json"
@@ -251,8 +259,6 @@ class MainWidget(QWidget):
                     json.dump(self.pupil, file, sort_keys=True, ensure_ascii=False)
         except:
             print("Ошибка при сохранении файла")
-        finally:
-            self.pupil.clear()
 
     def open_file(self):
         try:
@@ -284,6 +290,8 @@ class MainWidget(QWidget):
                     break
             group_dates = [str(_) for _ in dates[d]]
             group_dates.insert(0, "Фамилия Имя")
+            group_dates.append("ИТОГО")
+            self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
         except:
             print("Что-то не так при создании шаблона страницы")
@@ -293,41 +301,47 @@ class MainWidget(QWidget):
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
-                    for col in range(1, self.table.columnCount()):
+                    sum = 0
+                    for col in range(1, self.table.columnCount()-1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]
                             self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10)))
+                            sum += len(value) * 10
+                    self.table.setItem(row, col+1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
                     row += 1
-            except :
+            except:
                 print("Опять что-то не так, но уже при загрузке данных из файла")
             finally:
                 self.pupils_load()
 
     def cell_fill(self):
         # обработка нажатия на каждый чекбокс
-        # self.pupil = {None: {None: []}}
         if self.table.currentColumn() != 0:
             try:
                 points = 0
                 key = self.table.item(self.table.currentRow(), 0).text()
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-                self.pupil[key] = {value: []}
+                _ach_lst = []
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
                         points += 1
-                        self.pupil[key][value].append(chb.text())
-                self.table.setItem(self.table.currentRow(), self.table.currentColumn(),
-                                   QTableWidgetItem(str(points * 10)))
+                        _ach_lst.append(chb.text())
+                        # self.pupil[key][value].append(chb.text())
+                if key not in self.pupil:
+                    self.pupil[key] = {value: None}
+                self.pupil[key][value] = _ach_lst
+                self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(points * 10)))
+                self.pupil[key]["Замечания"] = int(self.reprimands_amount.text())
             except:
                 print("Нужно выбрать ячейку")
 
     def cell_select(self):
+        self.reprimands_amount.setText("0")
         for chb in self.achievement_chb_list:
             chb.setCheckState(0)
         try:
             t = self.table
-            if t.item(t.currentRow(), t.currentColumn()) != None:
-                # data = t.item(t.currentRow(), t.currentColumn()).text()
+            if t.item(t.currentRow(), t.currentColumn()) is not None:
                 key = self.table.item(self.table.currentRow(), 0).text()
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 for chb in self.achievement_chb_list:
@@ -337,6 +351,45 @@ class MainWidget(QWidget):
                         chb.setCheckState(0)
         except:
             pass
+
+    def inc_repr(self):
+        count = int(self.reprimands_amount.text()) + 1
+        self.reprimands_amount.setText(str(count))
+        if self.table.currentItem() is not None:
+            key = self.table.item(self.table.currentRow(), 0).text()
+            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
+            current_value = len(self.pupil[key][value])*10
+            current_value -= count * 10
+            self.table.currentItem().setText(str(current_value))
+        # self.pupil[key][value].append(count)
+        self.calculate_sum()
+
+    def dec_repr(self):
+        count = int(self.reprimands_amount.text())
+        if count > 0:
+            count -= 1
+            self.reprimands_amount.setText(str(count))
+        if self.table.currentItem() is not None:
+            key = self.table.item(self.table.currentRow(), 0).text()
+            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
+            current_value = int(self.table.currentItem().text())
+            current_value = len(self.pupil[key][value]) * 10
+            current_value -= count * 10
+            self.table.currentItem().setText(str(current_value))
+        # self.pupil[key][value].append(count)
+        self.calculate_sum()
+
+    def calculate_sum(self):
+        self.table.setFocus()
+        for row in range(self.table.rowCount()):
+            if self.table.item(row, 0) is not None:
+                total_sum = 0
+                for col in range(1, self.table.columnCount()-1):
+                    if self.table.item(row, col) is not None:
+                        total_sum += int(self.table.item(row, col).text())
+                self.table.setItem(row, col+1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
+            else:
+                return
 
     def test(self):
         pass
@@ -348,6 +401,8 @@ class MainWidget(QWidget):
             chb.clicked.connect(self.cell_fill)
         self.table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
+        self.inc_repr_btn.clicked.connect(self.inc_repr)
+        self.dec_repr_btn.clicked.connect(self.dec_repr)
 
 
 if __name__ == "__main__":
