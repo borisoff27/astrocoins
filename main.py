@@ -1,7 +1,7 @@
 """
     1. Запись замечаний в файл
     2. Переделать список достижений в файле в двумерный список для второго элмента - замечаний
-    3.
+    3. Расчет итоговой суммы при вводе данных (исправить)
 """
 
 from PyQt5.QtWidgets import *
@@ -107,6 +107,7 @@ class TableWidget(QTableWidget):
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
+
         # переменные
         self.groups_btn_list = []  # список кнопок выбора текущей группы сегодня
         self.achievement_chb_list = []  # список чекбоксов для выбора достижения
