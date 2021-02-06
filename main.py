@@ -119,7 +119,7 @@ class MainWidget(QWidget):
         self.next_btn = QPushButton("▶")
         self.group_name_lbl = QLabel("Группа")
         self.group_name_lbl.setAlignment(Qt.AlignCenter)
-        self.table = TableWidget(10, 1)
+        self.table = TableWidget(9, 1)
         self.add_table_col_btn = QPushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.reprimands_amount = QLineEdit()
@@ -140,6 +140,7 @@ class MainWidget(QWidget):
         self.choose_day()
         self.widgets_location()
         self.connects()
+        self.setWindowTitle("✨Астрокойны💰")
         self.showMaximized()
 
     def widgets_location(self):
@@ -161,8 +162,16 @@ class MainWidget(QWidget):
                     height: 40px;
                 }
                 '''
-        for _ in range(len(achievements_list)):
-            chb = QCheckBox(achievements_list[_])
+        chb_names = [
+            "😎 Посещение",
+            "⏰ Пунктуальность",
+            "✋ Ответы на вопросы преподавателя",
+            "✅ Выполнение основных заданий",
+            "⭐ Выполнение бонусных заданий",
+            "🏠 Выполнение дополнительных заданий",
+            "🤝 Помощь нуждающимся"]
+        for _ in range(len(chb_names)):
+            chb = QCheckBox(chb_names[_])
             chb.setStyleSheet(achievement_style_sheet)
             self.achievement_chb_list.append(chb)
             achievements_layout.addWidget(self.achievement_chb_list[_])
@@ -326,13 +335,13 @@ class MainWidget(QWidget):
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
                         points += 1
-                        _ach_lst.append(chb.text())
+                        _ach_lst.append(chb.text()[2:])
                         # self.pupil[key][value].append(chb.text())
                 if key not in self.pupil:
                     self.pupil[key] = {value: None}
                 self.pupil[key][value] = _ach_lst
                 self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(points * 10)))
-                self.pupil[key]["Замечания"] = int(self.reprimands_amount.text())
+                # self.pupil[key]["Замечания"] = int(self.reprimands_amount.text())
             except:
                 print("Нужно выбрать ячейку")
 
@@ -346,12 +355,13 @@ class MainWidget(QWidget):
                 key = self.table.item(self.table.currentRow(), 0).text()
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 for chb in self.achievement_chb_list:
-                    if chb.text() in self.pupil[key][value]:
+                    print(chb.text()[2:])
+                    if chb.text()[2:] in self.pupil[key][value]:
                         chb.setCheckState(1)
                     else:
                         chb.setCheckState(0)
         except:
-            pass
+            print("Не сработала функция cell_select")
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
