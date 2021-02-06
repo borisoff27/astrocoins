@@ -70,15 +70,23 @@ class PaddingDelegate(QStyledItemDelegate):  # отступ вначале яч�
         editor.setTextMargins(margins)
         return editor
 
+class PushButton(QPushButton):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        button_style = """
+            background-color: #833AE0;
+            color: #FFFFFF;
+            font-size: 15pt;
+            border-radius: 15px;
+            padding: 10px;
+        """
+        self.setStyleSheet(button_style)
 
 class TableWidget(QTableWidget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        table_style = """
-            QTableWidget:item {font-size: 12px}
-        """
-        self.setStyleSheet(table_style)
+
         self.setFont(QFont(None, 15))
         # добавление отступа вначале ячейки
         self.delegate = PaddingDelegate()
@@ -115,20 +123,21 @@ class MainWidget(QWidget):
         # виджеты
         self.groups_list_layout = QHBoxLayout()
         self.setFont(QFont("Times", 12))
-        self.prev_btn = QPushButton("◀")
-        self.next_btn = QPushButton("▶")
+        self.prev_btn = PushButton("◀")
+        self.next_btn = PushButton("▶")
         self.group_name_lbl = QLabel("Группа")
         self.group_name_lbl.setAlignment(Qt.AlignCenter)
         self.table = TableWidget(9, 1)
-        self.add_table_col_btn = QPushButton("Добавить столбец")
+        self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
+        self.achievements_gb.setStyleSheet("background-color: #833AE0; color: #FFF;")
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
         self.reprimands_amount.setAlignment(Qt.AlignCenter)
-        self.inc_repr_btn = QPushButton("▲")
-        self.dec_repr_btn = QPushButton("▼")
-        self.save_btn = QPushButton("Сохранить")
+        self.inc_repr_btn = PushButton("▲")
+        self.dec_repr_btn = PushButton("▼")
+        self.save_btn = PushButton("Сохранить")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
         self.calendar = QCalendarWidget()
@@ -140,9 +149,26 @@ class MainWidget(QWidget):
         self.choose_day()
         self.widgets_location()
         self.connects()
+        self.visualisation()
         self.setWindowTitle("✨Астрокойны💰")
         self.showMaximized()
 
+    def visualisation(self):
+        win_style = """
+            background-color: #FFEC99;
+            color: #2B2235;
+        """
+        self.setStyleSheet(win_style)
+        table_style = """
+                    QTableWidget:item {font-size: 12px}
+                """
+        header_style = """::section{background-color:#D9BBFF;
+                                    font-weight: bold;}"""
+        self.table.horizontalHeader().setStyleSheet(header_style)
+        self.table.verticalHeader().setStyleSheet(header_style)
+        # for _ in range(self.columnCount()):
+        #     self.horizontalHeaderItem(_).setBackground(QColor(255, 0, 0))
+        # self.setStyleSheet(table_style)
     def widgets_location(self):
         nav_layout = QHBoxLayout()
         nav_layout.addWidget(self.prev_btn)
@@ -154,12 +180,13 @@ class MainWidget(QWidget):
         achievement_style_sheet = '''
                 QCheckBox {
                     spacing: 20px;
-                    font-size:18pt;     
+                    font-size:15pt;     
                 }
 
                 QCheckBox::indicator {
                     width:  40px;
                     height: 40px;
+                    /* background-color: #833AE0;*/
                 }
                 '''
         chb_names = [
@@ -284,7 +311,7 @@ class MainWidget(QWidget):
 
     def add_col(self):
         self.table.setColumnCount(int(self.table.columnCount()) + 1)
-        self.table.setColumnWidth(self.table.columnCount() - 1, 100)
+        # self.table.setColumnWidth(self.table.columnCount() - 1, 100)
 
     def open_table(self):
         # при открытии таблицы создается 1 столбец для ученика
@@ -313,6 +340,7 @@ class MainWidget(QWidget):
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
                     sum = 0
                     for col in range(1, self.table.columnCount()-1):
+                        self.table.setColumnWidth(col, 120) # почему-то при создании ширина столбца больше
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]
                             self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10)))
@@ -355,7 +383,6 @@ class MainWidget(QWidget):
                 key = self.table.item(self.table.currentRow(), 0).text()
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 for chb in self.achievement_chb_list:
-                    print(chb.text()[2:])
                     if chb.text()[2:] in self.pupil[key][value]:
                         chb.setCheckState(1)
                     else:
@@ -383,7 +410,6 @@ class MainWidget(QWidget):
         if self.table.currentItem() is not None:
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = int(self.table.currentItem().text())
             current_value = len(self.pupil[key][value]) * 10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
