@@ -2,6 +2,7 @@
     1. Запись замечаний в файл
     2. Переделать список достижений в файле в двумерный список для второго элмента - замечаний
     3. Расчет итоговой суммы при вводе данных (исправить)
+    4. Изменение фона при нажатии кнопки
 """
 
 from PyQt5.QtWidgets import *
@@ -74,11 +75,18 @@ class PushButton(QPushButton):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         button_style = """
+        QPushButton{
             background-color: #833AE0;
             color: #FFFFFF;
             font-size: 15pt;
             border-radius: 15px;
             padding: 10px;
+            }
+            QPushButton:pressed
+            {
+              border-left: 3px solid #2B2235;
+              border-top: 3px solid #2B2235;
+            }
         """
         self.setStyleSheet(button_style)
 
@@ -130,7 +138,7 @@ class MainWidget(QWidget):
         self.table = TableWidget(9, 1)
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
-        self.achievements_gb.setStyleSheet("background-color: #833AE0; color: #FFF;")
+        self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
