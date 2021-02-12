@@ -1,8 +1,21 @@
 """
-    1. Запись замечаний в файл
-    2. Переделать список достижений в файле в двумерный список для второго элмента - замечаний
+    1. Протестировать сохранение с загрузку
+    2. Сделать корректный расчет баллов и замечаний при загрузке и не только
     3. Расчет итоговой суммы при вводе данных (исправить)
-    4. Изменение фона при нажатии кнопки
+    4. Исправить все файлы под новую структуру
+"""
+
+"""
+Структура словаря
+pupil = {
+    "Фамилия Имя":{
+        ДД мес:{
+            "achievements": ["ачивка 1", "ачивка 2"],
+            "reprimands": 0,
+            "notes": "заметка об ученике в этот день"
+        }
+    }
+}
 """
 
 from PyQt5.QtWidgets import *
@@ -177,6 +190,7 @@ class MainWidget(QWidget):
         # for _ in range(self.columnCount()):
         #     self.horizontalHeaderItem(_).setBackground(QColor(255, 0, 0))
         # self.setStyleSheet(table_style)
+
     def widgets_location(self):
         nav_layout = QHBoxLayout()
         nav_layout.addWidget(self.prev_btn)
@@ -350,7 +364,7 @@ class MainWidget(QWidget):
                     for col in range(1, self.table.columnCount()-1):
                         self.table.setColumnWidth(col, 120) # почему-то при создании ширина столбца больше
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
-                            value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]
+                            value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["achievements"]
                             self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10)))
                             sum += len(value) * 10
                     self.table.setItem(row, col+1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
@@ -374,15 +388,17 @@ class MainWidget(QWidget):
                         _ach_lst.append(chb.text()[2:])
                         # self.pupil[key][value].append(chb.text())
                 if key not in self.pupil:
-                    self.pupil[key] = {value: None}
-                self.pupil[key][value] = _ach_lst
+                    self.pupil[key] = {value: {}}
+                    # self.pupil[key][value] = {"achievements": [], "reprimands": 0, "notes": ""}
+                self.pupil[key][value] = {"achievements": _ach_lst, "reprimands": int(self.reprimands_amount.text()), "notes": self.note_field.toPlainText()}
                 self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(points * 10)))
-                # self.pupil[key]["Замечания"] = int(self.reprimands_amount.text())
             except:
                 print("Нужно выбрать ячейку")
 
     def cell_select(self):
+        # self.pupil_fill()
         self.reprimands_amount.setText("0")
+        self.note_field.clear()
         for chb in self.achievement_chb_list:
             chb.setCheckState(0)
         try:
@@ -391,12 +407,25 @@ class MainWidget(QWidget):
                 key = self.table.item(self.table.currentRow(), 0).text()
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 for chb in self.achievement_chb_list:
-                    if chb.text()[2:] in self.pupil[key][value]:
+                    if chb.text()[2:] in self.pupil[key][value]["achievements"]:
                         chb.setCheckState(1)
                     else:
                         chb.setCheckState(0)
+                self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
+                self.note_field.setText(self.pupil[key][value]["notes"])
         except:
             print("Не сработала функция cell_select")
+
+
+    # закончил +- тут. Надо затестить сохранение и загрузку
+    def pupil_fill(self):
+        if self.table.currentItem():
+            # сделать редактирование только при клике на уже заполненную достижениями ячейку
+            key = self.table.item(self.table.currentRow(), 0).text()
+            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
+            self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
+            self.pupil[key][value]["notes"] = self.note_field.toPlainText()
+            c = 0
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
@@ -404,11 +433,12 @@ class MainWidget(QWidget):
         if self.table.currentItem() is not None:
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = len(self.pupil[key][value])*10
+            current_value = len(self.pupil[key][value]["achievements"])*10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
         # self.pupil[key][value].append(count)
         self.calculate_sum()
+        self.pupil_fill()
 
     def dec_repr(self):
         count = int(self.reprimands_amount.text())
@@ -418,11 +448,12 @@ class MainWidget(QWidget):
         if self.table.currentItem() is not None:
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = len(self.pupil[key][value]) * 10
+            current_value = len(self.pupil[key][value]["achievements"]) * 10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
         # self.pupil[key][value].append(count)
         self.calculate_sum()
+        self.pupil_fill()
 
     def calculate_sum(self):
         self.table.setFocus()
@@ -448,6 +479,7 @@ class MainWidget(QWidget):
         self.save_btn.clicked.connect(self.save_table_to_file)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
+        self.note_field.textChanged.connect(self.pupil_fill)
 
 
 if __name__ == "__main__":
