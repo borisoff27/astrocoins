@@ -257,6 +257,7 @@ class MainWidget(QWidget):
 
     def choose_day(self):
         try:
+            self.note_field.clear()
             current_day = self.calendar.selectedDate()
             weekday_name = current_day.shortDayName(current_day.dayOfWeek())
 
@@ -421,7 +422,6 @@ class MainWidget(QWidget):
     # закончил +- тут. Надо затестить сохранение и загрузку
     def pupil_fill(self):
         if self.table.currentItem():
-            # сделать редактирование только при клике на уже заполненную достижениями ячейку
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
             self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
