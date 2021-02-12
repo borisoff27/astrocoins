@@ -1,6 +1,6 @@
 """
     1. Протестировать сохранение с загрузку
-    2. Сделать корректный расчет баллов и замечаний при загрузке и не только
+    2. Сделать корректный расчет баллов и замечаний !при загрузке! и не только
     3. Расчет итоговой суммы при вводе данных (исправить)
     4. Исправить все файлы под новую структуру
 """
@@ -365,8 +365,9 @@ class MainWidget(QWidget):
                         self.table.setColumnWidth(col, 120) # почему-то при создании ширина столбца больше
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["achievements"]
-                            self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10)))
-                            sum += len(value) * 10
+                            rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
+                            self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10 - rep*10)))
+                            sum += len(value) * 10 - rep*10
                     self.table.setItem(row, col+1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
                     row += 1
             except:
@@ -396,9 +397,6 @@ class MainWidget(QWidget):
                 print("Нужно выбрать ячейку")
 
     def cell_select(self):
-        # self.pupil_fill()
-        self.reprimands_amount.setText("0")
-        self.note_field.clear()
         for chb in self.achievement_chb_list:
             chb.setCheckState(0)
         try:
@@ -413,6 +411,9 @@ class MainWidget(QWidget):
                         chb.setCheckState(0)
                 self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
                 self.note_field.setText(self.pupil[key][value]["notes"])
+            else:
+                self.reprimands_amount.setText("0")
+                self.note_field.clear()
         except:
             print("Не сработала функция cell_select")
 
@@ -436,7 +437,7 @@ class MainWidget(QWidget):
             current_value = len(self.pupil[key][value]["achievements"])*10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
-        # self.pupil[key][value].append(count)
+        self.pupil[key][value]["reprimands"] = count
         self.calculate_sum()
         self.pupil_fill()
 
@@ -451,7 +452,7 @@ class MainWidget(QWidget):
             current_value = len(self.pupil[key][value]["achievements"]) * 10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
-        # self.pupil[key][value].append(count)
+        self.pupil[key][value]["reprimands"] = count
         self.calculate_sum()
         self.pupil_fill()
 
