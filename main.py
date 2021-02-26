@@ -268,10 +268,12 @@ class MainWidget(QWidget):
             self.group_name_lbl.setText(groups_list_today[0])
 
             # очистка макета от всех кнопок для выбора сегодняшних групп
-            while self.groups_list_layout.count():
-                child = self.groups_list_layout.takeAt(0)
-                if child.widget():
-                    child.widget().deleteLater()
+            # while self.groups_list_layout.count():
+            #     child = self.groups_list_layout.takeAt(0)
+            #     if child.widget():
+            #         child.widget().deleteLater()
+            for i in reversed(range(self.groups_list_layout.count())):
+                self.groups_list_layout.itemAt(i).widget().setParent(None)
 
             self.groups_btn_list.clear()
             # создание переключателей для выбора текущей группы

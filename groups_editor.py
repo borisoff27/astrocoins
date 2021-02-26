@@ -25,6 +25,7 @@ class MainWidget(QWidget):
         self.edit_gr_name.setPlaceholderText("Название группы")
         self.rename_group_btn = QPushButton("Переименовать группу")
         self.rename_group_btn.setEnabled(False)
+        self.add_group_btn = QPushButton("➕")
         self.total_pupils_amount = QSpinBox()
         self.total_pupils_amount.setValue(9)
         self.table.setRowCount(self.total_pupils_amount.value())
@@ -36,6 +37,7 @@ class MainWidget(QWidget):
         group_name_layout = QHBoxLayout()
         group_name_layout.addWidget(self.edit_gr_name)
         group_name_layout.addWidget(self.rename_group_btn)
+        group_name_layout.addWidget(self.add_group_btn)
         # gb_edit_layout.setAlignment(Qt.AlignAbsolute)
         gb_edit_layout.addLayout(group_name_layout)
         pupils_amount_layout = QHBoxLayout()
@@ -60,6 +62,7 @@ class MainWidget(QWidget):
         self.load_from_file()
         self.edit_gr_name.textChanged.connect(self.enabled_rename_button)
         self.rename_group_btn.clicked.connect(self.rename_group)
+        self.add_group_btn.clicked.connect(self.add_group)
 
         self.showMaximized()
 
@@ -69,6 +72,7 @@ class MainWidget(QWidget):
         try:
             with open(filename, "r") as file:
                 self.data = json.load(file)
+                print(self.data)
         except FileNotFoundError as e:
             try:
                 with open(filename, "w") as file:
@@ -95,20 +99,26 @@ class MainWidget(QWidget):
     def fill_group_names(self):
         groups_layout = QVBoxLayout()
         groups_box = QButtonGroup()
+        self.gb_groups.hide()
         # очистка макета от всех кнопок для выбора сегодняшних групп
-        while groups_layout.count():
-            child = groups_layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
+        # while groups_layout.count():
+        #     child = groups_layout.takeAt(0)
+        #     if child.widget():
+        #         child.widget().deleteLater()
+
+        for i in reversed(range(groups_layout.count())):
+            groups_layout.itemAt(i).widget().setParent(None)
         for g in self.data:
-            _group_name = QRadioButton(g)
-            self.groups_list.append(_group_name)
-            groups_box.addButton(_group_name)
-            groups_layout.addWidget(_group_name)
+            for _ in g.keys(): # не сработало обновление списка кнопок при добавлении новой группы
+                _group_name = QRadioButton(_)
+                self.groups_list.append(_group_name)
+                groups_box.addButton(_group_name)
+                groups_layout.addWidget(_group_name)
+        self.gb_groups.show()
         self.gb_groups.setLayout(groups_layout)
-        # groups_box.setExclusive(False)
-        # self.groups_list[0].setChecked(True)
-        # groups_box.setExclusive(True)
+        groups_box.setExclusive(False)
+        self.groups_list[0].setChecked(True)
+        groups_box.setExclusive(True)
         self.fill_table()
 
     def fill_table(self):
@@ -118,28 +128,46 @@ class MainWidget(QWidget):
                 self.table.clear()
                 self.table.setHorizontalHeaderLabels(["Фамилия Имя"])
                 row = 0
-                for p in self.data[g.text()]:
-                    self.table.setItem(row, 0, QTableWidgetItem(p))
-                    row += 1
+                for p in self.data:
+                    if g.text() in p:
+                        for _ in p[g.text()]:
+                            self.table.setItem(row, 0, QTableWidgetItem(_)) # self.data[q.getText()]
+                            row += 1
                 self.edit_gr_name.setText(g.text())
                 return
             else:
                 continue
 
     def enabled_rename_button(self):
-        if self.edit_gr_name.text()  == self.current_group_name.text():
+        if self.edit_gr_name.text() == self.current_group_name.text():
             self.rename_group_btn.setEnabled(False)
         else:
             self.rename_group_btn.setEnabled(True)
 
     def rename_group(self):
-        self.data[self.edit_gr_name.text()] = self.data[self.current_group_name.text()]
-        del self.data[self.current_group_name.text()]
-        self.current_group_name.setText(self.edit_gr_name.text())
+        for dic in self.data:
+            if self.current_group_name.text() in dic:
+                dic[self.edit_gr_name.text()] = dic[self.current_group_name.text()]
+                del dic[self.current_group_name.text()]
+                self.current_group_name.setText(self.edit_gr_name.text())
+        self.enabled_rename_button()
         with open("data_test.json", "w") as file:
             json.dump(self.data, file, ensure_ascii=False)
         self.fill_group_names()
 
+    def add_group(self):
+        num, ok = QInputDialog.getText(self, "Куда добавить группу?", "Уажите номер группы по порядку, начиная с 1:")
+        if ok and num != "":
+            try:
+                num = int(num)
+            except:
+                print("Номер группы должен быть целым числом")
+            else:
+                self.data.insert(num-1,{self.edit_gr_name.text():[]})
+                self.table.clear()
+                with open("data_test.json", "w") as file:
+                    json.dump(self.data, file, ensure_ascii=False)
+                self.fill_group_names()
 
 
 
