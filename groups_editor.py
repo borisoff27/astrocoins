@@ -30,9 +30,10 @@ class MainWidget(QWidget):
         self.total_pupils_amount.setValue(9)
         self.table.setRowCount(self.total_pupils_amount.value())
         self.save_group = QPushButton("Сохранить")
-        self.remove_group = QPushButton("🗑")
+        self.remove_group_btn = QPushButton("🗑")
 
         # макет
+        self.groups_layout = QVBoxLayout()
         gb_edit_layout = QVBoxLayout()
         group_name_layout = QHBoxLayout()
         group_name_layout.addWidget(self.edit_gr_name)
@@ -46,7 +47,7 @@ class MainWidget(QWidget):
         gb_edit_layout.addLayout(pupils_amount_layout)
         buttons = QHBoxLayout()
         buttons.addWidget(self.save_group, stretch=9)
-        buttons.addWidget(self.remove_group, stretch=1)
+        buttons.addWidget(self.remove_group_btn, stretch=1)
         gb_edit_layout.addLayout(buttons)
 
         self.gb_edit.setLayout(gb_edit_layout)
@@ -63,6 +64,7 @@ class MainWidget(QWidget):
         self.edit_gr_name.textChanged.connect(self.enabled_rename_button)
         self.rename_group_btn.clicked.connect(self.rename_group)
         self.add_group_btn.clicked.connect(self.add_group)
+        self.remove_group_btn.clicked.connect(self.remove_group)
 
         self.showMaximized()
 
@@ -97,34 +99,30 @@ class MainWidget(QWidget):
                 rb.clicked.connect(self.fill_table)
 
     def fill_group_names(self):
-        groups_layout = QVBoxLayout()
         groups_box = QButtonGroup()
-        self.gb_groups.hide()
         # очистка макета от всех кнопок для выбора сегодняшних групп
-        # while groups_layout.count():
-        #     child = groups_layout.takeAt(0)
-        #     if child.widget():
-        #         child.widget().deleteLater()
+        while self.groups_layout.count():
+            child = self.groups_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
 
-        for i in reversed(range(groups_layout.count())):
-            groups_layout.itemAt(i).widget().setParent(None)
+        # for i in reversed(range(groups_layout.count())):
+            # groups_layout.itemAt(i).widget().setParent(None)
 
-        self.groups_list.clear() ######
         for g in self.data:
             for _ in g.keys(): # не сработало обновление списка кнопок при добавлении новой группы
                 _group_name = QRadioButton(_)
                 self.groups_list.append(_group_name)
                 groups_box.addButton(_group_name)
-                groups_layout.addWidget(_group_name)
-        self.gb_groups.show()
-        self.gb_groups.setLayout(groups_layout)
+                self.groups_layout.addWidget(_group_name)
+        self.gb_groups.setLayout(self.groups_layout)
         groups_box.setExclusive(False)
         self.groups_list[0].setChecked(True)
         groups_box.setExclusive(True)
         self.fill_table()
 
     def fill_table(self):
-        for g in self.groups_list:
+        for g in self.groups_list: ###############
             if g.isChecked():
                 self.current_group_name = g
                 self.table.clear()
@@ -171,6 +169,17 @@ class MainWidget(QWidget):
                     json.dump(self.data, file, ensure_ascii=False)
                 self.fill_group_names()
 
+    def remove_group(self):############## что-то не так при удалении группы второй раз, не закрывая программы
+        # возможно надо очищать список self.group_list
+        for dic in self.data:
+            if self.edit_gr_name.text() in dic:
+                # self.groups_list.remove(self.edit_gr_name.text())
+                self.data.remove(dic)
+                # del dic[self.current_group_name.text()]
+        self.enabled_rename_button()
+        with open("data_test.json", "w") as file:
+            json.dump(self.data, file, ensure_ascii=False)
+        self.fill_group_names()
 
 
 if __name__ == "__main__":
