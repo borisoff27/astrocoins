@@ -108,6 +108,8 @@ class MainWidget(QWidget):
 
         for i in reversed(range(groups_layout.count())):
             groups_layout.itemAt(i).widget().setParent(None)
+
+        self.groups_list.clear() ######
         for g in self.data:
             for _ in g.keys(): # не сработало обновление списка кнопок при добавлении новой группы
                 _group_name = QRadioButton(_)
