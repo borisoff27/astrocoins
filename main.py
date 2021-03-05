@@ -35,6 +35,7 @@ groups_list = [
     "СР 17-00 ВП",
     "СР 19-00 ГД",
     "ЧТ 9-30 ВП",
+    "ПТ 17-20 ГД",
     "ПТ 19-00 ПС2",
     "СБ 10-30 ВП",
     "СБ 12-30 ГД",
@@ -152,6 +153,10 @@ class MainWidget(QWidget):
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
+        self.bonus_ach = QSpinBox()
+        self.bonus_ach.setValue(1)
+        self.additional_ach = QSpinBox()
+        self.additional_ach.setValue(1)
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
@@ -216,14 +221,26 @@ class MainWidget(QWidget):
             "⏰ Пунктуальность",
             "✋ Ответы на вопросы преподавателя",
             "✅ Выполнение основных заданий",
+            "🤝 Помощь нуждающимся",
             "⭐ Выполнение бонусных заданий",
-            "🏠 Выполнение дополнительных заданий",
-            "🤝 Помощь нуждающимся"]
+            "🏠 Выполнение дополнительных заданий"]
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
             chb.setStyleSheet(achievement_style_sheet)
             self.achievement_chb_list.append(chb)
-            achievements_layout.addWidget(self.achievement_chb_list[_])
+            if _ == len(chb_names)-2:
+                row1 = QHBoxLayout()
+                row1.addWidget(self.achievement_chb_list[_])
+                row1.addWidget(self.bonus_ach)
+                achievements_layout.addLayout(row1)
+            elif _ == len(chb_names)-1:
+                row2 = QHBoxLayout()
+                row2.addWidget(self.achievement_chb_list[_])
+                row2.addWidget(self.additional_ach)
+                achievements_layout.addLayout(row2)
+            else:
+                achievements_layout.addWidget(self.achievement_chb_list[_])
+
 
         reprimand_layout = QHBoxLayout()
         reprimand_layout.addWidget(QLabel("Количество замечаний:"))
@@ -388,14 +405,19 @@ class MainWidget(QWidget):
                 _ach_lst = []
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
-                        points += 1
+                        if chb.text().find("бонусных") != -1:
+                            points += int(self.bonus_ach.value())/2
+                        elif chb.text().find("дополнительных") != -1:
+                            points += int(self.additional_ach.value())/2
+                        else:
+                            points += 1
                         _ach_lst.append(chb.text()[2:])
                         # self.pupil[key][value].append(chb.text())
                 if key not in self.pupil:
                     self.pupil[key] = {value: {}}
                     # self.pupil[key][value] = {"achievements": [], "reprimands": 0, "notes": ""}
                 self.pupil[key][value] = {"achievements": _ach_lst, "reprimands": int(self.reprimands_amount.text()), "notes": self.note_field.toPlainText()}
-                self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(points * 10)))
+                self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(int(points * 10))))
             except:
                 print("Нужно выбрать ячейку")
 
@@ -478,6 +500,8 @@ class MainWidget(QWidget):
         self.add_table_col_btn.clicked.connect(self.test)
         for chb in self.achievement_chb_list:
             chb.clicked.connect(self.cell_fill)
+        self.bonus_ach.valueChanged.connect(self.cell_fill)
+        self.additional_ach.valueChanged.connect(self.cell_fill)
         self.table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
