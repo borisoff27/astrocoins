@@ -2,7 +2,9 @@
     1. Протестировать сохранение с загрузку
     2. Сделать корректный расчет баллов и замечаний !при загрузке! и не только
     3. Расчет итоговой суммы при вводе данных (исправить)
-    4. Исправить все файлы под новую структуру
+    4. Обнулять счетчики бонусов и дополнительных
+    5. Изменить загрузку баллов в связи с обновлением
+
 """
 
 """
@@ -405,7 +407,11 @@ class MainWidget(QWidget):
                 _ach_lst = []
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
-                        if chb.text().find("бонусных") != -1:
+                        if chb.text().find("Посещение") != -1:
+                            points += 0.5
+                        elif chb.text().find("Пунктуальность") != -1:
+                            points += 1.5
+                        elif chb.text().find("бонусных") != -1:
                             points += int(self.bonus_ach.value())/2
                         elif chb.text().find("дополнительных") != -1:
                             points += int(self.additional_ach.value())/2
@@ -422,8 +428,11 @@ class MainWidget(QWidget):
                 print("Нужно выбрать ячейку")
 
     def cell_select(self):
+        # переделать обнуление всего в отдельную функцию
         for chb in self.achievement_chb_list:
             chb.setCheckState(0)
+        self.bonus_ach.setValue(1)
+        self.additional_ach.setValue(1)
         try:
             t = self.table
             if t.item(t.currentRow(), t.currentColumn()) is not None:
@@ -434,6 +443,8 @@ class MainWidget(QWidget):
                         chb.setCheckState(1)
                     else:
                         chb.setCheckState(0)
+                # self.bonus_ach.setValue(self.pupil[key][value]["achievements"][])
+                self.additional_ach.setValue(1)
                 self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
                 self.note_field.setText(self.pupil[key][value]["notes"])
             else:
