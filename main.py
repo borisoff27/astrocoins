@@ -1,5 +1,5 @@
 """
-    1. Что-то не так с замечаниями или рассчётом
+    1.
     2.
     3.
 
@@ -92,6 +92,7 @@ class PaddingDelegate(QStyledItemDelegate):
         editor.setTextMargins(margins)
         return editor
 
+
 class LineEdit(QLineEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -106,6 +107,7 @@ class LineEdit(QLineEdit):
             
         """
         self.setStyleSheet(le_style)
+
 
 class PushButton(QPushButton):
     def __init__(self, *args, **kwargs):
@@ -372,13 +374,14 @@ class MainWidget(QWidget):
             for i in range(len(groups_list_today)):
                 r_btn = QRadioButton(groups_list_today[i])
                 self.groups_btn_list.append(r_btn)
-                r_btn.setStyleSheet('QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40px; height: 40px;};')
+                r_btn.setStyleSheet(
+                    'QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40px; height: 40px;};')
                 self.groups_list_layout.addWidget(self.groups_btn_list[i])
             self.groups_btn_list[0].setChecked(1)
             self.groups_list_btn_gb.setLayout(self.groups_list_layout)
             self.button_click()
-        except:
-            print("Не срабтала функция choose_day")
+        except Exception as e:
+            print("Не срабтала функция choose_day", e)
         else:
             # т.к. кнопки создаются всякий раз при выборе дня, то и клики обрабатывать нужно всегдя по новой
             for self.b in self.groups_btn_list:
@@ -388,6 +391,7 @@ class MainWidget(QWidget):
 
     # выбор группы (клик по radiobutton)
     def button_click(self):
+        self.reset_flags()
         for b in self.groups_btn_list:
             if b.isChecked():
                 self.group_name_lbl.setText(b.text())
@@ -412,16 +416,16 @@ class MainWidget(QWidget):
                 filename = str(self.group_name_lbl.text()) + ".json"
                 with open(filename, 'w') as file:
                     json.dump(self.pupil, file, indent=4, sort_keys=True, ensure_ascii=False)
-        except:
-            print("Ошибка при сохранении файла")
+        except Exception as e:
+            print("Ошибка при сохранении файла", e)
 
     def open_file(self):
         try:
             self.pupil.clear()
             filename = str(self.group_name_lbl.text()) + ".json"
             file = open(filename, 'r')
-        except:
-            pass
+        except Exception as e:
+            print(e)
         else:
             self.pupil = json.load(file)
         finally:
@@ -440,26 +444,26 @@ class MainWidget(QWidget):
             self.table.clear()
             self.table.setColumnCount(1)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            for d in dates.keys():
+            for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
-                        self.calendar.selectedDate().dayOfWeek()).lower() == d.lower():
-                    for i in dates[d]:
+                        self.calendar.selectedDate().dayOfWeek()).lower() == _d.lower():
+                    for _i in dates[_d]:
                         self.add_col()
                     break
-            group_dates = [str(_) for _ in dates[d]]
+            group_dates = [str(_) for _ in dates[_d]]
             group_dates.insert(0, "Фамилия Имя")
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
-        except:
-            print("Что-то не так при создании шаблона страницы")
+        except Exception as e:
+            print("Что-то не так при создании шаблона страницы", e)
         else:
             try:
                 self.open_file()
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
-                    sum = 0
+                    _sum = 0
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["achievements"]
@@ -469,12 +473,12 @@ class MainWidget(QWidget):
 
                             curr_sum = len(
                                 value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
-                            sum += curr_sum  # итоговая сумма
+                            _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
-                    self.table.setItem(row, col + 1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
+                    self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
-            except:
-                print("Опять что-то не так, но уже при загрузке данных из файла")
+            except Exception as e:
+                print("Опять что-то не так, но уже при загрузке данных из файла", e)
             finally:
                 self.pupils_load()
 
@@ -502,6 +506,7 @@ class MainWidget(QWidget):
                         if chb.text().find("бонус") == -1 and chb.text().find("допол") == -1:
                             _ach_lst.append(chb.text()[2:])
 
+                r = int(self.reprimands_amount.text())
                 if key not in self.pupil:
                     self.pupil[key] = {value: {}}
 
@@ -512,9 +517,9 @@ class MainWidget(QWidget):
                                           "notes": self.note_field.toPlainText()}
 
                 self.table.setItem(self.table.currentRow(), self.table.currentColumn(),
-                                   QTableWidgetItem(str(int(points * 10 + b + e))))
-            except:
-                print("Не сработала функция cell_fill")
+                                   QTableWidgetItem(str(int((points - r) * 10 + b + e))))
+            except Exception as e:
+                print("Не сработала функция cell_fill", e)
             finally:
                 self.calculate_sum()
 
@@ -540,10 +545,9 @@ class MainWidget(QWidget):
             else:
                 self.reset_flags()
                 self.note_field.clear()
-        except:
-            print("Не сработала функция cell_select")
+        except Exception as e:
+            print("Не сработала функция cell_select", e)
 
-    # закончил +- тут. Надо затестить сохранение и загрузку
     def pupil_fill(self):
         if self.table.currentItem():
             key = self.table.item(self.table.currentRow(), 0).text()
@@ -555,35 +559,18 @@ class MainWidget(QWidget):
                     self.pupil[key][value]["extra"] = int(self.extra_ach.text())
             self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
             self.pupil[key][value]["notes"] = self.note_field.toPlainText()
-            c = 0
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
         self.reprimands_amount.setText(str(count))
-        if self.table.currentItem() is not None:
-            key = self.table.item(self.table.currentRow(), 0).text()
-            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = len(self.pupil[key][value]["achievements"]) * 10
-            current_value -= count * 10
-            self.table.currentItem().setText(str(current_value))
-        self.pupil[key][value]["reprimands"] = count
-        self.calculate_sum()
-        self.pupil_fill()
+        self.cell_fill()
 
     def dec_repr(self):
         count = int(self.reprimands_amount.text())
         if count > 0:
             count -= 1
             self.reprimands_amount.setText(str(count))
-        if self.table.currentItem() is not None:
-            key = self.table.item(self.table.currentRow(), 0).text()
-            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = len(self.pupil[key][value]["achievements"]) * 10
-            current_value -= count * 10
-            self.table.currentItem().setText(str(current_value))
-        self.pupil[key][value]["reprimands"] = count
-        self.calculate_sum()
-        self.pupil_fill()
+        self.cell_fill()
 
     def bonus_up(self):
         count = int(self.bonus_ach.text()) + 1
@@ -601,6 +588,10 @@ class MainWidget(QWidget):
         if count > 0:
             count -= 1
             self.bonus_ach.setText(str(count))
+        if int(self.bonus_ach.text()) == 0:
+            for chb in self.achievement_chb_list:
+                if chb.text()[2:] == "Выполнение бонусных заданий" and chb.checkState():
+                    chb.setCheckState(Qt.Unchecked)
 
         self.calculate_sum()
         self.pupil_fill()
@@ -622,6 +613,10 @@ class MainWidget(QWidget):
         if count > 0:
             count -= 1
             self.extra_ach.setText(str(count))
+        if int(self.extra_ach.text()) == 0:
+            for chb in self.achievement_chb_list:
+                if chb.text()[2:] == "Выполнение дополнительных заданий" and chb.checkState():
+                    chb.setCheckState(Qt.Unchecked)
 
         self.calculate_sum()
         self.pupil_fill()
