@@ -1,8 +1,7 @@
 """
-    1. Протестировать сохранение с загрузку
-    2. Сделать корректный расчет баллов и замечаний !при загрузке! и не только
-    3. Расчет итоговой суммы при вводе данных (исправить)
-    4.
+    1. Что-то не так с замечаниями или рассчётом
+    2.
+    3.
 
 """
 
@@ -93,6 +92,20 @@ class PaddingDelegate(QStyledItemDelegate):
         editor.setTextMargins(margins)
         return editor
 
+class LineEdit(QLineEdit):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        le_style = """
+        QLineEdit{
+            background-color: #FFF;
+            color: #833AE0;
+            font-size: 15pt;
+            border-radius: 15px;
+            padding: 10px;
+            }
+            
+        """
+        self.setStyleSheet(le_style)
 
 class PushButton(QPushButton):
     def __init__(self, *args, **kwargs):
@@ -105,11 +118,11 @@ class PushButton(QPushButton):
             border-radius: 15px;
             padding: 10px;
             }
-            QPushButton:pressed
-            {
-              border-left: 3px solid #2B2235;
-              border-top: 3px solid #2B2235;
-            }
+        QPushButton:pressed
+        {
+          border-left: 3px solid #2B2235;
+          border-top: 3px solid #2B2235;
+        }
         """
         self.setStyleSheet(button_style)
 
@@ -154,7 +167,6 @@ class MainWidget(QWidget):
 
         # виджеты
         self.groups_list_layout = QHBoxLayout()
-        self.setFont(QFont("Times", 12))
         self.prev_btn = PushButton("◀")
         self.next_btn = PushButton("▶")
         self.group_name_lbl = QLabel("Группа")
@@ -163,20 +175,30 @@ class MainWidget(QWidget):
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
-        self.bonus_ach = QLineEdit()
+        self.bonus_ach = LineEdit()
+        self.bonus_ach.setFixedWidth(70)
+        self.bonus_ach.setAlignment(Qt.AlignCenter)
         self.bonus_ach.setReadOnly(True)
         self.bonus_up_btn = PushButton("▲")
+        self.bonus_up_btn.setFixedWidth(70)
         self.bonus_down_btn = PushButton("▼")
-        self.extra_ach = QLineEdit()
+        self.bonus_down_btn.setFixedWidth(70)
+        self.extra_ach = LineEdit()
+        self.extra_ach.setAlignment(Qt.AlignCenter)
         self.extra_ach.setReadOnly(True)
+        self.extra_ach.setFixedWidth(70)
         self.extra_up_btn = PushButton("▲")
+        self.extra_up_btn.setFixedWidth(70)
         self.extra_down_btn = PushButton("▼")
+        self.extra_down_btn.setFixedWidth(70)
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
         self.reprimands_amount.setAlignment(Qt.AlignCenter)
         self.inc_repr_btn = PushButton("▲")
+        self.inc_repr_btn.setFixedWidth(70)
         self.dec_repr_btn = PushButton("▼")
+        self.dec_repr_btn.setFixedWidth(70)
         self.save_btn = PushButton("Сохранить")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
@@ -194,6 +216,8 @@ class MainWidget(QWidget):
         self.showMaximized()
 
     def visualisation(self):
+
+        # self.setFont(QFont("Times", 12))
         win_style = """
             background-color: #FFEC99;
             color: #2B2235;
@@ -227,8 +251,18 @@ class MainWidget(QWidget):
                 QCheckBox::indicator {
                     width:  40px;
                     height: 40px;
-                    /* background-color: #833AE0;*/
+                    border-radius: 5px;
                 }
+                QCheckBox::indicator:unchecked
+                {
+                    background-color: #FFF;
+                }
+                QCheckBox::indicator:checked
+                {
+                    background-color: #833AE0;
+                }
+                
+                
                 '''
         chb_names = [
             "😎 Посещение",
@@ -240,12 +274,14 @@ class MainWidget(QWidget):
             "🏠 Выполнение дополнительных заданий"]
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
-            chb.setStyleSheet(achievement_style_sheet)
             self.achievement_chb_list.append(chb)
 
             if _ == len(chb_names) - 2:
                 row1 = QHBoxLayout()
                 row1.addWidget(self.achievement_chb_list[_])
+                # hs = QSpacerItem(20, 20, QSizePolicy.Ignored, QSizePolicy.Minimum)
+
+                # row1.addItem(hs)
                 row1.addWidget(self.bonus_ach)
                 row1.addWidget(self.bonus_up_btn)
                 row1.addWidget(self.bonus_down_btn)
@@ -259,6 +295,7 @@ class MainWidget(QWidget):
                 achievements_layout.addLayout(row2)
             else:
                 achievements_layout.addWidget(self.achievement_chb_list[_])
+            chb.setStyleSheet(achievement_style_sheet)
 
         reprimand_layout = QHBoxLayout()
         reprimand_layout.addWidget(QLabel("Количество замечаний:"))
@@ -293,7 +330,7 @@ class MainWidget(QWidget):
     def reset_flags(self):
         # сброс чекбоксов
         for chb in self.achievement_chb_list:
-            chb.setCheckState(0)
+            chb.setCheckState(Qt.Unchecked)
 
         # сброс счетчика бонсуных и доп. заданий
         self.bonus_ach.setText("0")
@@ -304,6 +341,8 @@ class MainWidget(QWidget):
 
         # очистка комментариев
         self.note_field.clear()
+
+        self.visualisation()
 
     # выбор дня в календаре
     def choose_day(self):
@@ -330,7 +369,9 @@ class MainWidget(QWidget):
             self.groups_btn_list.clear()
             # создание переключателей для выбора текущей группы
             for i in range(len(groups_list_today)):
-                self.groups_btn_list.append(QRadioButton(groups_list_today[i]))
+                r_btn = QRadioButton(groups_list_today[i])
+                self.groups_btn_list.append(r_btn)
+                r_btn.setStyleSheet('QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40px; height: 40px;};')
                 self.groups_list_layout.addWidget(self.groups_btn_list[i])
             self.groups_btn_list[0].setChecked(1)
             self.groups_list_btn_gb.setLayout(self.groups_list_layout)
@@ -369,7 +410,7 @@ class MainWidget(QWidget):
             if len(self.pupil) > 0:
                 filename = str(self.group_name_lbl.text()) + ".json"
                 with open(filename, 'w') as file:
-                    json.dump(self.pupil, file, sort_keys=True, ensure_ascii=False)
+                    json.dump(self.pupil, file, indent=4, sort_keys=True, ensure_ascii=False)
         except:
             print("Ошибка при сохранении файла")
 
@@ -473,6 +514,8 @@ class MainWidget(QWidget):
                                    QTableWidgetItem(str(int(points * 10 + b + e))))
             except:
                 print("Не сработала функция cell_fill")
+            finally:
+                self.calculate_sum()
 
     def cell_select(self):
         self.reset_flags()
@@ -483,13 +526,11 @@ class MainWidget(QWidget):
                 value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 for chb in self.achievement_chb_list:
                     if chb.text()[2:] in self.pupil[key][value]["achievements"]:
-                        chb.setCheckState(1)
+                        chb.setCheckState(Qt.Checked)
                     elif chb.text()[2:] == "Выполнение бонусных заданий" and self.pupil[key][value]["bonus"] != 0:
-                        chb.setCheckState(1)
+                        chb.setCheckState(Qt.Checked)
                     elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value]["extra"] != 0:
-                        chb.setCheckState(1)
-                    # else:
-                    #     chb.setCheckState(0)
+                        chb.setCheckState(Qt.Checked)
 
                 self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
                 self.extra_ach.setText(str(self.pupil[key][value]["extra"]))
@@ -497,8 +538,6 @@ class MainWidget(QWidget):
                 self.note_field.setText(self.pupil[key][value]["notes"])
             else:
                 self.reset_flags()
-                # self.reprimands_amount.setText("0")
-                # self.note_field.clear()
         except:
             print("Не сработала функция cell_select")
 
@@ -570,7 +609,8 @@ class MainWidget(QWidget):
         self.extra_ach.setText(str(count))
         for chb in self.achievement_chb_list:
             if chb.text()[2:] == "Выполнение дополнительных заданий" and not chb.checkState():
-                chb.setCheckState(True)
+                chb.toggle()
+                # chb.setCheckState(Qt.Checked)
 
         self.calculate_sum()
         self.pupil_fill()
@@ -599,7 +639,8 @@ class MainWidget(QWidget):
                 return
 
     def test(self):
-        self.extra_ach.setValue(2)
+        for chb in self.achievement_chb_list:
+            chb.toggle()
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
