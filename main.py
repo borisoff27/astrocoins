@@ -340,13 +340,14 @@ class MainWidget(QWidget):
         self.reprimands_amount.setText("0")
 
         # очистка комментариев
-        self.note_field.clear()
+        # self.note_field.clear()
 
         self.visualisation()
 
     # выбор дня в календаре
     def choose_day(self):
         self.reset_flags()
+        self.note_field.clear()
         try:
             self.note_field.clear()
             current_day = self.calendar.selectedDate()
@@ -538,6 +539,7 @@ class MainWidget(QWidget):
                 self.note_field.setText(self.pupil[key][value]["notes"])
             else:
                 self.reset_flags()
+                self.note_field.clear()
         except:
             print("Не сработала функция cell_select")
 
@@ -588,7 +590,7 @@ class MainWidget(QWidget):
         self.bonus_ach.setText(str(count))
         for chb in self.achievement_chb_list:
             if chb.text()[2:] == "Выполнение бонусных заданий" and not chb.checkState():
-                chb.setCheckState(True)
+                chb.setCheckState(Qt.Checked)
 
         self.calculate_sum()
         self.pupil_fill()
@@ -609,8 +611,7 @@ class MainWidget(QWidget):
         self.extra_ach.setText(str(count))
         for chb in self.achievement_chb_list:
             if chb.text()[2:] == "Выполнение дополнительных заданий" and not chb.checkState():
-                chb.toggle()
-                # chb.setCheckState(Qt.Checked)
+                chb.setCheckState(Qt.Checked)
 
         self.calculate_sum()
         self.pupil_fill()
