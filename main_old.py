@@ -2,6 +2,7 @@
     1. Протестировать сохранение с загрузку
     2. Сделать корректный расчет баллов и замечаний !при загрузке! и не только
     3. Расчет итоговой суммы при вводе данных (исправить)
+    4. Обнулять счетчики бонусов и дополнительных
     5. Изменить загрузку баллов в связи с обновлением
 
 """
@@ -12,8 +13,6 @@ pupil = {
     "Фамилия Имя":{
         ДД мес:{
             "achievements": ["ачивка 1", "ачивка 2"],
-            "bonus": 0,
-            "extra": 0,
             "reprimands": 0,
             "notes": "заметка об ученике в этот день"
         }
@@ -26,17 +25,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
 
-# спиок достижений
 achievements_list = ["Посещение",
                      "Пунктуальность",
                      "Ответы на вопросы преподавателя",
                      "Выполнение основных заданий",
+                     "Выполнение бонусных заданий",
+                     "Выполнение дополнительных заданий",
                      "Помощь нуждающимся"]
-
-bonus_price = 5  # стоимость одного бонустного задания
-extra_price = 5  # стоимость одного дополнительного задания
-# "Выполнение бонусных заданий",
-# "Выполнение дополнительных заданий",
 
 groups_list = [
     "СР 17-00 ВП",
@@ -76,8 +71,7 @@ for d in dates.keys():
     start_day = start_day.addDays(1)
 
 
-# отступ вначале ячейки таблицы
-class PaddingDelegate(QStyledItemDelegate):
+class PaddingDelegate(QStyledItemDelegate):  # отступ вначале ячейки таблицы
     def __init__(self, padding=1, parent=None):
         super(PaddingDelegate, self).__init__(parent)
         self._padding = ' ' * max(1, padding)
@@ -92,7 +86,6 @@ class PaddingDelegate(QStyledItemDelegate):
         margins.setLeft(margins.left() + padding)
         editor.setTextMargins(margins)
         return editor
-
 
 class PushButton(QPushButton):
     def __init__(self, *args, **kwargs):
@@ -112,7 +105,6 @@ class PushButton(QPushButton):
             }
         """
         self.setStyleSheet(button_style)
-
 
 class TableWidget(QTableWidget):
 
@@ -163,14 +155,10 @@ class MainWidget(QWidget):
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
-        self.bonus_ach = QLineEdit()
-        self.bonus_ach.setReadOnly(True)
-        self.bonus_up_btn = PushButton("▲")
-        self.bonus_down_btn = PushButton("▼")
-        self.extra_ach = QLineEdit()
-        self.extra_ach.setReadOnly(True)
-        self.extra_up_btn = PushButton("▲")
-        self.extra_down_btn = PushButton("▼")
+        self.bonus_ach = QSpinBox()
+        self.bonus_ach.setValue(1)
+        self.additional_ach = QSpinBox()
+        self.additional_ach.setValue(1)
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
@@ -242,23 +230,19 @@ class MainWidget(QWidget):
             chb = QCheckBox(chb_names[_])
             chb.setStyleSheet(achievement_style_sheet)
             self.achievement_chb_list.append(chb)
-
-            if _ == len(chb_names) - 2:
+            if _ == len(chb_names)-2:
                 row1 = QHBoxLayout()
                 row1.addWidget(self.achievement_chb_list[_])
                 row1.addWidget(self.bonus_ach)
-                row1.addWidget(self.bonus_up_btn)
-                row1.addWidget(self.bonus_down_btn)
                 achievements_layout.addLayout(row1)
-            elif _ == len(chb_names) - 1:
+            elif _ == len(chb_names)-1:
                 row2 = QHBoxLayout()
                 row2.addWidget(self.achievement_chb_list[_])
-                row2.addWidget(self.extra_ach)
-                row2.addWidget(self.extra_up_btn)
-                row2.addWidget(self.extra_down_btn)
+                row2.addWidget(self.additional_ach)
                 achievements_layout.addLayout(row2)
             else:
                 achievements_layout.addWidget(self.achievement_chb_list[_])
+
 
         reprimand_layout = QHBoxLayout()
         reprimand_layout.addWidget(QLabel("Количество замечаний:"))
@@ -290,24 +274,7 @@ class MainWidget(QWidget):
         main_layout.addLayout(bottom_layout)
         self.setLayout(main_layout)
 
-    def reset_flags(self):
-        # сброс чекбоксов
-        for chb in self.achievement_chb_list:
-            chb.setCheckState(0)
-
-        # сброс счетчика бонсуных и доп. заданий
-        self.bonus_ach.setText("0")
-        self.extra_ach.setText("0")
-
-        # обнуление замечаний
-        self.reprimands_amount.setText("0")
-
-        # очистка комментариев
-        self.note_field.clear()
-
-    # выбор дня в календаре
     def choose_day(self):
-        self.reset_flags()
         try:
             self.note_field.clear()
             current_day = self.calendar.selectedDate()
@@ -342,9 +309,10 @@ class MainWidget(QWidget):
             for self.b in self.groups_btn_list:
                 self.b.clicked.connect(self.button_click)
         finally:
-            self.reset_flags()
+            for chb in self.achievement_chb_list:
+                chb.setCheckState(0)
+            self.reprimands_amount.setText("0")
 
-    # выбор группы (клик по radiobutton)
     def button_click(self):
         for b in self.groups_btn_list:
             if b.isChecked():
@@ -387,10 +355,7 @@ class MainWidget(QWidget):
 
     def add_col(self):
         self.table.setColumnCount(int(self.table.columnCount()) + 1)
-
-        # подгон ширины под размер содержимого
-        for _ in range(1, self.table.columnCount()):
-            self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
+        # self.table.setColumnWidth(self.table.columnCount() - 1, 100)
 
     def open_table(self):
         # при открытии таблицы создается 1 столбец для ученика
@@ -418,18 +383,14 @@ class MainWidget(QWidget):
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
                     sum = 0
-                    for col in range(1, self.table.columnCount() - 1):
+                    for col in range(1, self.table.columnCount()-1):
+                        self.table.setColumnWidth(col, 120) # почему-то при создании ширина столбца больше
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["achievements"]
-                            bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
-                            ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
-
-                            curr_sum = len(
-                                value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
-                            sum += curr_sum  # итоговая сумма
-                            self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
-                    self.table.setItem(row, col + 1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
+                            self.table.setItem(row, col, QTableWidgetItem(str(len(value) * 10 - rep*10)))
+                            sum += len(value) * 10 - rep*10
+                    self.table.setItem(row, col+1, QTableWidgetItem(str(sum)))  # последний столбец для общей суммы
                     row += 1
             except:
                 print("Опять что-то не так, но уже при загрузке данных из файла")
@@ -440,9 +401,9 @@ class MainWidget(QWidget):
         # обработка нажатия на каждый чекбокс
         if self.table.currentColumn() != 0:
             try:
-                points, b, e = 0, 0, 0
-                key = self.table.item(self.table.currentRow(), 0).text()  # фамилия
-                value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()  # дата
+                points = 0
+                key = self.table.item(self.table.currentRow(), 0).text()
+                value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
                 _ach_lst = []
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
@@ -450,32 +411,28 @@ class MainWidget(QWidget):
                             points += 0.5
                         elif chb.text().find("Пунктуальность") != -1:
                             points += 1.5
-                        elif chb.text().find("бонус") != -1:
-                            b = int(self.bonus_ach.text()) * bonus_price
-                        elif chb.text().find("допол") != -1:
-                            e = int(self.extra_ach.text()) * extra_price
+                        elif chb.text().find("бонусных") != -1:
+                            points += int(self.bonus_ach.value())/2
+                        elif chb.text().find("дополнительных") != -1:
+                            points += int(self.additional_ach.value())/2
                         else:
                             points += 1
-
-                        if chb.text().find("бонус") == -1 and chb.text().find("допол") == -1:
-                            _ach_lst.append(chb.text()[2:])
-
+                        _ach_lst.append(chb.text()[2:])
+                        # self.pupil[key][value].append(chb.text())
                 if key not in self.pupil:
                     self.pupil[key] = {value: {}}
-
-                self.pupil[key][value] = {"achievements": _ach_lst,
-                                          "bonus": int(self.bonus_ach.text()),
-                                          "extra": int(self.extra_ach.text()),
-                                          "reprimands": int(self.reprimands_amount.text()),
-                                          "notes": self.note_field.toPlainText()}
-
-                self.table.setItem(self.table.currentRow(), self.table.currentColumn(),
-                                   QTableWidgetItem(str(int(points * 10 + b + e))))
+                    # self.pupil[key][value] = {"achievements": [], "reprimands": 0, "notes": ""}
+                self.pupil[key][value] = {"achievements": _ach_lst, "reprimands": int(self.reprimands_amount.text()), "notes": self.note_field.toPlainText()}
+                self.table.setItem(self.table.currentRow(), self.table.currentColumn(), QTableWidgetItem(str(int(points * 10))))
             except:
-                print("Не сработала функция cell_fill")
+                print("Нужно выбрать ячейку")
 
     def cell_select(self):
-        self.reset_flags()
+        # переделать обнуление всего в отдельную функцию
+        for chb in self.achievement_chb_list:
+            chb.setCheckState(0)
+        self.bonus_ach.setValue(1)
+        self.additional_ach.setValue(1)
         try:
             t = self.table
             if t.item(t.currentRow(), t.currentColumn()) is not None:
@@ -484,34 +441,24 @@ class MainWidget(QWidget):
                 for chb in self.achievement_chb_list:
                     if chb.text()[2:] in self.pupil[key][value]["achievements"]:
                         chb.setCheckState(1)
-                    elif chb.text()[2:] == "Выполнение бонусных заданий" and self.pupil[key][value]["bonus"] != 0:
-                        chb.setCheckState(1)
-                    elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value]["extra"] != 0:
-                        chb.setCheckState(1)
-                    # else:
-                    #     chb.setCheckState(0)
-
-                self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
-                self.extra_ach.setText(str(self.pupil[key][value]["extra"]))
+                    else:
+                        chb.setCheckState(0)
+                # self.bonus_ach.setValue(self.pupil[key][value]["achievements"][])
+                self.additional_ach.setValue(1)
                 self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
                 self.note_field.setText(self.pupil[key][value]["notes"])
             else:
-                self.reset_flags()
-                # self.reprimands_amount.setText("0")
-                # self.note_field.clear()
+                self.reprimands_amount.setText("0")
+                self.note_field.clear()
         except:
             print("Не сработала функция cell_select")
+
 
     # закончил +- тут. Надо затестить сохранение и загрузку
     def pupil_fill(self):
         if self.table.currentItem():
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            for chb in self.achievement_chb_list:
-                if chb.text()[2:] == "Выполнение бонусных заданий" and chb.checkState():
-                    self.pupil[key][value]["bonus"] = int(self.bonus_ach.text())
-                if chb.text()[2:] == "Выполнение дополнительных заданий" and chb.checkState():
-                    self.pupil[key][value]["extra"] = int(self.extra_ach.text())
             self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
             self.pupil[key][value]["notes"] = self.note_field.toPlainText()
             c = 0
@@ -522,7 +469,7 @@ class MainWidget(QWidget):
         if self.table.currentItem() is not None:
             key = self.table.item(self.table.currentRow(), 0).text()
             value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
-            current_value = len(self.pupil[key][value]["achievements"]) * 10
+            current_value = len(self.pupil[key][value]["achievements"])*10
             current_value -= count * 10
             self.table.currentItem().setText(str(current_value))
         self.pupil[key][value]["reprimands"] = count
@@ -544,78 +491,33 @@ class MainWidget(QWidget):
         self.calculate_sum()
         self.pupil_fill()
 
-    def bonus_up(self):
-        count = int(self.bonus_ach.text()) + 1
-        self.bonus_ach.setText(str(count))
-        for chb in self.achievement_chb_list:
-            if chb.text()[2:] == "Выполнение бонусных заданий" and not chb.checkState():
-                chb.setCheckState(True)
-
-        self.calculate_sum()
-        self.pupil_fill()
-        self.cell_fill()
-
-    def bonus_down(self):
-        count = int(self.bonus_ach.text())
-        if count > 0:
-            count -= 1
-            self.bonus_ach.setText(str(count))
-
-        self.calculate_sum()
-        self.pupil_fill()
-        self.cell_fill()
-
-    def extra_up(self):
-        count = int(self.extra_ach.text()) + 1
-        self.extra_ach.setText(str(count))
-        for chb in self.achievement_chb_list:
-            if chb.text()[2:] == "Выполнение дополнительных заданий" and not chb.checkState():
-                chb.setCheckState(True)
-
-        self.calculate_sum()
-        self.pupil_fill()
-        self.cell_fill()
-
-    def extra_down(self):
-        count = int(self.extra_ach.text())
-        if count > 0:
-            count -= 1
-            self.extra_ach.setText(str(count))
-
-        self.calculate_sum()
-        self.pupil_fill()
-        self.cell_fill()
-
     def calculate_sum(self):
         self.table.setFocus()
         for row in range(self.table.rowCount()):
             if self.table.item(row, 0) is not None:
                 total_sum = 0
-                for col in range(1, self.table.columnCount() - 1):
+                for col in range(1, self.table.columnCount()-1):
                     if self.table.item(row, col) is not None:
                         total_sum += int(self.table.item(row, col).text())
-                self.table.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
+                self.table.setItem(row, col+1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
             else:
                 return
 
     def test(self):
-        self.extra_ach.setValue(2)
+        pass
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
         self.add_table_col_btn.clicked.connect(self.test)
         for chb in self.achievement_chb_list:
             chb.clicked.connect(self.cell_fill)
-        self.bonus_up_btn.clicked.connect(self.bonus_up)
-        self.bonus_down_btn.clicked.connect(self.bonus_down)
-        self.extra_up_btn.clicked.connect(self.extra_up)
-        self.extra_down_btn.clicked.connect(self.extra_down)
+        self.bonus_ach.valueChanged.connect(self.cell_fill)
+        self.additional_ach.valueChanged.connect(self.cell_fill)
         self.table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
         self.note_field.textChanged.connect(self.pupil_fill)
-        self.prev_btn.clicked.connect(self.test)
 
 
 if __name__ == "__main__":
