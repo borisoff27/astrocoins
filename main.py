@@ -329,6 +329,25 @@ class MainWidget(QWidget):
         main_layout.addLayout(bottom_layout)
         self.setLayout(main_layout)
 
+    def prev_group(self):
+        i = 0
+        for b in self.groups_btn_list:
+            if b.isChecked() and i >= 0:
+                self.groups_btn_list[i - 1].setChecked(1)
+                break
+            i += 1
+        self.button_click()
+
+    def next_group(self):
+        i = 0
+        for b in self.groups_btn_list:
+            if b.isChecked() and i < len(self.groups_btn_list)-1:
+                self.groups_btn_list[i+1].setChecked(1)
+                break
+            i += 1
+        self.button_click()
+
+
     def reset_flags(self):
         # сброс чекбоксов
         for chb in self.achievement_chb_list:
@@ -652,7 +671,8 @@ class MainWidget(QWidget):
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
         self.note_field.textChanged.connect(self.pupil_fill)
-        self.prev_btn.clicked.connect(self.test)
+        self.prev_btn.clicked.connect(self.prev_group)
+        self.next_btn.clicked.connect(self.next_group)
 
 
 if __name__ == "__main__":
