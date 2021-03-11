@@ -178,29 +178,29 @@ class MainWidget(QWidget):
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
         self.bonus_ach = LineEdit()
-        self.bonus_ach.setFixedWidth(70)
+        self.bonus_ach.setFixedWidth(60)
         self.bonus_ach.setAlignment(Qt.AlignCenter)
         self.bonus_ach.setReadOnly(True)
         self.bonus_up_btn = PushButton("▲")
-        self.bonus_up_btn.setFixedWidth(70)
+        self.bonus_up_btn.setFixedWidth(60)
         self.bonus_down_btn = PushButton("▼")
-        self.bonus_down_btn.setFixedWidth(70)
+        self.bonus_down_btn.setFixedWidth(60)
         self.extra_ach = LineEdit()
         self.extra_ach.setAlignment(Qt.AlignCenter)
         self.extra_ach.setReadOnly(True)
-        self.extra_ach.setFixedWidth(70)
+        self.extra_ach.setFixedWidth(60)
         self.extra_up_btn = PushButton("▲")
-        self.extra_up_btn.setFixedWidth(70)
+        self.extra_up_btn.setFixedWidth(60)
         self.extra_down_btn = PushButton("▼")
-        self.extra_down_btn.setFixedWidth(70)
+        self.extra_down_btn.setFixedWidth(60)
         self.reprimands_amount = QLineEdit()
         self.reprimands_amount.setReadOnly(True)
         self.reprimands_amount.setText("0")
         self.reprimands_amount.setAlignment(Qt.AlignCenter)
         self.inc_repr_btn = PushButton("▲")
-        self.inc_repr_btn.setFixedWidth(70)
+        self.inc_repr_btn.setFixedWidth(60)
         self.dec_repr_btn = PushButton("▼")
-        self.dec_repr_btn.setFixedWidth(70)
+        self.dec_repr_btn.setFixedWidth(60)
         self.save_btn = PushButton("Сохранить")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
@@ -251,8 +251,8 @@ class MainWidget(QWidget):
                 }
 
                 QCheckBox::indicator {
-                    width:  40px;
-                    height: 40px;
+                    width:  30%;
+                    height: 30%;
                     border-radius: 5px;
                 }
                 QCheckBox::indicator:unchecked
@@ -281,9 +281,6 @@ class MainWidget(QWidget):
             if _ == len(chb_names) - 2:
                 row1 = QHBoxLayout()
                 row1.addWidget(self.achievement_chb_list[_])
-                # hs = QSpacerItem(20, 20, QSizePolicy.Ignored, QSizePolicy.Minimum)
-
-                # row1.addItem(hs)
                 row1.addWidget(self.bonus_ach)
                 row1.addWidget(self.bonus_up_btn)
                 row1.addWidget(self.bonus_down_btn)
@@ -394,7 +391,7 @@ class MainWidget(QWidget):
                 r_btn = QRadioButton(groups_list_today[i])
                 self.groups_btn_list.append(r_btn)
                 r_btn.setStyleSheet(
-                    'QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40px; height: 40px;};')
+                    'QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40%; height: 40%;};')
                 self.groups_list_layout.addWidget(self.groups_btn_list[i])
             self.groups_btn_list[0].setChecked(1)
             self.groups_list_btn_gb.setLayout(self.groups_list_layout)
@@ -503,7 +500,7 @@ class MainWidget(QWidget):
 
     def cell_fill(self):
         # обработка нажатия на каждый чекбокс
-        if self.table.currentColumn() != 0:
+        if self.table.currentColumn() != 0 and self.table.hasFocus(): # добавил hasFocus() - надо тестить
             try:
                 points, b, e = 0, 0, 0
                 key = self.table.item(self.table.currentRow(), 0).text()  # фамилия
