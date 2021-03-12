@@ -532,8 +532,7 @@ class MainWidget(QWidget):
     def cell_fill(self):
         t = self.sub_table
         # обработка нажатия на каждый чекбокс
-        e= t.currentColumn()
-        if t.currentColumn() != 0: # and t.hasFocus(): # добавил hasFocus() - надо тестить
+        if t.currentColumn() != 0 and t.hasFocus(): # добавил hasFocus() - надо тестить
             try:
                 points, b, e = 0, 0, 0
                 key = t.item(t.currentRow(), 0).text()  # фамилия
