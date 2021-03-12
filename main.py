@@ -173,7 +173,9 @@ class MainWidget(QWidget):
         self.next_btn = PushButton("▶")
         self.group_name_lbl = QLabel("Группа")
         self.group_name_lbl.setAlignment(Qt.AlignCenter)
-        self.table = TableWidget(9, 1)
+        self.table = TableWidget()
+        self.sub_table = TableWidget(self.table)
+        # self.table.setEditTriggers(QAbstractItemView.DoubleClicked)
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
@@ -232,6 +234,8 @@ class MainWidget(QWidget):
                                     font-weight: bold;}"""
         self.table.horizontalHeader().setStyleSheet(header_style)
         self.table.verticalHeader().setStyleSheet(header_style)
+        self.sub_table.horizontalHeader().setStyleSheet(header_style)
+        self.sub_table.verticalHeader().setStyleSheet(header_style)
         # for _ in range(self.columnCount()):
         #     self.horizontalHeaderItem(_).setBackground(QColor(255, 0, 0))
         # self.setStyleSheet(table_style)
@@ -420,10 +424,10 @@ class MainWidget(QWidget):
             group = json.load(file)
         row = 0
         for p in group[str(self.group_name_lbl.text())]:
-            if self.table.item(row, 0) is not None:
+            if self.sub_table.item(row, 0) is not None:
                 return
             else:
-                self.table.setItem(row, 0, QTableWidgetItem(p))
+                self.sub_table.setItem(row, 0, QTableWidgetItem(p))
             row += 1
 
     def save_table_to_file(self):
@@ -449,17 +453,29 @@ class MainWidget(QWidget):
 
     def add_col(self):
         self.table.setColumnCount(int(self.table.columnCount()) + 1)
+        self.sub_table.setColumnCount(int(self.sub_table.columnCount()) + 1)
 
         # подгон ширины под размер содержимого
         for _ in range(1, self.table.columnCount()):
             self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
+            self.sub_table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
 
     def open_table(self):
-        # при открытии таблицы создается 1 столбец для ученика
+        # при открытии таблицы создается 1 столбец для 9 учеников
         try:
             self.table.clear()
             self.table.setColumnCount(1)
+            self.table.setRowCount(9)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+            self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+            # форматирвоание 2 таблицы (с баллами)
+            self.sub_table.clear()
+            self.sub_table.setColumnCount(1)
+            self.sub_table.setRowCount(9)
+            self.sub_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+            # self.sub_table.hide()
+
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
                         self.calendar.selectedDate().dayOfWeek()).lower() == _d.lower():
@@ -471,6 +487,7 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
+            self.sub_table.setHorizontalHeaderLabels(group_dates)
         except Exception as e:
             print("Что-то не так при создании шаблона страницы", e)
         else:
@@ -479,18 +496,21 @@ class MainWidget(QWidget):
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
+                    self.sub_table.setItem(row, 0, QTableWidgetItem(pup))
                     _sum = 0
-                    for col in range(1, self.table.columnCount() - 1):
-                        if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
-                            value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["achievements"]
-                            bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
-                            ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
-                            rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
+                    for col in range(1, self.sub_table.columnCount() - 1):
+                        if self.sub_table.horizontalHeaderItem(col).text() in self.pupil[pup]:
+                            value = self.pupil[pup][str(self.sub_table.horizontalHeaderItem(col).text())]["achievements"]
+                            bon = self.pupil[pup][str(self.sub_table.horizontalHeaderItem(col).text())]["bonus"]
+                            ex = self.pupil[pup][str(self.sub_table.horizontalHeaderItem(col).text())]["extra"]
+                            rep = self.pupil[pup][str(self.sub_table.horizontalHeaderItem(col).text())]["reprimands"]
 
                             curr_sum = len(
                                 value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
+                            self.sub_table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
+                    self.sub_table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
             except Exception as e:
@@ -498,13 +518,26 @@ class MainWidget(QWidget):
             finally:
                 self.pupils_load()
 
+                self.sub_table.verticalHeader().hide()
+                h = self.table.horizontalHeader().height()*2
+                for i in range(self.table.rowCount()):
+                    h += self.table.rowHeight(i)
+                w = self.table.verticalHeader().height()
+                for i in range(1, self.table.columnCount()-2):
+                    w += self.table.columnWidth(i)
+                self.sub_table.resize(QSize(w, h))
+                self.sub_table.move(self.table.columnWidth(0)+self.table.verticalHeader().width(), 0)
+                self.sub_table.setColumnHidden(0, True)
+
     def cell_fill(self):
+        t = self.sub_table
         # обработка нажатия на каждый чекбокс
-        if self.table.currentColumn() != 0 and self.table.hasFocus(): # добавил hasFocus() - надо тестить
+        e= t.currentColumn()
+        if t.currentColumn() != 0: # and t.hasFocus(): # добавил hasFocus() - надо тестить
             try:
                 points, b, e = 0, 0, 0
-                key = self.table.item(self.table.currentRow(), 0).text()  # фамилия
-                value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()  # дата
+                key = t.item(t.currentRow(), 0).text()  # фамилия
+                value = t.horizontalHeaderItem(t.currentColumn()).text()  # дата
                 _ach_lst = []
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
@@ -532,7 +565,7 @@ class MainWidget(QWidget):
                                           "reprimands": int(self.reprimands_amount.text()),
                                           "notes": self.note_field.toPlainText()}
 
-                self.table.setItem(self.table.currentRow(), self.table.currentColumn(),
+                t.setItem(t.currentRow(), t.currentColumn(),
                                    QTableWidgetItem(str(int((points - r) * 10 + b + e))))
             except Exception as e:
                 print("Не сработала функция cell_fill", e)
@@ -542,10 +575,10 @@ class MainWidget(QWidget):
     def cell_select(self):
         self.reset_flags()
         try:
-            t = self.table
+            t = self.sub_table
             if t.item(t.currentRow(), t.currentColumn()) is not None:
-                key = self.table.item(self.table.currentRow(), 0).text()
-                value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
+                key = t.item(t.currentRow(), 0).text()
+                value = t.horizontalHeaderItem(t.currentColumn()).text()
                 for chb in self.achievement_chb_list:
                     if chb.text()[2:] in self.pupil[key][value]["achievements"]:
                         chb.setCheckState(Qt.Checked)
@@ -565,9 +598,10 @@ class MainWidget(QWidget):
             print("Не сработала функция cell_select", e)
 
     def pupil_fill(self):
-        if self.table.currentItem():
-            key = self.table.item(self.table.currentRow(), 0).text()
-            value = self.table.horizontalHeaderItem(self.table.currentColumn()).text()
+        t = self.sub_table
+        if t.currentItem():
+            key = t.item(t.currentRow(), 0).text()
+            value = t.horizontalHeaderItem(t.currentColumn()).text()
             for chb in self.achievement_chb_list:
                 if chb.text()[2:] == "Выполнение бонусных заданий" and chb.checkState():
                     self.pupil[key][value]["bonus"] = int(self.bonus_ach.text())
@@ -639,14 +673,15 @@ class MainWidget(QWidget):
         self.cell_fill()
 
     def calculate_sum(self):
-        self.table.setFocus()
-        for row in range(self.table.rowCount()):
-            if self.table.item(row, 0) is not None:
+        t = self.sub_table
+        t.setFocus()
+        for row in range(t.rowCount()):
+            if t.item(row, 0) is not None:
                 total_sum = 0
-                for col in range(1, self.table.columnCount() - 1):
-                    if self.table.item(row, col) is not None:
-                        total_sum += int(self.table.item(row, col).text())
-                self.table.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
+                for col in range(1, t.columnCount() - 1):
+                    if t.item(row, col) is not None:
+                        total_sum += int(t.item(row, col).text())
+                t.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
             else:
                 return
 
@@ -664,6 +699,7 @@ class MainWidget(QWidget):
         self.extra_up_btn.clicked.connect(self.extra_up)
         self.extra_down_btn.clicked.connect(self.extra_down)
         self.table.clicked.connect(self.cell_select)
+        self.sub_table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
