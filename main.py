@@ -146,9 +146,10 @@ class TableWidget(QTableWidget):
 
         if action == del_row_menu:
             current_row_index = self.currentRow()
-            del main_win.pupil[self.item(current_row_index, 0).text()]
-            self.removeRow(current_row_index)
-            self.setRowCount(9)
+            if self.item(current_row_index, 0) is not None:
+                del main_win.pupil[self.item(current_row_index, 0).text()]
+                self.removeRow(current_row_index)
+                self.setRowCount(9)
 
     # def mousePressEvent(self, event):
     #     table = event.button()
