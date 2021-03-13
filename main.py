@@ -522,6 +522,7 @@ class MainWidget(QWidget):
                 self.sub_table.resize(QSize(w,h))
                 self.sub_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
                 self.sub_table.move(self.table.verticalHeader().width(), 0)
+
                 # self.table.setColumnHidden(0, True)
 
     def cell_fill(self):
