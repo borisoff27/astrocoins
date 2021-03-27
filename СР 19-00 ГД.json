@@ -51,6 +51,15 @@
             "notes": "",
             "reprimands": 0
         },
+        "17 мар": {
+            "achievements": [
+                "Выполнение основных заданий"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 фев": {
             "achievements": [
                 "Посещение",
@@ -71,7 +80,7 @@
                 "Выполнение основных заданий",
                 "Помощь нуждающимся"
             ],
-            "bonus": 6,
+            "bonus": 8,
             "extra": 0,
             "notes": "",
             "reprimands": 0
