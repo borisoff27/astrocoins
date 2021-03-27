@@ -49,7 +49,7 @@ groups_list = [
     "СБ 16-00 КГ",
     "СБ 17-40 СС",
     "ВС 10-30 ГД",
-    "ВС 12-30 КГ",
+    "ВС 12-30 ГД",
     "ВС 15-00 СС",
     "ВС 17-00 ГД",
     "ВС 19-00 ПС2"
@@ -175,7 +175,6 @@ class MainWidget(QWidget):
         self.group_name_lbl = QLabel("Группа")
         self.group_name_lbl.setAlignment(Qt.AlignCenter)
         self.table = TableWidget()
-        self.sub_table = TableWidget(self.table)
         # self.table.setEditTriggers(QAbstractItemView.DoubleClicked)
         self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
@@ -235,8 +234,6 @@ class MainWidget(QWidget):
                                     font-weight: bold;}"""
         self.table.horizontalHeader().setStyleSheet(header_style)
         self.table.verticalHeader().setStyleSheet(header_style)
-        self.sub_table.horizontalHeader().setStyleSheet(header_style)
-        self.sub_table.verticalHeader().setStyleSheet(header_style)
 
 
     def widgets_location(self):
@@ -410,6 +407,7 @@ class MainWidget(QWidget):
     # выбор группы (клик по radiobutton)
     def button_click(self):
         self.reset_flags()
+        self.note_field.clear()
         for b in self.groups_btn_list:
             if b.isChecked():
                 self.group_name_lbl.setText(b.text())
@@ -451,12 +449,10 @@ class MainWidget(QWidget):
 
     def add_col(self):
         self.table.setColumnCount(int(self.table.columnCount()) + 1)
-        # self.sub_table.setColumnCount(int(self.sub_table.columnCount()) + 1)
 
         # подгон ширины под размер содержимого
         for _ in range(1, self.table.columnCount()):
             self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
-            # self.sub_table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
 
     def open_table(self):
         # при открытии таблицы создается 1 столбец для 9 учеников
@@ -465,13 +461,7 @@ class MainWidget(QWidget):
             self.table.setColumnCount(1)
             self.table.setRowCount(9)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-
-            # форматирвоание 2 таблицы (с баллами)
-            self.sub_table.clear()
-            self.sub_table.setColumnCount(1)
-            self.sub_table.setRowCount(9)
-            self.sub_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            self.sub_table.hide()
+            self.table.setVerticalHeaderLabels(["0" for i in range(9)])
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
@@ -484,7 +474,6 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
-            # self.sub_table.setHorizontalHeaderLabels(group_dates)
         except Exception as e:
             print("Что-то не так при создании шаблона страницы", e)
         else:
@@ -493,7 +482,6 @@ class MainWidget(QWidget):
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
-                    self.sub_table.setItem(row, 0, QTableWidgetItem(pup))
                     _sum = 0
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
@@ -507,6 +495,7 @@ class MainWidget(QWidget):
                                 value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
+                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)))
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
             except Exception as e:
@@ -514,14 +503,10 @@ class MainWidget(QWidget):
             finally:
                 self.pupils_load()
 
-                self.sub_table.verticalHeader().hide()
                 h = self.table.horizontalHeader().height()
                 for i in range(self.table.rowCount()):
                     h += self.table.rowHeight(i)
                 w = self.table.columnWidth(0)
-                self.sub_table.resize(QSize(w,h))
-                self.sub_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-                self.sub_table.move(self.table.verticalHeader().width(), 0)
 
                 # self.table.setColumnHidden(0, True)
 
@@ -677,16 +662,12 @@ class MainWidget(QWidget):
                     if t.item(row, col) is not None:
                         total_sum += int(t.item(row, col).text())
                 t.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
+                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
             else:
                 return
 
     def test(self):
         pass
-        # for r in range(self.sub_table.rowCount()):
-            # if self.sub_table.isRowHidden(r):
-            #     self.sub_table.setRowHidden(r, True)
-            # else:
-            #     self.sub_table.setRowHidden(r, False)
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
@@ -698,8 +679,6 @@ class MainWidget(QWidget):
         self.extra_up_btn.clicked.connect(self.extra_up)
         self.extra_down_btn.clicked.connect(self.extra_down)
         self.table.clicked.connect(self.cell_select)
-        # test = self.test()
-        self.sub_table.clicked.connect(self.test)
         self.save_btn.clicked.connect(self.save_table_to_file)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
