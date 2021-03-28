@@ -322,8 +322,8 @@ class MainWidget(QWidget):
         bottom_layout.addWidget(self.calendar, stretch=1)
 
         main_layout = QVBoxLayout()
-        main_layout.addLayout(top_layout)
-        main_layout.addLayout(bottom_layout)
+        main_layout.addLayout(top_layout, stretch=3)
+        main_layout.addLayout(bottom_layout, stretch=2)
         self.setLayout(main_layout)
 
     def prev_group(self):
