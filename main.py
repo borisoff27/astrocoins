@@ -462,6 +462,7 @@ class MainWidget(QWidget):
             self.table.setRowCount(9)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels(["0" for i in range(9)])
+            # self.table.setColumnHidden(1)
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
@@ -495,7 +496,7 @@ class MainWidget(QWidget):
                                 value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
-                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)))
+                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)+" - "+pup))
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
             except Exception as e:
@@ -663,6 +664,7 @@ class MainWidget(QWidget):
                         total_sum += int(t.item(row, col).text())
                 t.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
                 self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
+                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum) + " - " + t.item(row, 0).text()))
             else:
                 return
 
