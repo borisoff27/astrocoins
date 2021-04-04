@@ -509,7 +509,7 @@ class MainWidget(QWidget):
                     h += self.table.rowHeight(i)
                 w = self.table.columnWidth(0)
 
-                # self.table.setColumnHidden(0, True)
+                self.table.setColumnHidden(0, True)
 
     def cell_fill(self):
         t = self.table
