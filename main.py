@@ -461,7 +461,7 @@ class MainWidget(QWidget):
             self.table.setColumnCount(1)
             self.table.setRowCount(9)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            self.table.setVerticalHeaderLabels(["0" for i in range(9)])
+            self.table.setVerticalHeaderLabels([str(i+1) for i in range(9)])
             # self.table.setColumnHidden(1)
 
             for _d in dates.keys():
