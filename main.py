@@ -462,7 +462,6 @@ class MainWidget(QWidget):
             self.table.setRowCount(9)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels([str(i+1) for i in range(9)])
-            # self.table.setColumnHidden(1)
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
