@@ -163,6 +163,18 @@
             "notes": "",
             "reprimands": 0
         },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Ответы на вопросы преподавателя",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 7,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 мар": {
             "achievements": [
                 "Посещение",
@@ -292,6 +304,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 мар": {
             "achievements": [
                 "Посещение",
@@ -417,6 +439,17 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 5,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -554,6 +587,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Ответы на вопросы преподавателя"
+            ],
+            "bonus": 5,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 мар": {
             "achievements": [
                 "Посещение",
@@ -671,6 +715,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 мар": {
             "achievements": [
                 "Посещение",
@@ -737,7 +791,7 @@
             "bonus": 0,
             "extra": 0,
             "notes": "",
-            "reprimands": 0
+            "reprimands": 1
         },
         "07 фев": {
             "achievements": [
@@ -769,6 +823,17 @@
                 "Помощь нуждающимся"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "18 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Помощь нуждающимся"
+            ],
+            "bonus": 8,
             "extra": 0,
             "notes": "",
             "reprimands": 0
