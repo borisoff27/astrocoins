@@ -32,8 +32,9 @@ achievements_list = ["Посещение",
                      "Выполнение основных заданий",
                      "Помощь нуждающимся"]
 
-bonus_price = 5  # стоимость одного бонустного задания
-extra_price = 5  # стоимость одного дополнительного задания
+base_price = 10
+bonus_price = 10  # стоимость одного бонустного задания
+extra_price = 15  # стоимость одного дополнительного задания
 # "Выполнение бонусных заданий",
 # "Выполнение дополнительных заданий",
 
@@ -57,8 +58,8 @@ groups_list = [
 ]
 
 dates = {
-    # "ПН": None,
-    # "ВТ": None,
+    "ПН": None,
+    "ВТ": None,
     "СР": None,
     "ЧТ": None,
     "ПТ": None,
@@ -67,7 +68,7 @@ dates = {
 }
 
 # формирование словаря дат по дням
-start_day = QDate(2021, 1, 27)
+start_day = QDate(2021, 1, 25)
 for d in dates.keys():
     days = []
     _day = start_day
@@ -495,7 +496,7 @@ class MainWidget(QWidget):
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
 
                             curr_sum = len(
-                                value) * 10 + bon * 5 + ex * 5 - rep * 10  # подсчёт суммы астрокойнов из всех данных
+                                value) * base_price + bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
                     self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)+" - "+pup))
@@ -506,12 +507,12 @@ class MainWidget(QWidget):
             finally:
                 self.pupils_load()
 
-                h = self.table.horizontalHeader().height()
-                for i in range(self.table.rowCount()):
-                    h += self.table.rowHeight(i)
-                w = self.table.columnWidth(0)
-
-                self.table.setColumnHidden(0, True)
+                # h = self.table.horizontalHeader().height()
+                # for i in range(self.table.rowCount()):
+                #     h += self.table.rowHeight(i)
+                # w = self.table.columnWidth(0)
+        finally:
+            self.table.setColumnHidden(0, True)
 
     def cell_fill(self):
         t = self.table
