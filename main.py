@@ -490,7 +490,7 @@ class MainWidget(QWidget):
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())][
-                                "achievements"]
+                                "achievements"] # изменить для пропуска
                             bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
                             ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
@@ -550,7 +550,7 @@ class MainWidget(QWidget):
                                           "notes": self.note_field.toPlainText()}
 
                 t.setItem(t.currentRow(), t.currentColumn(),
-                          QTableWidgetItem(str(int((points - r) * 10 + b + e))))
+                          QTableWidgetItem(str(int(points*10 - r * 15 + b + e))))
             except Exception as e:
                 print("Не сработала функция cell_fill", e)
             finally:
