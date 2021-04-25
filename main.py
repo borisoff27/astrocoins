@@ -490,13 +490,20 @@ class MainWidget(QWidget):
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())][
-                                "achievements"] # изменить для пропуска
+                                "achievements"]
+                            visited = 0
+                            base = len(value)
+                            if "Посещение" in value:
+                                base -= 1
+                                visited += 5
+                                if "Пунктуальность" in value:
+                                    base -= 1
+                                    visited += 15
                             bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
                             ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
 
-                            curr_sum = len(
-                                value) * base_price + bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
+                            curr_sum = base* base_price + visited + bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
                     self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)+" - "+pup))
