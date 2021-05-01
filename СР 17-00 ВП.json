@@ -357,7 +357,7 @@
                 "Помощь нуждающимся"
             ],
             "bonus": 1,
-            "extra": 2,
+            "extra": 3,
             "notes": "",
             "reprimands": 0
         },
@@ -718,6 +718,13 @@
             "bonus": 1,
             "extra": 0,
             "notes": "",
+            "reprimands": 0
+        },
+        "12 май": {
+            "achievements": [],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "Обещала сделать 50 проектов",
             "reprimands": 0
         },
         "14 апр": {
