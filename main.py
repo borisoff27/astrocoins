@@ -78,6 +78,8 @@ for d in dates.keys():
     dates[d] = days
     start_day = start_day.addDays(1)
 
+dates["СБ"].append("1 мая 2")
+
 
 # отступ вначале ячейки таблицы
 class PaddingDelegate(QStyledItemDelegate):
