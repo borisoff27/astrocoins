@@ -80,6 +80,8 @@ for d in dates.keys():
 
 dates["СБ"].append("1 мая д.")
 dates["ВС"].append("3 мая д.")
+dates["СБ"].append("8 мая д.")
+dates["ВС"].append("10 мая д.")
 
 
 # отступ вначале ячейки таблицы
