@@ -132,6 +132,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "21 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 30,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "23 апр": {
             "achievements": [
                 "Посещение",
@@ -325,6 +335,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "21 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Помощь нуждающимся"
+            ],
+            "bonus": 57,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "23 апр": {
             "achievements": [
                 "Посещение",
@@ -513,6 +534,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "21 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "23 апр": {
             "achievements": [
                 "Посещение",
@@ -689,6 +720,16 @@
                 "Выполнение бонусных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "21 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 18,
             "extra": 0,
             "notes": "",
             "reprimands": 0
