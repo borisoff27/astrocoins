@@ -111,6 +111,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "22 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 17,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "24 апр": {
             "achievements": [
                 "Посещение",
@@ -447,6 +457,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "22 май": {
+            "achievements": [],
+            "bonus": 27,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "24 апр": {
             "achievements": [
                 "Посещение",
@@ -608,6 +625,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "22 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 30,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -777,6 +804,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "22 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 22,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "24 апр": {
             "achievements": [
                 "Посещение",
@@ -936,6 +973,15 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "22 май": {
+            "achievements": [
+                "Посещение"
+            ],
+            "bonus": 12,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -1105,6 +1151,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "22 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 33,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "27 мар": {
             "achievements": [
                 "Посещение",
@@ -1242,6 +1298,16 @@
                 "Выполнение дополнительных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "22 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 43,
             "extra": 0,
             "notes": "",
             "reprimands": 0
