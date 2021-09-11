@@ -40,18 +40,7 @@ extra_price = 15  # стоимость одного дополнительног
 
 groups_list = [
     "ПН 18-00 ОЛ",
-    # "СР 17-00 ВП",
-    # "СР 19-00 ГД",
-    # "ЧТ 9-30 ВП",
-    "ПТ 17-20 ГД",
-    # "ПТ 19-00 ПС2",
-    # "СБ 12-30 ГД",
-    # "СБ 14-10 ПС1",
-    # "СБ 16-00 КГ",
-    "ВС 12-30 ГД",
-    # "ВС 15-00 СС",
-    "ВС 17-00 ГД",
-    "ВС 19-00 ПС2"
+    "СБ 11-45 ГД"
 ]
 
 dates = {
@@ -65,16 +54,17 @@ dates = {
 }
 
 # формирование словаря дат по дням
-start_day = QDate(2021, 1, 25)
+start_day = QDate(2021, 9, 4) # неправильно формируются даты
 for d in dates.keys():
     days = []
     _day = start_day
-    while _day.month() < 7:
+    while _day.month() > 1:
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
     dates[d] = days
     start_day = start_day.addDays(1)
 
+# дополнительные дни вне расписания
 dates["СБ"].append("1 мая д.")
 dates["ВС"].append("3 мая д.")
 dates["СБ"].append("8 мая д.")
