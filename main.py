@@ -35,8 +35,8 @@ achievements_list = ["Посещение",
 base_price = 10
 bonus_price = 10  # стоимость одного бонустного задания
 extra_price = 15  # стоимость одного дополнительного задания
-# "Выполнение бонусных заданий",
-# "Выполнение дополнительных заданий",
+
+students_amount = 10 # количество человек у группе
 
 groups_list = [
     "ПН 18-00 ОЛ",
@@ -56,7 +56,7 @@ dates = {
 }
 
 # формирование словаря дат по дням
-start_day = QDate(2021, 9, 4) # неправильно формируются датыВС 10-30 ГД.json
+start_day = QDate(2021, 8, 30) # первый понедельник месяца
 for d in dates.keys():
     days = []
     _day = start_day
@@ -152,7 +152,7 @@ class TableWidget(QTableWidget):
             if self.item(current_row_index, 0) is not None:
                 del main_win.pupil[self.item(current_row_index, 0).text()]
                 self.removeRow(current_row_index)
-                self.setRowCount(9)
+                self.setRowCount(students_amount)
 
     # def mousePressEvent(self, event):
     #     table = event.button()
@@ -417,17 +417,18 @@ class MainWidget(QWidget):
                 self.open_table()
 
     def pupils_load(self):
+        pass
         # group = {None: []}
         # filename = str(self.group_name_lbl.text()) + ".json"
-        with open("data.json", 'r', encoding="utf-8") as file:
-            group = json.load(file)
-        row = 0
-        for p in group[str(self.group_name_lbl.text())]:
-            if self.table.item(row, 0) is not None:
-                return
-            else:
-                self.table.setItem(row, 0, QTableWidgetItem(p))
-            row += 1
+        # with open("data.json", 'r', encoding="utf-8") as file:
+        #     group = json.load(file)
+        # row = 0
+        # for p in group[str(self.group_name_lbl.text())]:
+        #     if self.table.item(row, 0) is not None:
+        #         return
+        #     else:
+        #         self.table.setItem(row, 0, QTableWidgetItem(p))
+        #     row += 1
 
     def save_table_to_file(self):
         try:
@@ -462,9 +463,9 @@ class MainWidget(QWidget):
         try:
             self.table.clear()
             self.table.setColumnCount(1)
-            self.table.setRowCount(10)
+            self.table.setRowCount(students_amount)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            self.table.setVerticalHeaderLabels([str(i+1) for i in range(10)])
+            self.table.setVerticalHeaderLabels([str(i+1) for i in range(students_amount)])
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
@@ -556,7 +557,7 @@ class MainWidget(QWidget):
                                           "notes": self.note_field.toPlainText()}
 
                 t.setItem(t.currentRow(), t.currentColumn(),
-                          QTableWidgetItem(str(int(points*10 - r * 15 + b + e))))
+                          QTableWidgetItem(str(int(points*base_price - r * 15 + b + e))))
             except Exception as e:
                 print("Не сработала функция cell_fill", e)
             finally:

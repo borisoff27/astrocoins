@@ -76,12 +76,12 @@ class MainWidget(QWidget):
         try:
             with open(filename, "r") as file:
                 self.data = json.load(file)
-                print(self.data)
+                # print(self.data)
         except FileNotFoundError as e:
             try:
                 with open(filename, "w") as file:
                     json.dump({}, file)
-            except:
+            except e:
                 pass
                 mb = QMessageBox()
                 mb.setWindowTitle("Не удалось сохранить файл")
@@ -97,11 +97,14 @@ class MainWidget(QWidget):
         else:
             self.fill_group_names()
         finally:
+            self.fill_group_names()
             for rb in self.groups_list:
                 rb.clicked.connect(self.fill_table)
 
     def fill_group_names(self):
+        self.groups_list.clear()
         groups_box = QButtonGroup()
+        print(groups_box.buttons())
         # очистка макета от всех кнопок для выбора сегодняшних групп
         while self.groups_layout.count():
             child = self.groups_layout.takeAt(0)
@@ -110,7 +113,6 @@ class MainWidget(QWidget):
 
         # for i in reversed(range(groups_layout.count())):
             # groups_layout.itemAt(i).widget().setParent(None)
-
         for g in self.data:
             for _ in g.keys(): # не сработало обновление списка кнопок при добавлении новой группы
                 _group_name = QRadioButton(_)
@@ -118,9 +120,9 @@ class MainWidget(QWidget):
                 groups_box.addButton(_group_name)
                 self.groups_layout.addWidget(_group_name)
         self.gb_groups.setLayout(self.groups_layout)
-        groups_box.setExclusive(False)
+        # groups_box.setExclusive(False)
         self.groups_list[0].setChecked(True)
-        groups_box.setExclusive(True)
+        # groups_box.setExclusive(True)
         self.fill_table()
 
     def fill_table(self):
@@ -173,14 +175,19 @@ class MainWidget(QWidget):
 
     def remove_group(self):############## что-то не так при удалении группы второй раз, не закрывая программы
         # возможно надо очищать список self.group_list
+        # НЕ ОБНОВЛЧЯЕТСЯ ПОЛЕ ВВОДА
+        # print(self.groups_list)
         for dic in self.data:
             if self.edit_gr_name.text() in dic:
                 # self.groups_list.remove(self.edit_gr_name.text())
-                self.data.remove(dic)
+                self.groups_list.clear()
                 # del dic[self.current_group_name.text()]
+                self.data.remove(dic)
+                # print(self.groups_list)
         self.enabled_rename_button()
         with open("data_test.json", "w") as file:
             json.dump(self.data, file, ensure_ascii=False)
+            file.close()
         self.fill_group_names()
 
 
