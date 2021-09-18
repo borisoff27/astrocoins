@@ -458,13 +458,13 @@ class MainWidget(QWidget):
             self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
 
     def open_table(self):
-        # при открытии таблицы создается 1 столбец для 9 учеников
+        # при открытии таблицы создается 1 столбец для 10 учеников
         try:
             self.table.clear()
             self.table.setColumnCount(1)
-            self.table.setRowCount(9)
+            self.table.setRowCount(10)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            self.table.setVerticalHeaderLabels([str(i+1) for i in range(9)])
+            self.table.setVerticalHeaderLabels([str(i+1) for i in range(10)])
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
