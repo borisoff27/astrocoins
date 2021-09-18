@@ -65,14 +65,14 @@ for d in dates.keys():
     start_day = start_day.addDays(1)
 
 # дополнительные дни вне расписания
-dates["СБ"].append("1 мая д.")
-dates["ВС"].append("3 мая д.")
-dates["СБ"].append("8 мая д.")
-dates["ВС"].append("10 мая д.")
-dates["ВС"].append("16 мая д.")
-dates["СБ"].append("22 мая д.")
-dates["ВС"].append("23 мая д.")
-dates["ВС"].append("30 мая д.")
+# dates["СБ"].append("1 мая д.")
+# dates["ВС"].append("3 мая д.")
+# dates["СБ"].append("8 мая д.")
+# dates["ВС"].append("10 мая д.")
+# dates["ВС"].append("16 мая д.")
+# dates["СБ"].append("22 мая д.")
+# dates["ВС"].append("23 мая д.")
+# dates["ВС"].append("30 мая д.")
 
 
 
