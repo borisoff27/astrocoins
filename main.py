@@ -54,7 +54,10 @@ groups_list = [
     "СБ 15-30 СС",
     "СБ 17-15 ВП",
     "ВС 11-15 КГ",
-    "ПТ 19-00 ГД"
+    "ВС 13-30 ГД2",
+    "ПТ 19-00 ГД",
+    "ВС 15-30 ГД",
+    "ВС 19-00 ПС"
 ]
 
 dates = {
@@ -158,10 +161,26 @@ class TableWidget(QTableWidget):
         context_menu = QMenu(self)
         del_row_menu = context_menu.addAction("Удалить строку")
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
-
+        archieve_group = dict()
         if action == del_row_menu:
             current_row_index = self.currentRow()
             if self.item(current_row_index, 0) is not None:
+                # добавление удалённой записи в архив
+
+                try:
+                    archieve_group.clear()
+                    filename = "archieve.json"
+                    file = open(filename, 'r')
+                except Exception as e:
+                    print(e)
+                else:
+                    delete_name = self.item(current_row_index, 0).text()
+                    archieve_group[delete_name] = main_win.pupil[self.item(current_row_index, 0).text()]
+                    archieve_group = json.load(file)
+                finally:
+                    file.close()
+
+
                 del main_win.pupil[self.item(current_row_index, 0).text()]
                 self.removeRow(current_row_index)
                 self.setRowCount(students_amount)
