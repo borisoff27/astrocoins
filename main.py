@@ -1,8 +1,58 @@
-"""
-    1.
-    2.
-    3.
+# pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокойны" source/main.py
 
+readme = """Небольшой гайд
+
+1. После первого запуска программы автоматически создаля файл groups_list.json
+2. Перечислите в нём все группы в формате: ПН 10-30 ВП
+
+Пример готового файла groups_list.json:
+{
+    "groups": [
+        "ПН 18-00 ОЛ",
+        "ВТ 10-00 ПС",
+        "СР 17-15 CC",
+        "СР 19-00 ПС2",
+        "ЧТ 19-00 КГ",
+        "ПТ 15-30 ВП",
+        "СБ 10-00 ГР",
+        "СБ 11-45 ГД",
+        "СБ 15-30 СС",
+        "СБ 17-15 ВП",
+        "ВС 11-15 КГ",
+        "ВС 13-30 ГД2",
+        "ПТ 19-00 ГД",
+        "ВС 15-30 ГД",
+        "ВС 19-00 ПС"
+    ]
+}
+
+3. Запустите программу и снова закройте
+4. В появившихся файлах раскопируйте шаблон "": [] столько раз, сколько учеников
+5. Впишите в кавычках имена учеников
+6. Наслаждайтесь выставлением баллов:)
+
+Пример готового файла ВС 13-30 ГД2.json:
+{
+    "Алгоритмиков Супер": {},
+    "Ракетов Кеплер": {},
+    "Марсоботов Кадет": {}
+}
+
+
+Возможные проблемы:
+ПРОБЛЕМА
+Все заполнено, но не отображается
+РЕШЕНИЕ
+Посмотрите внимательно структуру файла. Возможно не хватает запятой или стоит лишний символ
+
+
+ПРОБЛЕМА
+Имена детей в программе отображаются иероглифами
+РЕШЕНИЕ
+Через блокнот необходимо ересозранить файл:
+1. Файл
+2. Сохранить как
+3. Внизу выбрать кодировку ANSI
 """
 
 """
@@ -33,32 +83,46 @@ achievements_list = ["Посещение",
                      "Выполнение основных заданий",
                      "Помощь нуждающимся"]
 
-base_price = 10 # базовая стоимость
-visit_price = 5 # стоимость одно посещения
-on_time_price = 15 # стоимость пунктуальности
-turbo_price = 5 # скорость турбо-режима
+base_price = 10  # базовая стоимость
+visit_price = 5  # стоимость одно посещения
+on_time_price = 15  # стоимость пунктуальности
+turbo_price = 5  # скорость турбо-режима
 bonus_price = 10  # стоимость одного бонустного задания
 extra_price = 15  # стоимость одного дополнительного задания
 
-students_amount = 10 # количество человек у группе
+students_amount = 10  # количество человек у группе
 
-groups_list = [
-    "ПН 18-00 ОЛ",
-    "ВТ 10-00 ПС",
-    "СР 17-15 CC",
-    "СР 19-00 ПС2",
-    "ЧТ 19-00 КГ",
-    "ПТ 15-30 ВП",
-    "СБ 10-00 ГР",
-    "СБ 11-45 ГД",
-    "СБ 15-30 СС",
-    "СБ 17-15 ВП",
-    "ВС 11-15 КГ",
-    "ВС 13-30 ГД2",
-    "ПТ 19-00 ГД",
-    "ВС 15-30 ГД",
-    "ВС 19-00 ПС"
-]
+state = 1
+
+# чтение из файла словаря с группами
+try:
+    with open("groups_list.json", 'r', encoding="utf-8") as file:
+        groups = json.load(file)
+except Exception as e:
+    print(e)
+    with open("groups_list.json", 'w') as file:
+        json.dump({"groups": []}, file, indent=4, sort_keys=True, ensure_ascii=False)
+    with open("groups_list.json", 'r', encoding="utf-8") as file:
+        groups = json.load(file)
+
+
+# список названий групп из файла groups_list.json
+groups_list = groups["groups"]
+if len(groups_list) == 0:
+    state = 0
+
+
+# создание шаблонов групп в файлах по названию группы
+for _g in groups_list:
+    filename = str(_g) + ".json"
+    try:
+        # попытка открыть файл с группой
+        group_file_open = open(filename, "r")
+        group_file_open.close()
+    except IOError as e:
+        # если не удалось открыть файл, то он создаётся с шаблоном {"": []}
+        with open(filename, 'w') as file:
+            json.dump({"": {}}, file, indent=4, sort_keys=True, ensure_ascii=False)
 
 dates = {
     "ПН": None,
@@ -71,7 +135,7 @@ dates = {
 }
 
 # формирование словаря дат по дням
-start_day = QDate(2021, 8, 30) # первый понедельник месяца
+start_day = QDate(2021, 8, 30)  # первый понедельник месяца
 for d in dates.keys():
     days = []
     _day = start_day
@@ -80,6 +144,7 @@ for d in dates.keys():
         _day = _day.addDays(7)
     dates[d] = days
     start_day = start_day.addDays(1)
+
 
 # дополнительные дни вне расписания
 # dates["СБ"].append("1 мая д.")
@@ -90,7 +155,6 @@ for d in dates.keys():
 # dates["СБ"].append("22 мая д.")
 # dates["ВС"].append("23 мая д.")
 # dates["ВС"].append("30 мая д.")
-
 
 
 # отступ вначале ячейки таблицы
@@ -167,19 +231,21 @@ class TableWidget(QTableWidget):
             if self.item(current_row_index, 0) is not None:
                 # добавление удалённой записи в архив
 
+                archieve_group.clear()
+                filename = "archieve.json"
                 try:
-                    archieve_group.clear()
-                    filename = "archieve.json"
                     file = open(filename, 'r')
-                except Exception as e:
-                    print(e)
-                else:
                     delete_name = self.item(current_row_index, 0).text()
                     archieve_group[delete_name] = main_win.pupil[self.item(current_row_index, 0).text()]
-                    archieve_group = json.load(file)
-                finally:
+                    data = json.load(open(filename))
+                    data.append(archieve_group)
+                    with open(filename, "w") as write_file:
+                        json.dump(data, write_file, indent=4, ensure_ascii=False)
                     file.close()
-
+                except:
+                    json_data = [{"": []}]
+                    with open(filename, 'w') as file:
+                        file.write(json.dumps(json_data, indent=2, ensure_ascii=False))
 
                 del main_win.pupil[self.item(current_row_index, 0).text()]
                 self.removeRow(current_row_index)
@@ -269,7 +335,6 @@ class MainWidget(QWidget):
         self.table.horizontalHeader().setStyleSheet(header_style)
         self.table.verticalHeader().setStyleSheet(header_style)
 
-
     def widgets_location(self):
         nav_layout = QHBoxLayout()
         nav_layout.addWidget(self.prev_btn)
@@ -309,15 +374,16 @@ class MainWidget(QWidget):
         #     "🚀 Турбо режим"+" ("+str(turbo_price)+")",
         #     "⭐ Выполнение бонусных заданий"+" ("+str(bonus_price)+")",
         #     "🏠 Выполнение дополнительных заданий"+" ("+str(extra_price)+")"]
+
         chb_names = [
-                "😎 Посещение",
-                "⏰ Пунктуальность",
-                "✋ Ответы на вопросы преподавателя",
-                "✅ Выполнение основных заданий",
-                "🤝 Помощь нуждающимся",
-                "🚀 Турбо режим",
-                "⭐ Выполнение бонусных заданий",
-                "🏠 Выполнение дополнительных заданий"]
+            "😎 Посещение",
+            "⏰ Пунктуальность",
+            "✋ Ответы на вопросы преподавателя",
+            "✅ Выполнение основных заданий",
+            "🤝 Помощь нуждающимся",
+            "🚀 Турбо режим",
+            "⭐ Выполнение бонусных заданий",
+            "🏠 Выполнение дополнительных заданий"]
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
             self.achievement_chb_list.append(chb)
@@ -506,7 +572,7 @@ class MainWidget(QWidget):
             self.table.setColumnCount(1)
             self.table.setRowCount(students_amount)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            self.table.setVerticalHeaderLabels([str(i+1) for i in range(students_amount)])
+            self.table.setVerticalHeaderLabels([str(i + 1) for i in range(students_amount)])
 
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
@@ -536,7 +602,7 @@ class MainWidget(QWidget):
                             base = len(value)
                             tur = 0
                             if "Посещение" in value:
-                                base -= 1 # чтобы не дублировалось
+                                base -= 1  # чтобы не дублировалось
                                 visited += visit_price
                                 if "Пунктуальность" in value:
                                     base -= 1  # чтобы не дублировалось
@@ -547,10 +613,10 @@ class MainWidget(QWidget):
                             ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
 
-                            curr_sum = base* base_price + visited + tur +  bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
+                            curr_sum = base * base_price + visited + tur + bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
-                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum)+" - "+pup))
+                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum) + " - " + pup))
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
             except Exception as e:
@@ -603,7 +669,7 @@ class MainWidget(QWidget):
                                           "notes": self.note_field.toPlainText()}
 
                 t.setItem(t.currentRow(), t.currentColumn(),
-                          QTableWidgetItem(str(int(points*base_price - r * 15 + b + e))))
+                          QTableWidgetItem(str(int(points * base_price - r * 15 + b + e))))
             except Exception as e:
                 print("Не сработала функция cell_fill", e)
             finally:
@@ -744,13 +810,26 @@ class MainWidget(QWidget):
         self.prev_btn.clicked.connect(self.prev_group)
         self.next_btn.clicked.connect(self.next_group)
 
+def show_json():
+    global readme
+    os.startfile("groups_list.json")
+    with open("README.txt", "w") as f:
+        f.write(readme)
+    os.startfile("README.txt")
+    app.closeAllWindows()
 
+import os
 if __name__ == "__main__":
     app = QApplication([])
     main_win = MainWidget()
+    if not state:
+        modal = QMessageBox(main_win)
+        modal.setWindowTitle("РЕДАКТИРУЙТЕ ФАЙЛ В БЛОКНОТЕ")
+        modal.setText("Заполните файл groups_list.json\nНажмите ОК, чтобы открыть")
+        modal.setStandardButtons(QMessageBox.Ok)
+        modal.showNormal()
+        modal.buttonClicked.connect(show_json)
     app.exec_()
-
-
 
 """Это задание к хакатону. При пересылке оно испортило кодировку.
 Расшифруйте его, чтобы понять, что делать.
