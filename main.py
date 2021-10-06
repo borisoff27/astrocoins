@@ -238,14 +238,18 @@ class TableWidget(QTableWidget):
                     delete_name = self.item(current_row_index, 0).text()
                     archieve_group[delete_name] = main_win.pupil[self.item(current_row_index, 0).text()]
                     data = json.load(open(filename))
+                    data.append(main_win.group_name_lbl.text())
                     data.append(archieve_group)
                     with open(filename, "w") as write_file:
                         json.dump(data, write_file, indent=4, ensure_ascii=False)
                     file.close()
-                except:
-                    json_data = [{"": []}]
+                except Exception as e:
+                    print(e)
+                    json_data = []
+                    json_data.append(main_win.group_name_lbl.text())
+                    json_data.append(archieve_group)
                     with open(filename, 'w') as file:
-                        file.write(json.dumps(json_data, indent=2, ensure_ascii=False))
+                        file.write(json.dumps(json_data, indent=4, ensure_ascii=False))
 
                 del main_win.pupil[self.item(current_row_index, 0).text()]
                 self.removeRow(current_row_index)
