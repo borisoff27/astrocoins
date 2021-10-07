@@ -229,8 +229,8 @@ class TableWidget(QTableWidget):
         if action == del_row_menu:
             current_row_index = self.currentRow()
             if self.item(current_row_index, 0) is not None:
-                # добавление удалённой записи в архив
 
+                # добавление удалённой записи в архив
                 archieve_group.clear()
                 filename = "archieve.json"
                 try:
@@ -251,8 +251,11 @@ class TableWidget(QTableWidget):
                     with open(filename, 'w') as file:
                         file.write(json.dumps(json_data, indent=4, ensure_ascii=False))
 
+                # удаление из словарая в памяти
                 del main_win.pupil[self.item(current_row_index, 0).text()]
+                # удаление строки в таблице
                 self.removeRow(current_row_index)
+                # обновление строк до 10
                 self.setRowCount(students_amount)
 
     # def mousePressEvent(self, event):
