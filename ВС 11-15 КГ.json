@@ -340,6 +340,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 сен": {
+            "achievements": [
+                "Выполнение основных заданий",
+                "Турбо режим"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "26 сен": {
             "achievements": [
                 "Посещение",
@@ -354,5 +364,4 @@
             "reprimands": 0
         }
     }
-
 }
