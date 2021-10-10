@@ -34,5 +34,19 @@
                 "reprimands": 0
             }
         }
+    },
+    "ВС 15-30 ГД",
+    {
+        "тест": {
+            "03 окт": {
+                "achievements": [
+                    "Посещение"
+                ],
+                "bonus": 0,
+                "extra": 0,
+                "notes": "",
+                "reprimands": 0
+            }
+        }
     }
 ]
