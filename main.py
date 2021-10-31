@@ -311,6 +311,7 @@ class MainWidget(QWidget):
         self.dec_repr_btn = PushButton("▼")
         self.dec_repr_btn.setFixedWidth(60)
         self.save_btn = PushButton("Сохранить")
+        self.edit_btn = PushButton("🖊")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
         self.calendar = QCalendarWidget()
@@ -318,7 +319,7 @@ class MainWidget(QWidget):
 
         # словарь вида: ФИ : {дата : [список достижений за занятие]}
         self.pupil = dict()
-        self.resize(1366, 768)
+        # self.resize(1366, 768)
         self.choose_day()
         self.widgets_location()
         self.connects()
@@ -424,7 +425,11 @@ class MainWidget(QWidget):
         table_layout = QVBoxLayout()
         table_layout.addLayout(nav_layout)
         table_layout.addWidget(self.table)
-        table_layout.addWidget(self.save_btn)
+        under_table_layout = QHBoxLayout()
+        under_table_layout.addWidget(self.save_btn, stretch=9)
+        under_table_layout.addWidget(self.edit_btn, stretch=1)
+        table_layout.addLayout(under_table_layout)
+
 
         top_layout = QHBoxLayout()
         top_layout.addLayout(table_layout, stretch=2)
