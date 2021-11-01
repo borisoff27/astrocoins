@@ -142,7 +142,9 @@
             "reprimands": 0
         },
         "15 окт": {
-            "achievements": [],
+            "achievements": [
+                "Выполнение основных заданий"
+            ],
             "bonus": 0,
             "extra": 0,
             "notes": "",

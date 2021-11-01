@@ -93,24 +93,24 @@ extra_price = 15  # стоимость одного дополнительног
 students_amount = 10  # количество человек у группе
 
 state = 1
+is_table_edit = False
+groups = dict()
 
 # чтение из файла словаря с группами
 try:
     with open("groups_list.json", 'r', encoding="utf-8") as file:
         groups = json.load(file)
-except Exception as e:
-    print(e)
+except Exception as EX:
+    print(EX)
     with open("groups_list.json", 'w') as file:
         json.dump({"groups": []}, file, indent=4, sort_keys=True, ensure_ascii=False)
     with open("groups_list.json", 'r', encoding="utf-8") as file:
         groups = json.load(file)
 
-
 # список названий групп из файла groups_list.json
 groups_list = groups["groups"]
 if len(groups_list) == 0:
     state = 0
-
 
 # создание шаблонов групп в файлах по названию группы
 for _g in groups_list:
@@ -119,7 +119,7 @@ for _g in groups_list:
         # попытка открыть файл с группой
         group_file_open = open(filename, "r")
         group_file_open.close()
-    except IOError as e:
+    except IOError as EX:
         # если не удалось открыть файл, то он создаётся с шаблоном {"": []}
         with open(filename, 'w') as file:
             json.dump({"": {}}, file, indent=4, sort_keys=True, ensure_ascii=False)
@@ -166,8 +166,8 @@ class PaddingDelegate(QStyledItemDelegate):
     def displayText(self, text, locale):
         return self._padding + text
 
-    def createEditor(self, parent, option, index):
-        editor = super().createEditor(parent, option, index)
+    def createEditor(self, parent, option, indEX):
+        editor = super().createEditor(parent, option, indEX)
         margins = editor.textMargins()
         padding = editor.fontMetrics().width(self._padding) + 1
         margins.setLeft(margins.left() + padding)
@@ -243,8 +243,8 @@ class TableWidget(QTableWidget):
                     with open(filename, "w") as write_file:
                         json.dump(data, write_file, indent=4, ensure_ascii=False)
                     file.close()
-                except Exception as e:
-                    print(e)
+                except Exception as EX:
+                    print(EX)
                     json_data = []
                     json_data.append(main_win.group_name_lbl.text())
                     json_data.append(archieve_group)
@@ -430,7 +430,6 @@ class MainWidget(QWidget):
         under_table_layout.addWidget(self.edit_btn, stretch=1)
         table_layout.addLayout(under_table_layout)
 
-
         top_layout = QHBoxLayout()
         top_layout.addLayout(table_layout, stretch=2)
         top_layout.addWidget(self.achievements_gb, stretch=1)
@@ -467,6 +466,12 @@ class MainWidget(QWidget):
         self.button_click()
 
     def reset_flags(self):
+
+        # сокрытие столбца для редактирования с фамаилиями
+        global is_table_edit
+        if not is_table_edit:
+            self.table.setColumnHidden(0, True)
+
         # сброс чекбоксов
         for chb in self.achievement_chb_list:
             chb.setCheckState(Qt.Unchecked)
@@ -517,8 +522,8 @@ class MainWidget(QWidget):
             self.groups_btn_list[0].setChecked(1)
             self.groups_list_btn_gb.setLayout(self.groups_list_layout)
             self.button_click()
-        except Exception as e:
-            print("Не срабтала функция choose_day", e)
+        except Exception as EX:
+            print("Не срабтала функция choose_day", EX)
         else:
             # т.к. кнопки создаются всякий раз при выборе дня, то и клики обрабатывать нужно всегдя по новой
             for self.b in self.groups_btn_list:
@@ -550,21 +555,54 @@ class MainWidget(QWidget):
         #     row += 1
 
     def save_table_to_file(self):
+        global is_table_edit
+        if is_table_edit:
+            # self.pupil.clear() # очистка словаря и его обновление
+            t = self.table
+            t.setFocus()
+            temp_pupil = dict(self.pupil)
+            for row in range(t.rowCount()):
+                original_name = t.verticalHeaderItem(row).text().split()
+                if t.item(row, 0) is not None:
+                    try:
+                        temp_name = ""
+                        for _ in range(2, len(original_name)):
+                            temp_name += original_name[_]+" "
+                        original_name = temp_name.strip()
+                    except Exception as EX:
+                        # print("Ошибка original_name", EX)
+                        self.pupil[t.item(row, 0).text()] = dict()
+                    else:
+                        if t.item(row, 0).text() in self.pupil:
+                            del temp_pupil[t.item(row, 0).text()]
+                        else:
+                            chaged_name = t.item(row, 0).text() # идея так себе, т.к. не будет работать при создании массы людей
+                            try:
+                                self.pupil[chaged_name] = temp_pupil[original_name]
+                                del temp_pupil[original_name]
+                                del self.pupil[original_name]
+                            except Exception as EX:
+                                print("Ошибка при добавлении/редактирвоании человека", EX)
+                                return
+            self.table.setColumnHidden(0, True)
+            t.setCurrentItem(None)
+            is_table_edit = False
         try:
             if len(self.pupil) > 0:
                 filename = str(self.group_name_lbl.text()) + ".json"
                 with open(filename, 'w') as file:
                     json.dump(self.pupil, file, indent=4, sort_keys=True, ensure_ascii=False)
-        except Exception as e:
-            print("Ошибка при сохранении файла", e)
+            self.open_table()
+        except Exception as EX:
+            print("Ошибка при сохранении файла", EX)
 
     def open_file(self):
         try:
             self.pupil.clear()
             filename = str(self.group_name_lbl.text()) + ".json"
             file = open(filename, 'r')
-        except Exception as e:
-            print(e)
+        except Exception as EX:
+            print(EX)
         else:
             self.pupil = json.load(file)
         finally:
@@ -597,8 +635,8 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
-        except Exception as e:
-            print("Что-то не так при создании шаблона страницы", e)
+        except Exception as EX:
+            print("Что-то не так при создании шаблона страницы", EX)
         else:
             try:
                 self.open_file()
@@ -622,17 +660,17 @@ class MainWidget(QWidget):
                             if "Турбо-режим" in value:
                                 tur = turbo_price
                             bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
-                            ex = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
+                            extr = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
 
-                            curr_sum = base * base_price + visited + tur + bon * bonus_price + ex * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
+                            curr_sum = base * base_price + visited + tur + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
                     self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum) + " - " + pup))
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
                     row += 1
-            except Exception as e:
-                print("Опять что-то не так, но уже при загрузке данных из файла", e)
+            except Exception as EX:
+                print("Опять что-то не так, но уже при загрузке данных из файла", EX)
             finally:
                 self.pupils_load()
 
@@ -643,6 +681,7 @@ class MainWidget(QWidget):
         finally:
             self.table.setColumnHidden(0, True)
 
+    # заполнение ячейки баллами
     def cell_fill(self):
         t = self.table
         # обработка нажатия на каждый чекбокс
@@ -682,48 +721,55 @@ class MainWidget(QWidget):
 
                 t.setItem(t.currentRow(), t.currentColumn(),
                           QTableWidgetItem(str(int(points * base_price - r * 15 + b + e))))
-            except Exception as e:
-                print("Не сработала функция cell_fill", e)
+            except Exception as EX:
+                print("Не сработала функция cell_fill", EX)
             finally:
                 self.calculate_sum()
 
+    # щелчок по ячейке 
     def cell_select(self):
         self.reset_flags()
         try:
-            t = self.table
-            if t.item(t.currentRow(), t.currentColumn()) is not None:
-                key = t.item(t.currentRow(), 0).text()
-                value = t.horizontalHeaderItem(t.currentColumn()).text()
-                for chb in self.achievement_chb_list:
-                    if chb.text()[2:] in self.pupil[key][value]["achievements"]:
-                        chb.setCheckState(Qt.Checked)
-                    elif chb.text()[2:] == "Выполнение бонусных заданий" and self.pupil[key][value]["bonus"] != 0:
-                        chb.setCheckState(Qt.Checked)
-                    elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value]["extra"] != 0:
-                        chb.setCheckState(Qt.Checked)
+            global is_table_edit
+            if not is_table_edit:
+                t = self.table
+                if t.item(t.currentRow(), t.currentColumn()) is not None:
+                    key = t.item(t.currentRow(), 0).text()
+                    value = t.horizontalHeaderItem(t.currentColumn()).text()
+                    for chb in self.achievement_chb_list:
+                        if chb.text()[2:] in self.pupil[key][value]["achievements"]:
+                            chb.setCheckState(Qt.Checked)
+                        elif chb.text()[2:] == "Выполнение бонусных заданий" and self.pupil[key][value]["bonus"] != 0:
+                            chb.setCheckState(Qt.Checked)
+                        elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value]["extra"] != 0:
+                            chb.setCheckState(Qt.Checked)
 
-                self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
-                self.extra_ach.setText(str(self.pupil[key][value]["extra"]))
-                self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
-                self.note_field.setText(self.pupil[key][value]["notes"])
-            else:
-                self.reset_flags()
-                self.note_field.clear()
-        except Exception as e:
-            print("Не сработала функция cell_select", e)
+                    self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
+                    self.extra_ach.setText(str(self.pupil[key][value]["extra"]))
+                    self.reprimands_amount.setText(str(self.pupil[key][value]["reprimands"]))
+                    self.note_field.setText(self.pupil[key][value]["notes"])
+                else:
+                    self.reset_flags()
+                    self.note_field.clear()
+        except Exception as EX:
+            print("Не сработала функция cell_select", EX)
 
     def pupil_fill(self):
         t = self.table
+        # main_win.table.setCurrentItem(None)
         if t.currentItem():
             key = t.item(t.currentRow(), 0).text()
             value = t.horizontalHeaderItem(t.currentColumn()).text()
-            for chb in self.achievement_chb_list:
-                if chb.text()[2:] == "Выполнение бонусных заданий" and chb.checkState():
-                    self.pupil[key][value]["bonus"] = int(self.bonus_ach.text())
-                if chb.text()[2:] == "Выполнение дополнительных заданий" and chb.checkState():
-                    self.pupil[key][value]["extra"] = int(self.extra_ach.text())
-            self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
-            self.pupil[key][value]["notes"] = self.note_field.toPlainText()
+            if value == "Фамилия Имя":
+                return
+            else:
+                for chb in self.achievement_chb_list:
+                    if chb.text()[2:] == "Выполнение бонусных заданий" and chb.checkState():
+                        self.pupil[key][value]["bonus"] = int(self.bonus_ach.text())
+                    if chb.text()[2:] == "Выполнение дополнительных заданий" and chb.checkState():
+                        self.pupil[key][value]["extra"] = int(self.extra_ach.text())
+                self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
+                self.pupil[key][value]["notes"] = self.note_field.toPlainText()
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
@@ -803,7 +849,15 @@ class MainWidget(QWidget):
                 return
 
     def test(self):
-        pass
+        # редактирование столбца с фамилиями
+        # не происходит сохранение - не меняется фамилия,
+        # наверное берется при сохранении из другого стобца либо надо переделать заполонение и сохранение словаря!!!!!!
+        global is_table_edit
+        is_table_edit = not is_table_edit
+        if is_table_edit:
+            main_win.table.setColumnHidden(0, False)
+        else:
+            main_win.table.setColumnHidden(0, True)
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
@@ -816,11 +870,13 @@ class MainWidget(QWidget):
         self.extra_down_btn.clicked.connect(self.extra_down)
         self.table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
+        self.edit_btn.clicked.connect(self.test)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
         self.note_field.textChanged.connect(self.pupil_fill)
         self.prev_btn.clicked.connect(self.prev_group)
         self.next_btn.clicked.connect(self.next_group)
+
 
 def show_json():
     global readme
@@ -830,7 +886,9 @@ def show_json():
     os.startfile("README.txt")
     app.closeAllWindows()
 
+
 import os
+
 if __name__ == "__main__":
     app = QApplication([])
     main_win = MainWidget()
@@ -842,33 +900,3 @@ if __name__ == "__main__":
         modal.showNormal()
         modal.buttonClicked.connect(show_json)
     app.exec_()
-
-"""Это задание к хакатону. При пересылке оно испортило кодировку.
-Расшифруйте его, чтобы понять, что делать.
-
-
-К сообщению прилагалось следующая инструкция:
-1.
-2.
-3.
-
-Сообщение:
-Мы перехватили сигнал по зашифрованному каналу. Мы предполагаем, что это не простое сообщение.
-По данным разведки в нём скрыто послание. Есть информация, что это ОДНО слово. Помоги его получить.
-
-Ниже приведены IP. Напиши программу, которая проверит правильность IP:
-00.0.000.0
-0.00.000.0
-000.00.0.0
-
-Входные данные IP - массив строк
-
-Есть предположение, что правильный IP содержит часть букв. Это очевидно.
-Также поступила информация, что значения IP каким-то образом связаны с ASCII.
-Что бы это могло значить?
-
-
-
-
-
-"""
