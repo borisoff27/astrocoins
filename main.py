@@ -90,7 +90,7 @@ turbo_price = 5  # скорость турбо-режима
 bonus_price = 10  # стоимость одного бонустного задания
 extra_price = 15  # стоимость одного дополнительного задания
 
-students_amount = 10  # количество человек у группе
+students_amount = 10  # количество человек в группе
 
 state = 1
 is_table_edit = False
@@ -615,12 +615,13 @@ class MainWidget(QWidget):
         for _ in range(1, self.table.columnCount()):
             self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
 
+
     def open_table(self):
         # при открытии таблицы создается 1 столбец для 10 учеников
         try:
             self.table.clear()
             self.table.setColumnCount(1)
-            self.table.setRowCount(students_amount)
+            self.table.setRowCount(students_amount+1)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels([str(i + 1) for i in range(students_amount)])
 
@@ -635,6 +636,7 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
+
         except Exception as EX:
             print("Что-то не так при создании шаблона страницы", EX)
         else:
@@ -680,6 +682,15 @@ class MainWidget(QWidget):
                 # w = self.table.columnWidth(0)
         finally:
             self.table.setColumnHidden(0, True)
+            # добавление строки с количетством присутствующих
+            self.table.setVerticalHeaderItem(10, QTableWidgetItem("Посещаемость"))
+            for day_for_visits in range(1, self.table.columnCount()):
+                visits = 0
+                for p in self.pupil:
+                    if self.table.horizontalHeaderItem(day_for_visits).text() in self.pupil[p]:
+                        if "Посещение" in self.pupil[p][self.table.horizontalHeaderItem(day_for_visits).text()]['achievements']:
+                            visits += 1
+                self.table.setItem(10, day_for_visits, QTableWidgetItem(str(visits))) #+'/'+str(len(self.pupil))))
 
     # заполнение ячейки баллами
     def cell_fill(self):
