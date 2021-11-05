@@ -13,6 +13,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 ноя": {
+            "achievements": [
+                "Посещение",
+                "Ответы на вопросы преподавателя"
+            ],
+            "bonus": 5,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "08 окт": {
             "achievements": [
                 "Посещение",
