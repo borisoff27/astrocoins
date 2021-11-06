@@ -90,6 +90,15 @@
             "notes": "",
             "reprimands": 0
         },
+        "07 ноя": {
+            "achievements": [
+                "Выполнение основных заданий"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "Отработка заранее",
+            "reprimands": 0
+        },
         "10 окт": {
             "achievements": [
                 "Посещение",

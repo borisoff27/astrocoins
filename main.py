@@ -569,11 +569,15 @@ class MainWidget(QWidget):
                         for _ in range(2, len(original_name)):
                             temp_name += original_name[_]+" "
                         original_name = temp_name.strip()
+                        #if original_name == "":
+                            #temp_pupil[t.item(row, 0).text()] = dict()
                     except Exception as EX:
                         # print("Ошибка original_name", EX)
                         self.pupil[t.item(row, 0).text()] = dict()
                     else:
-                        if t.item(row, 0).text() in self.pupil:
+                        if original_name == "" and t.verticalHeaderItem(row).text().isdigit():
+                            self.pupil[t.item(row, 0).text()] = dict()
+                        elif t.item(row, 0).text() in self.pupil:
                             del temp_pupil[t.item(row, 0).text()]
                         else:
                             chaged_name = t.item(row, 0).text() # идея так себе, т.к. не будет работать при создании массы людей
@@ -584,6 +588,8 @@ class MainWidget(QWidget):
                             except Exception as EX:
                                 print("Ошибка при добавлении/редактирвоании человека", EX)
                                 return
+                #else:
+                #    self.pupil[t.item(row, 0).text()] = dict()
             self.table.setColumnHidden(0, True)
             t.setCurrentItem(None)
             is_table_edit = False
