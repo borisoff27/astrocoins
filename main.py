@@ -580,7 +580,7 @@ class MainWidget(QWidget):
                         elif t.item(row, 0).text() in self.pupil:
                             del temp_pupil[t.item(row, 0).text()]
                         else:
-                            chaged_name = t.item(row, 0).text() # идея так себе, т.к. не будет работать при создании массы людей
+                            chaged_name = t.item(row, 0).text()
                             try:
                                 self.pupil[chaged_name] = temp_pupil[original_name]
                                 del temp_pupil[original_name]
@@ -591,7 +591,7 @@ class MainWidget(QWidget):
                 #else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
             self.table.setColumnHidden(0, True)
-            t.setCurrentItem(None)
+            # t.setCurrentItem(None)
             is_table_edit = False
         try:
             if len(self.pupil) > 0:
