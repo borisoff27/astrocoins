@@ -59,6 +59,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "21 ноя": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "24 окт": {
             "achievements": [
                 "Посещение",
@@ -137,6 +147,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "21 ноя": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -221,6 +241,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "21 ноя": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Ответы на вопросы преподавателя"
+            ],
+            "bonus": 1,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "24 окт": {
             "achievements": [
                 "Посещение",
@@ -302,6 +333,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "21 ноя": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
