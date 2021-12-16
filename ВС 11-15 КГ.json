@@ -838,6 +838,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 дек": {
+            "achievements": [
+                "Выполнение основных заданий",
+                "Турбо режим"
+            ],
+            "bonus": 0,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "07 ноя": {
             "achievements": [
                 "Посещение",
@@ -847,6 +857,16 @@
             ],
             "bonus": 0,
             "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 дек": {
+            "achievements": [
+                "Выполнение основных заданий",
+                "Турбо режим"
+            ],
+            "bonus": 3,
+            "extra": 1,
             "notes": "",
             "reprimands": 0
         },
@@ -883,6 +903,16 @@
             ],
             "bonus": 0,
             "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "21 ноя": {
+            "achievements": [
+                "Выполнение основных заданий",
+                "Турбо режим"
+            ],
+            "bonus": 0,
+            "extra": 1,
             "notes": "",
             "reprimands": 0
         },
