@@ -388,6 +388,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 дек": {
+            "achievements": [],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 но€": {
             "achievements": [],
             "bonus": 2,
@@ -548,6 +555,13 @@
                 "¬ыполнение основных заданий"
             ],
             "bonus": 17,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "19 дек": {
+            "achievements": [],
+            "bonus": 8,
             "extra": 0,
             "notes": "",
             "reprimands": 0

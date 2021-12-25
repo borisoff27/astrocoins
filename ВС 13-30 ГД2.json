@@ -455,7 +455,9 @@
             "reprimands": 0
         },
         "19 дек": {
-            "achievements": [],
+            "achievements": [
+                "Выполнение основных заданий"
+            ],
             "bonus": 0,
             "extra": 0,
             "notes": "",
