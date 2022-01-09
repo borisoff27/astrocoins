@@ -135,11 +135,13 @@ dates = {
 }
 
 # формирование словаря дат по дням
-start_day = QDate(2021, 8, 30)  # первый понедельник месяца
+# start_day = QDate(2021, 8, 30)  # первый понедельник месяца
+start_day = QDate(2022, 1, 3)   # первый понедельник месяца
 for d in dates.keys():
     days = []
     _day = start_day
-    while _day.month() > 1:
+    # while _day.month() > 1: # > 1 - до НГ, < 6 - после НГ
+    while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
     dates[d] = days
