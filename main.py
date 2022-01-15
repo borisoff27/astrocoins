@@ -3,11 +3,11 @@
 """
 Доработки:
 1. Убрать ограниечение на 10 человек и сделат безлимит
-2. Переключение между годами либо всё в один год
+2. Переключение между годами либо всё в один год (оптимизировать)
 3. Добавление групп без работы с файлом
 4. Переписать ридми в соответствии с изменениями
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
-6.
+6. Фокус на текущий день
 
 """
 
@@ -147,6 +147,18 @@ dates = {
 }
 
 # формирование словаря дат по дням
+start_day = QDate(2021, 8, 30)  # первый понедельник месяца
+# start_day = QDate(2022, 1, 3)   # первый понедельник месяца
+for d in dates.keys():
+    days = []
+    _day = start_day
+    while _day.month() > 1: # > 1 - до НГ, < 6 - после НГ
+    # while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
+        days.append(_day.toString("dd MMM"))
+        _day = _day.addDays(7)
+    dates[d] = days
+    start_day = start_day.addDays(1)
+
 # start_day = QDate(2021, 8, 30)  # первый понедельник месяца
 start_day = QDate(2022, 1, 3)   # первый понедельник месяца
 for d in dates.keys():
@@ -156,9 +168,8 @@ for d in dates.keys():
     while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
-    dates[d] = days
+    dates[d] += days
     start_day = start_day.addDays(1)
-
 
 # дополнительные дни вне расписания
 # dates["СБ"].append("1 мая д.")
@@ -656,6 +667,7 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
+            self.table.setpo
 
         except Exception as EX:
             print("Что-то не так при создании шаблона страницы", EX)

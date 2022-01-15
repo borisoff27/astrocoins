@@ -77,6 +77,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 13,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -256,6 +266,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 13,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -417,6 +437,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 14,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -585,6 +615,16 @@
                 "Ответы на вопросы преподавателя"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 13,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -773,6 +813,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 14,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -926,6 +976,16 @@
             ],
             "bonus": 0,
             "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 13,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -1113,6 +1173,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 14,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -1292,6 +1362,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 13,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -1467,6 +1547,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "15 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 14,
             "extra": 0,
             "notes": "",
             "reprimands": 0
