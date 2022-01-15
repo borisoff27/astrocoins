@@ -655,7 +655,6 @@ class MainWidget(QWidget):
             self.table.setRowCount(students_amount+1)
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels([str(i + 1) for i in range(students_amount)])
-
             for _d in dates.keys():
                 if self.calendar.selectedDate().shortDayName(
                         self.calendar.selectedDate().dayOfWeek()).lower() == _d.lower():
@@ -667,8 +666,13 @@ class MainWidget(QWidget):
             group_dates.append("ИТОГО")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
-            self.table.setpo
 
+            # автоскроллинг до столбца с текущей датой
+            # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
+            for num in range(len(group_dates)):
+                if group_dates[num] == QDate().currentDate().toString("dd MMM"):
+                    self.table.horizontalScrollBar().setValue(num-6)
+                    break
         except Exception as EX:
             print("Что-то не так при создании шаблона страницы", EX)
         else:
