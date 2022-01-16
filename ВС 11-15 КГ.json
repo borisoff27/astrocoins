@@ -70,6 +70,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 16,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -259,6 +269,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 16,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -453,6 +473,16 @@
                 "Турбо режим"
             ],
             "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 30,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -669,6 +699,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 30,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -863,6 +903,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 30,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -1004,6 +1054,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "19 дек": {
             "achievements": [
                 "Посещение",
@@ -1122,6 +1182,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 16,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -1305,6 +1375,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -1493,6 +1573,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
             "extra": 0,
             "notes": "",
             "reprimands": 0

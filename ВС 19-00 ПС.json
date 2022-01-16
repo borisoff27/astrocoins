@@ -41,6 +41,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 4,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -165,6 +175,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -269,6 +289,16 @@
                 "Помощь нуждающимся"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 19,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -391,6 +421,16 @@
                 "Пунктуальность"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 10,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -518,6 +558,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 19,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -637,6 +687,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 5,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -703,30 +763,6 @@
                 "Турбо режим"
             ],
             "bonus": 4,
-            "extra": 0,
-            "notes": "",
-            "reprimands": 0
-        }
-    },
-    "Трубеева Арина": {
-        "03 окт": {
-            "achievements": [
-                "Посещение",
-                "Пунктуальность",
-                "Выполнение основных заданий"
-            ],
-            "bonus": 11,
-            "extra": 0,
-            "notes": "",
-            "reprimands": 0
-        },
-        "10 окт": {
-            "achievements": [
-                "Посещение",
-                "Пунктуальность",
-                "Выполнение основных заданий"
-            ],
-            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
