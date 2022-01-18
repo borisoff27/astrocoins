@@ -667,12 +667,7 @@ class MainWidget(QWidget):
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
 
-            # автоскроллинг до столбца с текущей датой
-            # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
-            for num in range(len(group_dates)):
-                if group_dates[num] == QDate().currentDate().toString("dd MMM"):
-                    self.table.horizontalScrollBar().setValue(num-6)
-                    break
+
         except Exception as EX:
             print("Что-то не так при создании шаблона страницы", EX)
         else:
@@ -710,7 +705,15 @@ class MainWidget(QWidget):
             except Exception as EX:
                 print("Опять что-то не так, но уже при загрузке данных из файла", EX)
             finally:
+                # автоскроллинг до столбца с текущей датой
+                # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
                 self.pupils_load()
+                # global main_win
+                for num in range(len(group_dates)):
+                    if group_dates[num] == self.calendar.selectedDate().toString("dd MMM"):
+                        self.table.horizontalScrollBar().setValue(num-6)
+                        print(num)
+                        break
 
                 # h = self.table.horizontalHeader().height()
                 # for i in range(self.table.rowCount()):
