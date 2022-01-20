@@ -68,6 +68,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 11,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 окт": {
             "achievements": [
                 "Посещение",
@@ -202,6 +212,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 8,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "21 окт": {
             "achievements": [
                 "Посещение",
@@ -300,6 +320,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 3,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "23 дек": {
             "achievements": [
                 "Посещение",
@@ -323,7 +353,7 @@
             "reprimands": 0
         }
     },
-    "Сидоров Степа": {
+    "Сидоров Стёпа": {
         "13 янв": {
             "achievements": [
                 "Посещение",
@@ -346,6 +376,16 @@
                 "Турбо режим"
             ],
             "bonus": 4,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 9,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -425,6 +465,16 @@
                 "Турбо режим"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 6,
             "extra": 0,
             "notes": "",
             "reprimands": 0

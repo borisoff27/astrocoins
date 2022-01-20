@@ -1,9 +1,5 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import json
 
-# надо выйти из папки source
+# надо выйти из папки source ../
 # pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокойны" source/main.py
 
 """
@@ -18,6 +14,10 @@ import json
 
 """
 
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import json
 
 readme = """Небольшой гайд
 
