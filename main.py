@@ -7,7 +7,10 @@
 3. Добавление групп без работы с файлом
 4. Переписать ридми в соответствии с изменениями
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
-6. Фокус на текущий день
+6. Фокус на текущий день - потестить и поправить
+    6-1. При редактировании фокус на первом столбце
+    6-2. После - вернуть обратно
+
 
 """
 
@@ -708,18 +711,13 @@ class MainWidget(QWidget):
                 # автоскроллинг до столбца с текущей датой
                 # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
                 self.pupils_load()
-                # global main_win
                 for num in range(len(group_dates)):
                     if group_dates[num] == self.calendar.selectedDate().toString("dd MMM"):
                         self.table.horizontalScrollBar().setValue(num-6)
-                        print(num)
                         break
-
-                # h = self.table.horizontalHeader().height()
-                # for i in range(self.table.rowCount()):
-                #     h += self.table.rowHeight(i)
-                # w = self.table.columnWidth(0)
         finally:
+            global is_table_edit
+            is_table_edit = False
             self.table.setColumnHidden(0, True)
             # добавление строки с количетством присутствующих
             self.table.setVerticalHeaderItem(10, QTableWidgetItem("Посещаемость"))
@@ -898,16 +896,20 @@ class MainWidget(QWidget):
             else:
                 return
 
-    def test(self):
+    def SurnameEditing(self):
         # редактирование столбца с фамилиями
         # не происходит сохранение - не меняется фамилия,
         # наверное берется при сохранении из другого стобца либо надо переделать заполонение и сохранение словаря!!!!!!
         global is_table_edit
         is_table_edit = not is_table_edit
         if is_table_edit:
-            main_win.table.setColumnHidden(0, False)
+            self.table.setColumnHidden(0, False)
         else:
-            main_win.table.setColumnHidden(0, True)
+            self.table.setColumnHidden(0, True)
+        self.table.horizontalScrollBar().setValue(0)
+
+    def test(self):
+        pass
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
@@ -920,7 +922,7 @@ class MainWidget(QWidget):
         self.extra_down_btn.clicked.connect(self.extra_down)
         self.table.clicked.connect(self.cell_select)
         self.save_btn.clicked.connect(self.save_table_to_file)
-        self.edit_btn.clicked.connect(self.test)
+        self.edit_btn.clicked.connect(self.SurnameEditing)
         self.inc_repr_btn.clicked.connect(self.inc_repr)
         self.dec_repr_btn.clicked.connect(self.dec_repr)
         self.note_field.textChanged.connect(self.pupil_fill)
