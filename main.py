@@ -1,3 +1,9 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import json
+
+# надо выйти из папки source
 # pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокойны" source/main.py
 
 """
@@ -8,8 +14,6 @@
 4. Переписать ридми в соответствии с изменениями
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
 6. Фокус на текущий день - потестить и поправить
-    6-1. При редактировании фокус на первом столбце
-    6-2. После - вернуть обратно
 
 
 """
@@ -84,11 +88,6 @@ pupil = {
     }
 }
 """
-
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import json
 
 # спиок достижений
 achievements_list = ["Посещение",
