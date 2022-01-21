@@ -104,7 +104,7 @@ turbo_price = 5  # скорость турбо-режима
 bonus_price = 10  # стоимость одного бонустного задания
 extra_price = 15  # стоимость одного дополнительного задания
 
-students_amount = 10  # количество человек в группе
+students_amount = 1  # количество человек в группе
 
 state = 1
 is_table_edit = False
@@ -282,9 +282,8 @@ class TableWidget(QTableWidget):
                 del main_win.pupil[self.item(current_row_index, 0).text()]
                 # удаление строки в таблице
                 self.removeRow(current_row_index)
-                # обновление строк до 10
-                self.setRowCount(students_amount)
 
+                main_win.bottom_row()
     # def mousePressEvent(self, event):
     #     table = event.button()
     #     if table == Qt.RightButton:
@@ -652,6 +651,9 @@ class MainWidget(QWidget):
     def open_table(self):
         # при открытии таблицы создается 1 столбец для 10 учеников
         try:
+            self.open_file()
+            global students_amount
+            students_amount = len(self.pupil) + 1
             self.table.clear()
             self.table.setColumnCount(1)
             self.table.setRowCount(students_amount+1)
@@ -674,7 +676,6 @@ class MainWidget(QWidget):
             print("Что-то не так при создании шаблона страницы", EX)
         else:
             try:
-                self.open_file()
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
@@ -719,14 +720,27 @@ class MainWidget(QWidget):
             is_table_edit = False
             self.table.setColumnHidden(0, True)
             # добавление строки с количетством присутствующих
-            self.table.setVerticalHeaderItem(10, QTableWidgetItem("Посещаемость"))
-            for day_for_visits in range(1, self.table.columnCount()):
-                visits = 0
-                for p in self.pupil:
-                    if self.table.horizontalHeaderItem(day_for_visits).text() in self.pupil[p]:
-                        if "Посещение" in self.pupil[p][self.table.horizontalHeaderItem(day_for_visits).text()]['achievements']:
-                            visits += 1
-                self.table.setItem(10, day_for_visits, QTableWidgetItem(str(visits))) #+'/'+str(len(self.pupil))))
+            self.bottom_row()
+            # self.table.setVerticalHeaderItem(students_amount, QTableWidgetItem("Посещаемость"))
+            # for day_for_visits in range(1, self.table.columnCount()):
+            #     visits = 0
+            #     for p in self.pupil:
+            #         if self.table.horizontalHeaderItem(day_for_visits).text() in self.pupil[p]:
+            #             if "Посещение" in self.pupil[p][self.table.horizontalHeaderItem(day_for_visits).text()]['achievements']:
+            #                 visits += 1
+            #     self.table.setItem(students_amount, day_for_visits, QTableWidgetItem(str(visits))) #+'/'+str(len(self.pupil))))
+
+    def bottom_row(self):
+        self.table.setVerticalHeaderItem(students_amount, QTableWidgetItem("Посещаемость"))
+        for day_for_visits in range(1, self.table.columnCount()):
+            visits = 0
+            for p in self.pupil:
+                if self.table.horizontalHeaderItem(day_for_visits).text() in self.pupil[p]:
+                    if "Посещение" in self.pupil[p][self.table.horizontalHeaderItem(day_for_visits).text()][
+                        'achievements']:
+                        visits += 1
+            self.table.setItem(students_amount, day_for_visits,
+                               QTableWidgetItem(str(visits)))  # +'/'+str(len(self.pupil))))
 
     # заполнение ячейки баллами
     def cell_fill(self):
