@@ -4,12 +4,9 @@
 
 """
 Доработки:
-1. Убрать ограниечение на 10 человек и сделат безлимит
-2. Переключение между годами либо всё в один год (оптимизировать)
 3. Добавление групп без работы с файлом
-4. Переписать ридми в соответствии с изменениями
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
-6. Фокус на текущий день - потестить и поправить для больших экранов сделать вывод посередине
+6. Фокус на текущий день - работает по разному при открытии и созранении
 
 
 """
@@ -105,6 +102,7 @@ bonus_price = 10  # стоимость одного бонустного зад�
 extra_price = 15  # стоимость одного дополнительного задания
 
 students_amount = 1  # количество человек в группе
+today_column = 0
 
 state = 1
 is_table_edit = False
@@ -555,8 +553,8 @@ class MainWidget(QWidget):
             for self.b in self.groups_btn_list:
                 self.b.clicked.connect(self.button_click)
         finally:
-            self.reset_flags()
-
+            # self.reset_flags()
+            pass
     # выбор группы (клик по radiobutton)
     def button_click(self):
         self.reset_flags()
@@ -565,6 +563,7 @@ class MainWidget(QWidget):
             if b.isChecked():
                 self.group_name_lbl.setText(b.text())
                 self.open_table()
+                break
 
     def pupils_load(self):
         pass
@@ -616,9 +615,9 @@ class MainWidget(QWidget):
                                 return
                 #else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
-            self.table.setColumnHidden(0, True)
+            # self.table.setColumnHidden(0, True)
             # t.setCurrentItem(None)
-            is_table_edit = False
+            # is_table_edit = False
         try:
             if len(self.pupil) > 0:
                 filename = str(self.group_name_lbl.text()) + ".json"
@@ -708,27 +707,24 @@ class MainWidget(QWidget):
             except Exception as EX:
                 print("Опять что-то не так, но уже при загрузке данных из файла", EX)
             finally:
+                self.table.setColumnHidden(0, True)
                 # автоскроллинг до столбца с текущей датой
                 # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
                 self.pupils_load()
-                for num in range(len(group_dates)):
-                    if group_dates[num] == self.calendar.selectedDate().toString("dd MMM"):
-                        self.table.horizontalScrollBar().setValue(num-6)
-                        break
         finally:
             global is_table_edit
-            is_table_edit = False
-            self.table.setColumnHidden(0, True)
+            for num in range(len(group_dates)):
+                if group_dates[num] == self.calendar.selectedDate().toString("dd MMM"):
+                    if not is_table_edit:
+                        global today_column
+                        today_column = num
+                        self.table.horizontalScrollBar().setValue(num-6)
+                    break
+            # global is_table_edit
+            # is_table_edit = False
+            # self.table.setColumnHidden(0, True)
             # добавление строки с количетством присутствующих
             self.bottom_row()
-            # self.table.setVerticalHeaderItem(students_amount, QTableWidgetItem("Посещаемость"))
-            # for day_for_visits in range(1, self.table.columnCount()):
-            #     visits = 0
-            #     for p in self.pupil:
-            #         if self.table.horizontalHeaderItem(day_for_visits).text() in self.pupil[p]:
-            #             if "Посещение" in self.pupil[p][self.table.horizontalHeaderItem(day_for_visits).text()]['achievements']:
-            #                 visits += 1
-            #     self.table.setItem(students_amount, day_for_visits, QTableWidgetItem(str(visits))) #+'/'+str(len(self.pupil))))
 
     def bottom_row(self):
         self.table.setVerticalHeaderItem(students_amount, QTableWidgetItem("Посещаемость"))
@@ -911,15 +907,15 @@ class MainWidget(QWidget):
 
     def SurnameEditing(self):
         # редактирование столбца с фамилиями
-        # не происходит сохранение - не меняется фамилия,
-        # наверное берется при сохранении из другого стобца либо надо переделать заполонение и сохранение словаря!!!!!!
         global is_table_edit
         is_table_edit = not is_table_edit
         if is_table_edit:
             self.table.setColumnHidden(0, False)
+            self.table.horizontalScrollBar().setValue(0)
+
         else:
             self.table.setColumnHidden(0, True)
-        self.table.horizontalScrollBar().setValue(0)
+            self.table.horizontalScrollBar().setValue(today_column - 6)
 
     def test(self):
         pass
