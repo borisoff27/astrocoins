@@ -344,10 +344,10 @@ class MainWidget(QWidget):
         # словарь вида: ФИ : {дата : [список достижений за занятие]}
         self.pupil = dict()
         # self.resize(1366, 768)
-        self.choose_day()
         self.widgets_location()
         self.connects()
         self.visualisation()
+        self.choose_day()
         self.setWindowTitle("✨Астрокойны💰")
         self.showMaximized()
 
@@ -492,9 +492,10 @@ class MainWidget(QWidget):
     def reset_flags(self):
 
         # сокрытие столбца для редактирования с фамаилиями
-        global is_table_edit
+        global is_table_edit, today_column
         if not is_table_edit:
             self.table.setColumnHidden(0, True)
+            # self.table.horizontalScrollBar().setValue(today_column-6)
 
         # сброс чекбоксов
         for chb in self.achievement_chb_list:
@@ -720,9 +721,12 @@ class MainWidget(QWidget):
                         today_column = num
                         self.table.horizontalScrollBar().setValue(num-6)
                     break
+
+
+
             # global is_table_edit
             # is_table_edit = False
-            # self.table.setColumnHidden(0, True)
+            self.table.setColumnHidden(0, True)
             # добавление строки с количетством присутствующих
             self.bottom_row()
 
