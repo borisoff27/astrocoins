@@ -583,6 +583,7 @@ class MainWidget(QWidget):
     def save_table_to_file(self):
         global is_table_edit
         if is_table_edit:
+            is_table_edit = False
             # self.pupil.clear() # очистка словаря и его обновление
             t = self.table
             t.setFocus()
