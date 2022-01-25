@@ -1,6 +1,6 @@
 
 # надо выйти из папки source ../
-# pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокойны" source/main.py
+# pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокоины" source/main.py
 
 """
 Доработки:
@@ -348,7 +348,7 @@ class MainWidget(QWidget):
         self.connects()
         self.visualisation()
         self.choose_day()
-        self.setWindowTitle("✨Астрокойны💰")
+        self.setWindowTitle("✨Астрокоины💰")
         self.showMaximized()
 
     def visualisation(self):
@@ -495,6 +495,7 @@ class MainWidget(QWidget):
         global is_table_edit, today_column
         if not is_table_edit:
             self.table.setColumnHidden(0, True)
+            self.table.setColumnHidden(self.table.columnCount() - 1, True)
             # self.table.horizontalScrollBar().setValue(today_column-6)
 
         # сброс чекбоксов
@@ -615,6 +616,9 @@ class MainWidget(QWidget):
                             except Exception as EX:
                                 print("Ошибка при добавлении/редактирвоании человека", EX)
                                 return
+                    finally:
+                        chaged_name = original_name
+                    self.pupil[chaged_name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
                 #else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
             # self.table.setColumnHidden(0, True)
@@ -700,7 +704,7 @@ class MainWidget(QWidget):
                             extr = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
 
-                            curr_sum = base * base_price + visited + tur + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
+                            curr_sum = base * base_price + visited + tur + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокоинов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
                     try:
@@ -714,6 +718,7 @@ class MainWidget(QWidget):
                 print("Опять что-то не так, но уже при загрузке данных из файла", EX)
             finally:
                 self.table.setColumnHidden(0, True)
+                self.table.setColumnHidden(self.table.columnCount() - 1, True)
                 # автоскроллинг до столбца с текущей датой
                 # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
                 self.pupils_load()
@@ -732,6 +737,7 @@ class MainWidget(QWidget):
             # global is_table_edit
             # is_table_edit = False
             self.table.setColumnHidden(0, True)
+            self.table.setColumnHidden(self.table.columnCount() - 1, True)
             # добавление строки с количетством присутствующих
             self.bottom_row()
 
@@ -825,6 +831,10 @@ class MainWidget(QWidget):
         # main_win.table.setCurrentItem(None)
         if t.currentItem():
             key = t.item(t.currentRow(), 0).text()
+            # if t.currentColumn() == t.columnCount()-1:
+            #     self.pupil[key]["paid"] = int(t.item(t.currentRow(), t.columnCount()-1).text())
+            #     print(self.pupil[key]["paid"])
+            # else:
             value = t.horizontalHeaderItem(t.currentColumn()).text()
             if value == "Фамилия Имя":
                 return
@@ -836,7 +846,6 @@ class MainWidget(QWidget):
                         self.pupil[key][value]["extra"] = int(self.extra_ach.text())
                 self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
                 self.pupil[key][value]["notes"] = self.note_field.toPlainText()
-                self.pupil[key][value]["paid"] = 0 # !!!!!!!!!!!!!!!!!!!!!! записать из таблицы для каждого
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
@@ -921,10 +930,13 @@ class MainWidget(QWidget):
         is_table_edit = not is_table_edit
         if is_table_edit:
             self.table.setColumnHidden(0, False)
+            self.table.setColumnHidden(self.table.columnCount()-1, False)
             self.table.horizontalScrollBar().setValue(0)
 
         else:
+            self.pupil_fill()
             self.table.setColumnHidden(0, True)
+            self.table.setColumnHidden(self.table.columnCount()-1, True)
             self.table.horizontalScrollBar().setValue(today_column - 6)
 
     def test(self):
