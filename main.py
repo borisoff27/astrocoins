@@ -668,7 +668,7 @@ class MainWidget(QWidget):
                     break
             group_dates = [str(_) for _ in dates[_d]]
             group_dates.insert(0, "Фамилия Имя")
-            group_dates.append("ИТОГО")
+            group_dates.append("Потрачено")
             self.add_col()
             self.table.setHorizontalHeaderLabels(group_dates)
 
@@ -703,8 +703,12 @@ class MainWidget(QWidget):
                             curr_sum = base * base_price + visited + tur + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокойнов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
-                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum) + " - " + pup))
-                    self.table.setItem(row, col + 1, QTableWidgetItem(str(_sum)))  # последний столбец для общей суммы
+                    try:
+                        paid = self.pupil[pup]["paid"]
+                    except Exception:
+                        paid = 0
+                    self.table.setItem(row, col + 1, QTableWidgetItem(str(paid)))  # последний столбец для общей суммы
+                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum-paid) + " - " + pup))
                     row += 1
             except Exception as EX:
                 print("Опять что-то не так, но уже при загрузке данных из файла", EX)
@@ -832,6 +836,7 @@ class MainWidget(QWidget):
                         self.pupil[key][value]["extra"] = int(self.extra_ach.text())
                 self.pupil[key][value]["reprimands"] = int(self.reprimands_amount.text())
                 self.pupil[key][value]["notes"] = self.note_field.toPlainText()
+                self.pupil[key][value]["paid"] = 0 # !!!!!!!!!!!!!!!!!!!!!! записать из таблицы для каждого
 
     def inc_repr(self):
         count = int(self.reprimands_amount.text()) + 1
