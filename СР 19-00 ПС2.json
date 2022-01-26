@@ -172,7 +172,8 @@
             "extra": 0,
             "notes": "Бонус за много правильных ответов",
             "reprimands": 0
-        }
+        },
+        "paid": 0
     },
     "Беннер Егор": {
         "01 дек": {
@@ -266,6 +267,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 4,
+            "extra": 81,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -338,7 +349,8 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 1500
     },
     "Богомолов Данил": {
         "01 дек": {
@@ -450,6 +462,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [],
+            "bonus": 1,
+            "extra": 23,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -520,7 +539,8 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 0
     },
     "Иванов Вячеслав": {
         "01 дек": {
@@ -627,6 +647,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 12,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -663,7 +693,8 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 620
     },
     "Мушкин Максим": {
         "01 дек": {
@@ -770,6 +801,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 5,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -837,7 +878,8 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 150
     },
     "Наумова Наташа": {
         "01 дек": {
@@ -939,6 +981,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [],
+            "bonus": 1,
+            "extra": 42,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -1012,7 +1061,8 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 0
     },
     "Тарасенко Макар": {
         "01 дек": {
@@ -1105,6 +1155,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "19 янв": {
+            "achievements": [],
+            "bonus": 2,
+            "extra": 107,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 окт": {
             "achievements": [
                 "Посещение",
@@ -1173,6 +1230,7 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
-        }
+        },
+        "paid": 0
     }
 }
