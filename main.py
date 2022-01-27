@@ -4,6 +4,8 @@
 
 """
 Доработки:
+1. НЕ РАБОТАЕТ ДОБАВЛЕНИЕ УЧЕНИКОВ!!!! Связано с вычитанием баллов (наверное)
+2. При запуске  быллов??? ЧТ 17-15
 3. Добавление групп без работы с файлом
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
 6. Фокус на текущий день - работает по разному при открытии и созранении
@@ -618,7 +620,10 @@ class MainWidget(QWidget):
                                 return
                     finally:
                         chaged_name = original_name
-                    self.pupil[chaged_name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
+                    if  int(t.item(row, t.columnCount() - 1).text()) is None:
+                        self.pupil[chaged_name]["paid"] = 0
+                    else:
+                        self.pupil[chaged_name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
                 #else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
             # self.table.setColumnHidden(0, True)
