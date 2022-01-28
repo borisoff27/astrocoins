@@ -5,7 +5,7 @@
 """
 Доработки:
 1. Не проставляет галочки в режиме редактирования (либо заблокировать, либо исправить)
-2. При запуске  баллов??? ЧТ 17-15
+2. Автопереключение группы по времени
 3. Добавление групп без работы с файлом
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
 6. Фокус на текущий день - работает по разному при открытии и созранении
@@ -929,9 +929,14 @@ class MainWidget(QWidget):
                 for col in range(1, t.columnCount() - 1):
                     if t.item(row, col) is not None:
                         total_sum += int(t.item(row, col).text())
-                t.setItem(row, col + 1, QTableWidgetItem(str(self.pupil[t.item(row, 0).text()]["paid"])))  # последний столбец для общей суммы
-                total_sum -= int(self.pupil[t.item(row, 0).text()]["paid"])
-                # self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
+                print(t.item(row, 0).text())
+                # print(self.pupil[t.item(row, 0).text()]["paid"])
+                try:
+                    t.setItem(row, col + 1, QTableWidgetItem(str(self.pupil[t.item(row, 0).text()]["paid"])))  # последний столбец для общей суммы
+                except Exception as Ex:
+                    t.setItem(row, col + 1, QTableWidgetItem(str(0)))  # последний столбец для общей суммы
+                total_sum -= int(t.item(row, col + 1).text())
+                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
                 self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum) + " - " + (t.item(row, 0).text())))
             else:
                 return
