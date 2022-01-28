@@ -310,7 +310,7 @@ class MainWidget(QWidget):
         self.group_name_lbl.setAlignment(Qt.AlignCenter)
         self.table = TableWidget()
         # self.table.setEditTriggers(QAbstractItemView.DoubleClicked)
-        self.add_table_col_btn = PushButton("Добавить столбец")
+        # self.add_table_col_btn = PushButton("Добавить столбец")
         self.achievements_gb = QGroupBox("Достижения")
         self.achievements_gb.setStyleSheet("background-color:#D9BBFF; color: #2B2235")
         self.bonus_ach = LineEdit()
@@ -505,12 +505,14 @@ class MainWidget(QWidget):
         # self.note_field.clear()
 
         # разблокирование всех чекбоксов
-        self.lock_widgets(False)
+        # self.lock_widgets(False)
 
         self.visualisation()
 
     # выбор дня в календаре
     def choose_day(self):
+        global is_table_edit
+        is_table_edit = False
         self.reset_flags()
         self.note_field.clear()
         try:
@@ -852,11 +854,12 @@ class MainWidget(QWidget):
         # main_win.table.setCurrentItem(None)
         if t.currentItem():
             key = t.item(t.currentRow(), 0).text()
-            # if t.currentColumn() == t.columnCount()-1:
-            #     self.pupil[key]["paid"] = int(t.item(t.currentRow(), t.columnCount()-1).text())
-            #     print(self.pupil[key]["paid"])
-            # else:
-            value = t.horizontalHeaderItem(t.currentColumn()).text()
+            if t.currentColumn() == t.columnCount()-1:
+                value = t.horizontalHeaderItem(0).text()
+                # self.pupil[key]["paid"] = int(t.item(t.currentRow(), t.columnCount()-1).text())
+                # print(self.pupil[key]["paid"])
+            else:
+                value = t.horizontalHeaderItem(t.currentColumn()).text()
             if value == "Фамилия Имя":
                 return
             else:
@@ -955,11 +958,15 @@ class MainWidget(QWidget):
         # редактирование столбца с фамилиями
         global is_table_edit
         is_table_edit = not is_table_edit
+        t = self.table
         if is_table_edit:
             self.lock_widgets(True)
             self.table.setColumnHidden(0, False)
             self.table.setColumnHidden(self.table.columnCount() - 1, False)
             self.table.horizontalScrollBar().setValue(0)
+
+            for c in range(1,t.columnCount()-1):
+                t.hideColumn(c)
 
         else:
             self.lock_widgets(False)
@@ -967,6 +974,9 @@ class MainWidget(QWidget):
             self.table.setColumnHidden(0, True)
             self.table.setColumnHidden(self.table.columnCount() - 1, True)
             self.table.horizontalScrollBar().setValue(today_column - 6)
+
+            for c in range(1,t.columnCount()-1):
+                t.showColumn(c)
 
     def lock_widgets(self, is_state):
         self.achievements_gb.setEnabled(not is_state)
@@ -979,6 +989,7 @@ class MainWidget(QWidget):
 
         return total
 
+    # выбор группы по текущему времени
     def group_time_now(self):
         time_now = QTime.currentTime()
         h_now = time_now.hour()
@@ -992,7 +1003,7 @@ class MainWidget(QWidget):
             self.radio_group.setExclusive(False)
             rbs[i].setChecked(0)
             if total_now < self.group_time(rbs[0].text()):
-                self.rbs[0].setChecked(1)
+                rbs[0].setChecked(1)
             elif 0 < self.group_time(rbs[i].text()) - total_now < 10 or \
                     0 < total_now - self.group_time(rbs[i].text()) <= 95:
                 rbs[i].setChecked(1)
@@ -1048,3 +1059,11 @@ if __name__ == "__main__":
         modal.showNormal()
         modal.buttonClicked.connect(show_json)
     app.exec_()
+
+
+"""
+Скроллинг
+
+Сам я реализовал следующим образом.
+Размещаю на виджете QTableWidget и QScrollBar. Из ширины QTableWidget->viewport()->size().width() вычитаю ширину столбцов которые закреплены (не перемещающиеся по скроллингу). Из оставшейся ширины вычисляю, сколько колонок помещается. Те, которые не помещаются, делаю их скрытыми (setColumnHidden). У скроллинга задаю setMaximum равную количеству скрытых столбцов. При перемещении ползунка скроллинга скрываю одни и отображаю другие столбцы.
+"""
