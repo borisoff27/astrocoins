@@ -4,8 +4,8 @@
 
 """
 Доработки:
-1. НЕ РАБОТАЕТ ДОБАВЛЕНИЕ УЧЕНИКОВ!!!! Связано с вычитанием баллов (наверное)
-2. При запуске  быллов??? ЧТ 17-15
+1. Не проставляет галочки в режиме редактирования (либо заблокировать, либо исправить)
+2. При запуске  баллов??? ЧТ 17-15
 3. Добавление групп без работы с файлом
 5. ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
 6. Фокус на текущий день - работает по разному при открытии и созранении
@@ -620,10 +620,11 @@ class MainWidget(QWidget):
                                 return
                     finally:
                         chaged_name = original_name
-                    if  int(t.item(row, t.columnCount() - 1).text()) is None:
-                        self.pupil[chaged_name]["paid"] = 0
+                    name = t.item(row, 0).text()
+                    if t.item(row, t.columnCount()-1) is None:
+                        self.pupil[name]["paid"] = 0
                     else:
-                        self.pupil[chaged_name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
+                        self.pupil[name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
                 #else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
             # self.table.setColumnHidden(0, True)
@@ -667,6 +668,7 @@ class MainWidget(QWidget):
             self.table.clear()
             self.table.setColumnCount(1)
             self.table.setRowCount(students_amount+1)
+            # self.table.setItem(self.table.rowCount()-1, self.table.colunmCount()-1, QTableWidgetItem(str(0)))
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels([str(i + 1) for i in range(students_amount)])
             for _d in dates.keys():
@@ -689,7 +691,11 @@ class MainWidget(QWidget):
                 row = 0
                 for pup in self.pupil:
                     self.table.setItem(row, 0, QTableWidgetItem(pup))
+                    # self.table.setItem(row, self.table.columnCount(), QTableWidgetItem(str(0)))
+                    # print(self.table.item(row, self.table.columnCount()))
+
                     _sum = 0
+                        # self.table.setItem(row, self.table.columnCount(), QTableWidgetItem(str(0)))  # последний столбец для общей суммы
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())][
@@ -917,15 +923,16 @@ class MainWidget(QWidget):
     def calculate_sum(self):
         t = self.table
         t.setFocus()
-        for row in range(t.rowCount()):
+        for row in range(0, t.rowCount()):
             if t.item(row, 0) is not None:
                 total_sum = 0
                 for col in range(1, t.columnCount() - 1):
                     if t.item(row, col) is not None:
                         total_sum += int(t.item(row, col).text())
-                t.setItem(row, col + 1, QTableWidgetItem(str(total_sum)))  # последний столбец для общей суммы
-                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
-                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum) + " - " + t.item(row, 0).text()))
+                t.setItem(row, col + 1, QTableWidgetItem(str(self.pupil[t.item(row, 0).text()]["paid"])))  # последний столбец для общей суммы
+                total_sum -= int(self.pupil[t.item(row, 0).text()]["paid"])
+                # self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
+                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum) + " - " + (t.item(row, 0).text())))
             else:
                 return
 
