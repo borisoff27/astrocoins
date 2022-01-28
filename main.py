@@ -1,4 +1,3 @@
-
 # надо выйти из папки source ../
 # pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокоины" source/main.py
 
@@ -154,24 +153,25 @@ start_day = QDate(2021, 8, 30)  # первый понедельник месяц
 for d in dates.keys():
     days = []
     _day = start_day
-    while _day.month() > 1: # > 1 - до НГ, < 6 - после НГ
-    # while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
+    while _day.month() > 1:  # > 1 - до НГ, < 6 - после НГ
+        # while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
     dates[d] = days
     start_day = start_day.addDays(1)
 
 # start_day = QDate(2021, 8, 30)  # первый понедельник месяца
-start_day = QDate(2022, 1, 3)   # первый понедельник месяца
+start_day = QDate(2022, 1, 3)  # первый понедельник месяца
 for d in dates.keys():
     days = []
     _day = start_day
     # while _day.month() > 1: # > 1 - до НГ, < 6 - после НГ
-    while _day.month() < 6: # > 1 - до НГ, < 6 - после НГ
+    while _day.month() < 6:  # > 1 - до НГ, < 6 - после НГ
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
     dates[d] += days
     start_day = start_day.addDays(1)
+
 
 # дополнительные дни вне расписания
 # dates["СБ"].append("1 мая д.")
@@ -303,6 +303,7 @@ class MainWidget(QWidget):
 
         # виджеты
         self.groups_list_layout = QHBoxLayout()
+        self.radio_group = QButtonGroup()
         self.prev_btn = PushButton("◀")
         self.next_btn = PushButton("▶")
         self.group_name_lbl = QLabel("Группа")
@@ -395,19 +396,8 @@ class MainWidget(QWidget):
                 QCheckBox::indicator:checked
                 {
                     background-color: #833AE0;
-                }
-                
-                
+                }              
                 '''
-        # chb_names = [
-        #     "😎 Посещение"+" ("+str(visit_price)+")",
-        #     "⏰ Пунктуальность"+" ("+str(on_time_price)+")",
-        #     "✋ Ответы на вопросы преподавателя"+" ("+str(base_price)+")",
-        #     "✅ Выполнение основных заданий"+" ("+str(base_price)+")",
-        #     "🤝 Помощь нуждающимся"+" ("+str(base_price)+")",
-        #     "🚀 Турбо режим"+" ("+str(turbo_price)+")",
-        #     "⭐ Выполнение бонусных заданий"+" ("+str(bonus_price)+")",
-        #     "🏠 Выполнение дополнительных заданий"+" ("+str(extra_price)+")"]
 
         chb_names = [
             "😎 Посещение",
@@ -480,7 +470,7 @@ class MainWidget(QWidget):
                 self.groups_btn_list[i - 1].setChecked(1)
                 break
             i += 1
-        self.button_click()
+        # self.button_click()
 
     def next_group(self):
         i = 0
@@ -489,7 +479,7 @@ class MainWidget(QWidget):
                 self.groups_btn_list[i + 1].setChecked(1)
                 break
             i += 1
-        self.button_click()
+        # self.button_click()
 
     def reset_flags(self):
 
@@ -513,6 +503,9 @@ class MainWidget(QWidget):
 
         # очистка комментариев
         # self.note_field.clear()
+
+        # разблокирование всех чекбоксов
+        self.lock_widgets(False)
 
         self.visualisation()
 
@@ -540,34 +533,53 @@ class MainWidget(QWidget):
                 self.groups_list_layout.itemAt(i).widget().setParent(None)
 
             self.groups_btn_list.clear()
+
             # создание переключателей для выбора текущей группы
             for i in range(len(groups_list_today)):
                 r_btn = QRadioButton(groups_list_today[i])
                 self.groups_btn_list.append(r_btn)
                 r_btn.setStyleSheet(
                     'QRadioButton{font: 12pt None;} QRadioButton::indicator { width: 40%; height: 40%;};')
+                # self.radio_group.addButton(r_btn)
+                r_btn.toggled.connect(self.test2)
+                # print(self.groups_btn_list)
                 self.groups_list_layout.addWidget(self.groups_btn_list[i])
-            self.groups_btn_list[0].setChecked(1)
+            # self.radio_group.setExclusive(False)
+            # self.groups_btn_list[0].setChecked(1)
+            # self.radio_group.setExclusive(True)
+
             self.groups_list_btn_gb.setLayout(self.groups_list_layout)
-            self.button_click()
+            # self.button_click()
         except Exception as EX:
             print("Не срабтала функция choose_day", EX)
-        else:
-            # т.к. кнопки создаются всякий раз при выборе дня, то и клики обрабатывать нужно всегдя по новой
-            for self.b in self.groups_btn_list:
-                self.b.clicked.connect(self.button_click)
+        #     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # else:
+        # т.к. кнопки создаются всякий раз при выборе дня, то и клики обрабатывать нужно всегдя по новой
+        # for self.b in self.groups_btn_list:
+        #     self.b.toggled.connect(self.test)
+        # self.b.clicked.connect(self.button_click)
         finally:
+            self.group_time_now()
             # self.reset_flags()
             pass
+
     # выбор группы (клик по radiobutton)
-    def button_click(self):
+    # def button_click(self):
+    def test2(self):
         self.reset_flags()
         self.note_field.clear()
-        for b in self.groups_btn_list:
-            if b.isChecked():
-                self.group_name_lbl.setText(b.text())
-                self.open_table()
-                break
+
+        r_btn = self.sender()
+        if r_btn.isChecked():
+            self.group_name_lbl.setText(r_btn.text())
+            self.open_table()
+        # print(r_btn.text())
+
+        # for r_btn in self.groups_btn_list:
+        #     if r_btn.isChecked():
+        #
+        #
+        # break
 
     def pupils_load(self):
         pass
@@ -597,10 +609,10 @@ class MainWidget(QWidget):
                     try:
                         temp_name = ""
                         for _ in range(2, len(original_name)):
-                            temp_name += original_name[_]+" "
+                            temp_name += original_name[_] + " "
                         original_name = temp_name.strip()
-                        #if original_name == "":
-                            #temp_pupil[t.item(row, 0).text()] = dict()
+                        # if original_name == "":
+                        # temp_pupil[t.item(row, 0).text()] = dict()
                     except Exception as EX:
                         # print("Ошибка original_name", EX)
                         self.pupil[t.item(row, 0).text()] = dict()
@@ -618,14 +630,12 @@ class MainWidget(QWidget):
                             except Exception as EX:
                                 print("Ошибка при добавлении/редактирвоании человека", EX)
                                 return
-                    finally:
-                        chaged_name = original_name
                     name = t.item(row, 0).text()
-                    if t.item(row, t.columnCount()-1) is None:
+                    if t.item(row, t.columnCount() - 1) is None:
                         self.pupil[name]["paid"] = 0
                     else:
                         self.pupil[name]["paid"] = int(t.item(row, t.columnCount() - 1).text())
-                #else:
+                # else:
                 #    self.pupil[t.item(row, 0).text()] = dict()
             # self.table.setColumnHidden(0, True)
             # t.setCurrentItem(None)
@@ -638,6 +648,7 @@ class MainWidget(QWidget):
             self.open_table()
         except Exception as EX:
             print("Ошибка при сохранении файла", EX)
+        self.lock_widgets(False)
 
     def open_file(self):
         try:
@@ -658,7 +669,6 @@ class MainWidget(QWidget):
         for _ in range(1, self.table.columnCount()):
             self.table.horizontalHeader().setSectionResizeMode(_, QHeaderView.ResizeToContents)
 
-
     def open_table(self):
         # при открытии таблицы создается 1 столбец для 10 учеников
         try:
@@ -667,7 +677,7 @@ class MainWidget(QWidget):
             students_amount = len(self.pupil) + 1
             self.table.clear()
             self.table.setColumnCount(1)
-            self.table.setRowCount(students_amount+1)
+            self.table.setRowCount(students_amount + 1)
             # self.table.setItem(self.table.rowCount()-1, self.table.colunmCount()-1, QTableWidgetItem(str(0)))
             self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.table.setVerticalHeaderLabels([str(i + 1) for i in range(students_amount)])
@@ -695,7 +705,7 @@ class MainWidget(QWidget):
                     # print(self.table.item(row, self.table.columnCount()))
 
                     _sum = 0
-                        # self.table.setItem(row, self.table.columnCount(), QTableWidgetItem(str(0)))  # последний столбец для общей суммы
+                    # self.table.setItem(row, self.table.columnCount(), QTableWidgetItem(str(0)))  # последний столбец для общей суммы
                     for col in range(1, self.table.columnCount() - 1):
                         if self.table.horizontalHeaderItem(col).text() in self.pupil[pup]:
                             value = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())][
@@ -723,7 +733,7 @@ class MainWidget(QWidget):
                     except Exception:
                         paid = 0
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(paid)))  # последний столбец для общей суммы
-                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum-paid) + " - " + pup))
+                    self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum - paid) + " - " + pup))
                     row += 1
             except Exception as EX:
                 print("Опять что-то не так, но уже при загрузке данных из файла", EX)
@@ -734,16 +744,15 @@ class MainWidget(QWidget):
                 # !!! ПРОВЕРИТ В НАЧАЛЕ ГОДА!!!!
                 self.pupils_load()
         finally:
+
             global is_table_edit
             for num in range(len(group_dates)):
                 if group_dates[num] == self.calendar.selectedDate().toString("dd MMM"):
                     if not is_table_edit:
                         global today_column
                         today_column = num
-                        self.table.horizontalScrollBar().setValue(num-6)
+                        self.table.horizontalScrollBar().setValue(num - 6)
                     break
-
-
 
             # global is_table_edit
             # is_table_edit = False
@@ -824,7 +833,8 @@ class MainWidget(QWidget):
                             chb.setCheckState(Qt.Checked)
                         elif chb.text()[2:] == "Выполнение бонусных заданий" and self.pupil[key][value]["bonus"] != 0:
                             chb.setCheckState(Qt.Checked)
-                        elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value]["extra"] != 0:
+                        elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value][
+                            "extra"] != 0:
                             chb.setCheckState(Qt.Checked)
 
                     self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
@@ -929,15 +939,15 @@ class MainWidget(QWidget):
                 for col in range(1, t.columnCount() - 1):
                     if t.item(row, col) is not None:
                         total_sum += int(t.item(row, col).text())
-                print(t.item(row, 0).text())
-                # print(self.pupil[t.item(row, 0).text()]["paid"])
                 try:
-                    t.setItem(row, col + 1, QTableWidgetItem(str(self.pupil[t.item(row, 0).text()]["paid"])))  # последний столбец для общей суммы
+                    t.setItem(row, col + 1, QTableWidgetItem(
+                        str(self.pupil[t.item(row, 0).text()]["paid"])))  # последний столбец для общей суммы
                 except Exception as Ex:
                     t.setItem(row, col + 1, QTableWidgetItem(str(0)))  # последний столбец для общей суммы
                 total_sum -= int(t.item(row, col + 1).text())
                 self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum)))
-                self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(total_sum) + " - " + (t.item(row, 0).text())))
+                self.table.setVerticalHeaderItem(row,
+                                                 QTableWidgetItem(str(total_sum) + " - " + (t.item(row, 0).text())))
             else:
                 return
 
@@ -946,22 +956,60 @@ class MainWidget(QWidget):
         global is_table_edit
         is_table_edit = not is_table_edit
         if is_table_edit:
+            self.lock_widgets(True)
             self.table.setColumnHidden(0, False)
-            self.table.setColumnHidden(self.table.columnCount()-1, False)
+            self.table.setColumnHidden(self.table.columnCount() - 1, False)
             self.table.horizontalScrollBar().setValue(0)
 
         else:
+            self.lock_widgets(False)
             self.pupil_fill()
             self.table.setColumnHidden(0, True)
-            self.table.setColumnHidden(self.table.columnCount()-1, True)
+            self.table.setColumnHidden(self.table.columnCount() - 1, True)
             self.table.horizontalScrollBar().setValue(today_column - 6)
 
+    def lock_widgets(self, is_state):
+        self.achievements_gb.setEnabled(not is_state)
+
+    def group_time(self, text):
+        time_start = text.split()
+        hours = int(time_start[1].split('-')[0])
+        minutes = int(time_start[1].split('-')[1])
+        total = minutes + hours * 60
+
+        return total
+
+    def group_time_now(self):
+        time_now = QTime.currentTime()
+        h_now = time_now.hour()
+        m_now = time_now.minute()
+        total_now = m_now + h_now * 60
+
+        # псевдоним списку
+        rbs: [] = self.groups_btn_list
+        for i in range(len(rbs)):
+            # total_start = self.group_time(rbs[i].text())
+            self.radio_group.setExclusive(False)
+            rbs[i].setChecked(0)
+            if total_now < self.group_time(rbs[0].text()):
+                self.rbs[0].setChecked(1)
+            elif 0 < self.group_time(rbs[i].text()) - total_now < 10 or \
+                    0 < total_now - self.group_time(rbs[i].text()) <= 95:
+                rbs[i].setChecked(1)
+                break
+            elif rbs[i] == rbs[-1]:
+                rbs[i].setChecked(1)
+                break
+            else:
+                continue
+            self.radio_group.setExclusive(True)
+
     def test(self):
-        pass
+        print("123")
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
-        self.add_table_col_btn.clicked.connect(self.test)
+        # self.add_table_col_btn.clicked.connect(self.test)
         for chb in self.achievement_chb_list:
             chb.clicked.connect(self.cell_fill)
         self.bonus_up_btn.clicked.connect(self.bonus_up)
