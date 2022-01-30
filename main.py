@@ -415,6 +415,7 @@ class MainWidget(QWidget):
             chb = QCheckBox(chb_names[_])
             self.achievement_chb_list.append(chb)
 
+
             if _ == len(chb_names) - 2:
                 row1 = QHBoxLayout()
                 row1.addWidget(self.achievement_chb_list[_])
@@ -781,6 +782,7 @@ class MainWidget(QWidget):
     # заполнение ячейки баллами
     def cell_fill(self):
         t = self.table
+        # if t.hasFocus():
         # обработка нажатия на каждый чекбокс
         if t.currentColumn() != 0:
             try:
@@ -1024,6 +1026,8 @@ class MainWidget(QWidget):
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
         # self.add_table_col_btn.clicked.connect(self.test)
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! по фокусу на таблице
+        #if self.table.hasFocus():
         for chb in self.achievement_chb_list:
             chb.clicked.connect(self.cell_fill)
         self.bonus_up_btn.clicked.connect(self.bonus_up)
