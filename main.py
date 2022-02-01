@@ -22,7 +22,7 @@ import json
 
 readme = """Небольшой гайд
 
-1. После первого запуска программы автоматически создаст файл groups_list.json
+1. После первого запуска программа автоматически создаст файл groups_list.json
 2. Программу необходимо закрыть (при нажатии на ОК она закроется сама)
 3. Перечислите в файле groups_list.json все группы в формате: ПН 10-30 ВП
 
@@ -96,10 +96,11 @@ achievements_list = ["Посещение",
                      "Турбо-режим",
                      "Ответы на вопросы преподавателя",
                      "Выполнение основных заданий",
+                     "Работа на занятии",
                      "Помощь нуждающимся"]
 
 base_price = 10  # базовая стоимость
-visit_price = 5  # стоимость одно посещения
+visit_price = 5  # стоимость одного посещения
 on_time_price = 15  # стоимость пунктуальности
 turbo_price = 5  # скорость турбо-режима
 bonus_price = 10  # стоимость одного бонустного задания
@@ -406,6 +407,7 @@ class MainWidget(QWidget):
             "😎 Посещение",
             "⏰ Пунктуальность",
             "✋ Ответы на вопросы преподавателя",
+            "📈 Работа на занятии",
             "✅ Выполнение основных заданий",
             "🤝 Помощь нуждающимся",
             "🚀 Турбо режим",
@@ -718,20 +720,21 @@ class MainWidget(QWidget):
                                 "achievements"]
                             visited = 0
                             base = len(value)
-                            tur = 0
+                            tur = base_price
+                            work = 0
                             if "Посещение" in value:
                                 base -= 1  # чтобы не дублировалось
                                 visited += visit_price
                                 if "Пунктуальность" in value:
                                     base -= 1  # чтобы не дублировалось
                                     visited += on_time_price
-                            if "Турбо-режим" in value:
-                                tur = turbo_price
+                            if "Работа на занятии" in value:
+                                base -= 1
+                                work = int(base_price / 2)
                             bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
                             extr = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
-
-                            curr_sum = base * base_price + visited + tur + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокоинов из всех данных
+                            curr_sum = base * base_price + visited + work + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокоинов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
                     try:
@@ -784,6 +787,7 @@ class MainWidget(QWidget):
         t = self.table
         # if t.hasFocus():
         # обработка нажатия на каждый чекбокс
+
         if t.currentColumn() != 0:
             try:
                 points, b, e = 0, 0, 0
@@ -791,12 +795,19 @@ class MainWidget(QWidget):
                 value = t.horizontalHeaderItem(t.currentColumn()).text()  # дата
                 _ach_lst = []
                 for chb in self.achievement_chb_list:
+                    # if chb.text().find("Выполнение основных заданий") != -1:
+                    #     for c in self.achievement_chb_list:
+                    #         if c.text().find("Работа на занятии") != -1:
+                    #             c.setCheckState(Qt.Checked)
+                    #             break
                     if chb.checkState():
+
                         if chb.text().find("Посещение") != -1:
                             points += 0.5
                         elif chb.text().find("Пунктуальность") != -1:
                             points += 1.5
-                        elif chb.text().find("Турбо-режим") != -1:
+
+                        elif chb.text().find("Работа на занятии") != -1:
                             points += 0.5
                         elif chb.text().find("бонус") != -1:
                             b = int(self.bonus_ach.text()) * bonus_price
@@ -843,6 +854,10 @@ class MainWidget(QWidget):
                         elif chb.text()[2:] == "Выполнение дополнительных заданий" and self.pupil[key][value][
                             "extra"] != 0:
                             chb.setCheckState(Qt.Checked)
+                        # elif chb.text()[2:] == "Выполнение основных заданий":
+                        #     for c in self.achievement_chb_list:
+                        #         if c.text()[2:] == "Работа на занятии":
+                        #             c.setCheckState(Qt.Checked)
 
                     self.bonus_ach.setText(str(self.pupil[key][value]["bonus"]))
                     self.extra_ach.setText(str(self.pupil[key][value]["extra"]))

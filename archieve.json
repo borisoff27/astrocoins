@@ -1782,5 +1782,18 @@
                 "reprimands": 0
             }
         }
+    },
+    "СР 17-15 CC",
+    {
+        "Тест": {
+            "02 фев": {
+                "achievements": [],
+                "bonus": 0,
+                "extra": 0,
+                "reprimands": 0,
+                "notes": ""
+            },
+            "paid": 0
+        }
     }
 ]
