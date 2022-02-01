@@ -794,12 +794,19 @@ class MainWidget(QWidget):
                 key = t.item(t.currentRow(), 0).text()  # фамилия
                 value = t.horizontalHeaderItem(t.currentColumn()).text()  # дата
                 _ach_lst = []
+
+                # не оптимально!!! Много циклов вложенных. Надо переделать
+                # Если выполнил основные задания, значит и на заняти работал
                 for chb in self.achievement_chb_list:
-                    # if chb.text().find("Выполнение основных заданий") != -1:
-                    #     for c in self.achievement_chb_list:
-                    #         if c.text().find("Работа на занятии") != -1:
-                    #             c.setCheckState(Qt.Checked)
-                    #             break
+                    if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
+                        for c in self.achievement_chb_list:
+                            if c.text().find("Работа на занятии") != -1:
+                                c.setCheckState(Qt.Checked)
+                                break
+                    if chb.text().find("Работа на занятии") != -1 and chb.checkState():
+                        break
+                for chb in self.achievement_chb_list:
+
                     if chb.checkState():
 
                         if chb.text().find("Посещение") != -1:
