@@ -416,6 +416,8 @@ class MainWidget(QWidget):
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
             self.achievement_chb_list.append(chb)
+            chb.clicked.connect(self.cell_fill) # подключение функции по клику
+            # for chb in self.achievement_chb_list:
 
 
             if _ == len(chb_names) - 2:
@@ -797,6 +799,19 @@ class MainWidget(QWidget):
 
                 # не оптимально!!! Много циклов вложенных. Надо переделать
                 # Если выполнил основные задания, значит и на заняти работал
+
+                # for chb in self.achievement_chb_list:
+                #     if chb.text().find("Работа на занятии") != -1:
+                #         work_class_chb = chb
+                #     elif chb.text().find("Посещаемость") != -1:
+                #         visit_chb = chb
+                # for chb in self.achievement_chb_list:
+                #     if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
+                #         work_class_chb.setCheckState(Qt.Checked)
+                #     elif chb.text().find("Пунктуальность") != -1 and chb.checkState():
+                #         visit_chb.setCheckState(Qt.Checked)
+
+
                 for chb in self.achievement_chb_list:
                     if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
                         for c in self.achievement_chb_list:
@@ -1050,8 +1065,8 @@ class MainWidget(QWidget):
         # self.add_table_col_btn.clicked.connect(self.test)
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! по фокусу на таблице
         #if self.table.hasFocus():
-        for chb in self.achievement_chb_list:
-            chb.clicked.connect(self.cell_fill)
+        # for chb in self.achievement_chb_list:
+        #     chb.clicked.connect(self.cell_fill)
         self.bonus_up_btn.clicked.connect(self.bonus_up)
         self.bonus_down_btn.clicked.connect(self.bonus_down)
         self.extra_up_btn.clicked.connect(self.extra_up)
