@@ -122,7 +122,7 @@ try:
         groups = json.load(file)
 except Exception as EX:
     print(EX)
-    with open("groups_list.json", 'w') as file:
+    with open("groups_list.json", 'w', encoding='utf-8') as file:
         json.dump({"groups": []}, file, indent=4, sort_keys=True, ensure_ascii=False)
     with open("groups_list.json", 'r', encoding="utf-8") as file:
         groups = json.load(file)
@@ -348,6 +348,8 @@ class MainWidget(QWidget):
         self.edit_btn = PushButton("🖊")
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
+        self.add_group_btn = PushButton("➕")
+        self.del_group_btn = PushButton("🗑")
         self.calendar = QCalendarWidget()
         self.calendar.setFont(QFont("Times", 12))
 
@@ -358,10 +360,11 @@ class MainWidget(QWidget):
         self.connects()
         self.visualisation()
         self.choose_day()
-        self.setWindowTitle("✨Астрокоины💰")
         self.showMaximized()
 
     def visualisation(self):
+        self.setWindowTitle("✨Астрокоины💰")
+        self.setWindowIcon(QIcon("ico.ico"))
 
         # self.setFont(QFont("Times", 12))
         win_style = """
@@ -376,6 +379,22 @@ class MainWidget(QWidget):
                                     font-weight: bold;}"""
         self.table.horizontalHeader().setStyleSheet(header_style)
         self.table.verticalHeader().setStyleSheet(header_style)
+
+        # подсказки при наведении
+        self.add_group_btn.setToolTip("Добавить группу")
+        self.del_group_btn.setToolTip("Удалить группу")
+
+        for ach in self.achievement_chb_list:
+            if ach.text().find("Посещение") != -1:
+                ach.setToolTip(str(base_price-5)+" баллов")
+            elif ach.text().find("Пунктуальность") != -1:
+                ach.setToolTip(str(base_price+5)+" баллов")
+            elif ach.text().find("Работа на занятии") != -1:
+                ach.setToolTip(str(base_price-5)+" баллов")
+            elif ach.text().find("дополнительны") != -1:
+                ach.setToolTip(str(base_price+5)+" баллов")
+            else:
+                ach.setToolTip(str(base_price) + " баллов")
 
     def widgets_location(self):
         nav_layout = QHBoxLayout()
@@ -460,9 +479,20 @@ class MainWidget(QWidget):
         top_layout.addLayout(table_layout, stretch=2)
         top_layout.addWidget(self.achievements_gb, stretch=1)
 
+        # comment_layout.addWidget(self.groups_list_btn_gb)
+
+        # кнопки добавления/удаления групп
+        groups_edit_layout = QVBoxLayout()
+        groups_edit_layout.addWidget(self.add_group_btn)
+        groups_edit_layout.addWidget(self.del_group_btn)
+
+        bottom_inner_layout = QHBoxLayout()
+        bottom_inner_layout.addWidget(self.groups_list_btn_gb, stretch=9)
+        bottom_inner_layout.addLayout(groups_edit_layout, stretch=1)
+
         comment_layout = QVBoxLayout()
         comment_layout.addWidget(self.note_field)
-        comment_layout.addWidget(self.groups_list_btn_gb)
+        comment_layout.addLayout(bottom_inner_layout)
 
         bottom_layout = QHBoxLayout()
         bottom_layout.addLayout(comment_layout, stretch=2)
@@ -811,8 +841,6 @@ class MainWidget(QWidget):
     # заполнение ячейки баллами
     def cell_fill(self):
         t = self.table
-        # if t.hasFocus():
-        # обработка нажатия на каждый чекбокс
 
         if t.currentColumn() != 0:
             try:
@@ -821,7 +849,6 @@ class MainWidget(QWidget):
                 value = t.horizontalHeaderItem(t.currentColumn()).text()  # дата
                 _ach_lst = []
 
-
                 # Если выполнил основные задания, значит и на заняти работал
                 for chb in self.achievement_chb_list:
                     if chb.checkState():
@@ -829,7 +856,6 @@ class MainWidget(QWidget):
                             points += 0.5
                         elif chb.text().find("Пунктуальность") != -1:
                             points += 1.5
-
                         elif chb.text().find("Работа на занятии") != -1:
                             points += 0.5
                         elif chb.text().find("бонус") != -1:
@@ -1061,6 +1087,53 @@ class MainWidget(QWidget):
     def test(self):
         print("123")
 
+    def add_group(self):
+        dlg = QInputDialog(self)
+        dlg.setInputMode(QInputDialog.TextInput)
+        dlg.setWindowIcon(QIcon("ico.ico"))
+        dlg.setWindowTitle("Создание группы")
+        dlg.setLabelText("Ведите название группы:")
+        wd = self.calendar.selectedDate().dayOfWeek()
+        dlg.setTextValue(str(list(dates.keys())[wd-1])+" ")
+        # dlg.unsetCursor()
+        # cursor = dlg.text ().textCursor()
+        # cursor.setPosition(0)
+        # cursor.setPosition(3, QTextCursor.KeepAnchor)
+        # dlg.getText().setTextCursor(2)
+        dlg.resize(500, 100)
+        ok = dlg.exec()
+        group_name = dlg.textValue()
+        if ok and group_name != "":
+            # сделать дополнительнуд проверку на корректность группы (день недели)
+            # переключить фокус радиобантон на эту кнопку
+            filename = "groups_list.json"
+            if group_name[:2] in dates.keys():
+                groups["groups"].append(group_name)
+                groups["groups"].sort()
+                with open(filename, 'w', encoding='utf-8') as file:
+                    json.dump(groups, file, indent=4, ensure_ascii=False)
+
+            filename = group_name+".json"
+            with open(filename, 'w') as file:
+                json.dump({"": {}}, file, indent=4, sort_keys=True, ensure_ascii=False)
+
+            self.choose_day()
+        else:
+            pass
+            # self.add_group()
+            # dlg.exec()
+
+    def del_group(self):
+        global groups
+        for r_btn in self.groups_btn_list:
+            if r_btn.isChecked():
+                groups["groups"].remove(r_btn.text())
+                break
+        filename = "groups_list.json"
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(groups, file, indent=4, ensure_ascii=False)
+        self.choose_day()
+
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
         # self.add_table_col_btn.clicked.connect(self.test)
@@ -1080,12 +1153,14 @@ class MainWidget(QWidget):
         self.note_field.textChanged.connect(self.pupil_fill)
         self.prev_btn.clicked.connect(self.prev_group)
         self.next_btn.clicked.connect(self.next_group)
+        self.add_group_btn.clicked.connect(self.add_group)
+        self.del_group_btn.clicked.connect(self.del_group)
 
 
 def show_json():
     global readme
     os.startfile("groups_list.json")
-    with open("README.txt", "w") as f:
+    with open("README.txt", "w", encoding="utf-8") as f:
         f.write(readme)
     os.startfile("README.txt")
     app.closeAllWindows()
@@ -1098,6 +1173,7 @@ if __name__ == "__main__":
     main_win = MainWidget()
     if not state:
         modal = QMessageBox(main_win)
+        modal.setWindowIcon(QIcon("ico.ico"))
         modal.setWindowTitle("РЕДАКТИРУЙТЕ ФАЙЛ В БЛОКНОТЕ")
         modal.setText("Заполните файл groups_list.json\nНажмите ОК, чтобы открыть")
         modal.setStandardButtons(QMessageBox.Ok)
