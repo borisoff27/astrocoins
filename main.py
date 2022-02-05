@@ -419,9 +419,8 @@ class MainWidget(QWidget):
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
             self.achievement_chb_list.append(chb)
-            chb.clicked.connect(self.cell_fill) # подключение функции по клику
+            chb.toggled.connect(self.check_fill)  # подключение функции по клику
             # for chb in self.achievement_chb_list:
-
 
             if _ == len(chb_names) - 2:
                 row1 = QHBoxLayout()
@@ -787,6 +786,28 @@ class MainWidget(QWidget):
             self.table.setItem(students_amount, day_for_visits,
                                QTableWidgetItem(str(visits)))  # +'/'+str(len(self.pupil))))
 
+    # проверка и одновременное выставление некоторых чекбоксов
+    def check_fill(self):
+        for chb in self.achievement_chb_list:
+            c = self.sender()
+            if c.text().find("Пунктуальность") != -1 and chb.text().find("Посещение") != -1:
+                if not chb.isChecked() and c.isChecked():
+                    chb.setCheckState(Qt.Checked)
+            elif c.text().find("Выполнение основных заданий") != -1 and chb.text().find("Работа на занятии") != -1:
+                if not chb.isChecked() and c.isChecked():
+                    chb.setCheckState(Qt.Checked)
+            elif c.text().find("Выполнение бонусных заданий") != -1 and self.bonus_ach.text() == '0':
+                if c.isChecked():
+                    self.bonus_ach.setText("1")
+                else:
+                    self.bonus_ach.setText("0")
+            elif c.text().find("Выполнение дополнительных заданий") != -1 and self.extra_ach.text() == '0':
+                if c.isChecked():
+                    self.extra_ach.setText("1")
+                else:
+                    self.extra_ach.setText("0")
+        self.cell_fill()
+
     # заполнение ячейки баллами
     def cell_fill(self):
         t = self.table
@@ -800,38 +821,10 @@ class MainWidget(QWidget):
                 value = t.horizontalHeaderItem(t.currentColumn()).text()  # дата
                 _ach_lst = []
 
-                # не оптимально!!! Много циклов вложенных. Надо переделать
+
                 # Если выполнил основные задания, значит и на заняти работал
-
-                # visit_chb = QChekBox()
-                # for chb in self.achievement_chb_list:
-                #     if chb.text().find("Работа на занятии") != -1:
-                #         visit_chb = chb
-                #     elif chb.text().find("Посещаемость") != -1:
-                #         visit_chb = chb
-                # for chb in self.achievement_chb_list:
-                #     if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
-                #         work_class_chb.setCheckState(Qt.Checked)
-                #     elif chb.text().find("Пунктуальность") != -1 and chb.checkState():
-                #         visit_chb.setCheckState(Qt.Checked)
-
-
                 for chb in self.achievement_chb_list:
-                    # chb["Работа на занятии"].setCheckState(Qt.Checked)
-                    if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
-                        for c in self.achievement_chb_list:
-                            if c.text().find("Работа на занятии") != -1:
-                                c.setCheckState(Qt.Checked)
-                                break
-                    if chb.text().find("Работа на занятии") != -1 and chb.checkState():
-                        break
-                    #
-                    # if chb.text().find("Пунктуальность") != -1 and chb.checkState():
-                    #     visit_chb.setChecked(1)
-                for chb in self.achievement_chb_list:
-
                     if chb.checkState():
-
                         if chb.text().find("Посещение") != -1:
                             points += 0.5
                         elif chb.text().find("Пунктуальность") != -1:
@@ -904,7 +897,7 @@ class MainWidget(QWidget):
         # main_win.table.setCurrentItem(None)
         if t.currentItem():
             key = t.item(t.currentRow(), 0).text()
-            if t.currentColumn() == t.columnCount()-1:
+            if t.currentColumn() == t.columnCount() - 1:
                 value = t.horizontalHeaderItem(0).text()
                 # self.pupil[key]["paid"] = int(t.item(t.currentRow(), t.columnCount()-1).text())
                 # print(self.pupil[key]["paid"])
@@ -1015,7 +1008,7 @@ class MainWidget(QWidget):
             self.table.setColumnHidden(self.table.columnCount() - 1, False)
             self.table.horizontalScrollBar().setValue(0)
 
-            for c in range(1,t.columnCount()-1):
+            for c in range(1, t.columnCount() - 1):
                 t.hideColumn(c)
 
         else:
@@ -1025,7 +1018,7 @@ class MainWidget(QWidget):
             self.table.setColumnHidden(self.table.columnCount() - 1, True)
             self.table.horizontalScrollBar().setValue(today_column - 6)
 
-            for c in range(1,t.columnCount()-1):
+            for c in range(1, t.columnCount() - 1):
                 t.showColumn(c)
 
     def lock_widgets(self, is_state):
@@ -1072,7 +1065,7 @@ class MainWidget(QWidget):
         self.calendar.selectionChanged.connect(self.choose_day)
         # self.add_table_col_btn.clicked.connect(self.test)
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! по фокусу на таблице
-        #if self.table.hasFocus():
+        # if self.table.hasFocus():
         # for chb in self.achievement_chb_list:
         #     chb.clicked.connect(self.cell_fill)
         self.bonus_up_btn.clicked.connect(self.bonus_up)
@@ -1111,7 +1104,6 @@ if __name__ == "__main__":
         modal.showNormal()
         modal.buttonClicked.connect(show_json)
     app.exec_()
-
 
 """
 Скроллинг
