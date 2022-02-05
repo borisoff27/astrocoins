@@ -3,6 +3,9 @@
 
 """
 Доработки:
+* добавить статистику по группе:
+- рейтинг по каждому пункту (не только в числах, но и словами)
+- обратить внимание на отдельных учеников, если больше трех занятий подряд не было галочек
 * Сделать так, чтобы даты расставлялись сами после 1 сентября (с понедельника)
 * Добавление групп без работы с файлом
 * ГЛОБАЛЬННО - сделать выгрузку для ЗП и синхронизировать их
@@ -800,9 +803,10 @@ class MainWidget(QWidget):
                 # не оптимально!!! Много циклов вложенных. Надо переделать
                 # Если выполнил основные задания, значит и на заняти работал
 
+                # visit_chb = QChekBox()
                 # for chb in self.achievement_chb_list:
                 #     if chb.text().find("Работа на занятии") != -1:
-                #         work_class_chb = chb
+                #         visit_chb = chb
                 #     elif chb.text().find("Посещаемость") != -1:
                 #         visit_chb = chb
                 # for chb in self.achievement_chb_list:
@@ -813,6 +817,7 @@ class MainWidget(QWidget):
 
 
                 for chb in self.achievement_chb_list:
+                    # chb["Работа на занятии"].setCheckState(Qt.Checked)
                     if chb.text().find("Выполнение основных заданий") != -1 and chb.checkState():
                         for c in self.achievement_chb_list:
                             if c.text().find("Работа на занятии") != -1:
@@ -820,6 +825,9 @@ class MainWidget(QWidget):
                                 break
                     if chb.text().find("Работа на занятии") != -1 and chb.checkState():
                         break
+                    #
+                    # if chb.text().find("Пунктуальность") != -1 and chb.checkState():
+                    #     visit_chb.setChecked(1)
                 for chb in self.achievement_chb_list:
 
                     if chb.checkState():
