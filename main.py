@@ -3,6 +3,9 @@
 
 """
 Доработки:
+* добавить возможность просмотра архива
+* добавить возможность восстановления из архива
+* добавить возможность перевода из одной группы в другую в рамках одного курса (переделать с привязки дат к номеру урока)
 * добавить статистику по группе:
 - рейтинг по каждому пункту (не только в числах, но и словами)
 - обратить внимание на отдельных учеников, если больше трех занятий подряд не было галочек
@@ -22,12 +25,19 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
+# import pandas as pd
 
 readme = """Небольшой гайд
 
 1. После первого запуска программа автоматически создаст файл groups_list.json
-2. Программу необходимо закрыть (при нажатии на ОК она закроется сама)
-3. Перечислите в файле groups_list.json все группы в формате: ПН 10-30 ВП
+2. Для создания группы нажмите на "+" в правом нижнем углу.
+ВАЖНО: Название группы должно начинаться с дня недели в сокращённом формате: ПН, ВТ, СР, ЧТ, ПТ, СБ или ВС
+3. Для удаления текущей группы нажмите на кнопку с корзиной
+4. Для добавления учеников или заддания количества потраченных баллов необходимо нажать на значок карандаша справа от кнопки СОХРАНИТЬ
+5. Количество потраченных баллов ставится вручную
+6. Сохраните изменения
+7. Наслаждайтесь выставлением баллов:)
+
 
 Пример готового файла groups_list.json:
 {
@@ -49,10 +59,6 @@ readme = """Небольшой гайд
         "ВС 19-00 ПС"
     ]
 }
-
-4. Для добавления учеников или указания количества потраченных баллов необходимо нажать на значок карандаша справа от кнопки СОХРАНИТЬ
-5. Сохраните изменения
-6. Наслаждайтесь выставлением баллов:)
 
 Пример готового файла ВС 13-30 ГД2.json:
 {
@@ -438,7 +444,7 @@ class MainWidget(QWidget):
         for _ in range(len(chb_names)):
             chb = QCheckBox(chb_names[_])
             self.achievement_chb_list.append(chb)
-            chb.toggled.connect(self.check_fill)  # подключение функции по клику
+            chb.clicked.connect(self.check_fill)  # подключение функции по клику
             # for chb in self.achievement_chb_list:
 
             if _ == len(chb_names) - 2:
@@ -530,13 +536,13 @@ class MainWidget(QWidget):
             self.table.setColumnHidden(self.table.columnCount() - 1, True)
             # self.table.horizontalScrollBar().setValue(today_column-6)
 
-        # сброс чекбоксов
-        for chb in self.achievement_chb_list:
-            chb.setCheckState(Qt.Unchecked)
-
         # сброс счетчика бонсуных и доп. заданий
         self.bonus_ach.setText("0")
         self.extra_ach.setText("0")
+
+        # сброс чекбоксов
+        for chb in self.achievement_chb_list:
+            chb.setCheckState(Qt.Unchecked)
 
         # обнуление замечаний
         self.reprimands_amount.setText("0")
@@ -818,6 +824,7 @@ class MainWidget(QWidget):
 
     # проверка и одновременное выставление некоторых чекбоксов
     def check_fill(self):
+        # self.reset_flags()
         for chb in self.achievement_chb_list:
             c = self.sender()
             if c.text().find("Пунктуальность") != -1 and chb.text().find("Посещение") != -1:
@@ -841,7 +848,9 @@ class MainWidget(QWidget):
     # заполнение ячейки баллами
     def cell_fill(self):
         t = self.table
-
+        # self.reset_flags()
+        # self.bonus_ach.setText("0")
+        # self.extra_ach.setText("0")
         if t.currentColumn() != 0:
             try:
                 points, b, e = 0, 0, 0
@@ -1159,11 +1168,13 @@ class MainWidget(QWidget):
 
 def show_json():
     global readme
-    os.startfile("groups_list.json")
+    # os.startfile("groups_list.json")
     with open("README.txt", "w", encoding="utf-8") as f:
         f.write(readme)
     os.startfile("README.txt")
-    app.closeAllWindows()
+    # app.exec_()
+
+    # app.closeAllWindows()    app.exec_()
 
 
 import os
@@ -1172,13 +1183,14 @@ if __name__ == "__main__":
     app = QApplication([])
     main_win = MainWidget()
     if not state:
-        modal = QMessageBox(main_win)
-        modal.setWindowIcon(QIcon("ico.ico"))
-        modal.setWindowTitle("РЕДАКТИРУЙТЕ ФАЙЛ В БЛОКНОТЕ")
-        modal.setText("Заполните файл groups_list.json\nНажмите ОК, чтобы открыть")
-        modal.setStandardButtons(QMessageBox.Ok)
-        modal.showNormal()
-        modal.buttonClicked.connect(show_json)
+        show_json()
+    #     modal = QMessageBox(main_win)
+    #     modal.setWindowIcon(QIcon("ico.ico"))
+    #     modal.setWindowTitle("РЕДАКТИРУЙТЕ ФАЙЛ В БЛОКНОТЕ")
+    #     modal.setText("Заполните файл groups_list.json\nНажмите ОК, чтобы открыть")
+    #     modal.setStandardButtons(QMessageBox.Ok)
+    #     modal.showNormal()
+    #     modal.buttonClicked.connect(show_json)
     app.exec_()
 
 """
