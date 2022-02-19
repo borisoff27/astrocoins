@@ -26,6 +26,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
+# https://www.pythonguis.com/widgets/pyqt-toggle-widget/
+from qtwidgets import Toggle, AnimatedToggle
+import configparser
+
 # import pandas as pd
 
 readme = """Небольшой гайд
@@ -353,6 +357,7 @@ class MainWidget(QWidget):
         self.dec_repr_btn.setFixedWidth(60)
         self.save_btn = PushButton("Сохранить")
         self.edit_btn = PushButton("🖊")
+        self.toggle = Toggle()
         self.note_field = QTextEdit()
         self.groups_list_btn_gb = QGroupBox("Список групп сегодня")
         self.add_group_btn = PushButton("➕")
@@ -393,13 +398,13 @@ class MainWidget(QWidget):
 
         for ach in self.achievement_chb_list:
             if ach.text().find("Посещение") != -1:
-                ach.setToolTip(str(base_price-5)+" баллов")
+                ach.setToolTip(str(base_price - 5) + " баллов")
             elif ach.text().find("Пунктуальность") != -1:
-                ach.setToolTip(str(base_price+5)+" баллов")
+                ach.setToolTip(str(base_price + 5) + " баллов")
             elif ach.text().find("Работа на занятии") != -1:
-                ach.setToolTip(str(base_price-5)+" баллов")
+                ach.setToolTip(str(base_price - 5) + " баллов")
             elif ach.text().find("дополнительны") != -1:
-                ach.setToolTip(str(base_price+5)+" баллов")
+                ach.setToolTip(str(base_price + 5) + " баллов")
             else:
                 ach.setToolTip(str(base_price) + " баллов")
 
@@ -478,8 +483,11 @@ class MainWidget(QWidget):
         table_layout.addLayout(nav_layout)
         table_layout.addWidget(self.table)
         under_table_layout = QHBoxLayout()
+        # under_table_layout.addWidget(self.toggle, stretch=1)
         under_table_layout.addWidget(self.save_btn, stretch=9)
+        # edit_buttons_layout = QVBoxLayout()
         under_table_layout.addWidget(self.edit_btn, stretch=1)
+        # under_table_layout.addLayout(edit_buttons_layout)
         table_layout.addLayout(under_table_layout)
 
         top_layout = QHBoxLayout()
@@ -493,6 +501,28 @@ class MainWidget(QWidget):
         groups_edit_layout.addWidget(self.add_group_btn)
         groups_edit_layout.addWidget(self.del_group_btn)
 
+        # легенда цветов
+        self.legend = QGroupBox("Обозначения цветов")
+
+        self.red_legend = QLabel("Не выполнены основные задания")
+        self.red_legend.setStyleSheet("color:red;")
+
+        self.dark_legend = QLabel("Опоздание")
+        self.dark_legend.setStyleSheet("background-color:#EEDD90;")
+
+        legend_layout = QVBoxLayout()
+        legend_layout.setAlignment(Qt.AlignTop)
+
+        self.toggle.setFixedWidth(50)
+        self.toggle.toggled.connect(self.open_table)
+
+        legend_layout.addWidget(self.toggle)
+        legend_layout.addWidget(self.red_legend)
+        legend_layout.addWidget(self.dark_legend)
+
+        self.legend.setLayout(legend_layout)
+
+
         bottom_inner_layout = QHBoxLayout()
         bottom_inner_layout.addWidget(self.groups_list_btn_gb, stretch=9)
         bottom_inner_layout.addLayout(groups_edit_layout, stretch=1)
@@ -502,7 +532,8 @@ class MainWidget(QWidget):
         comment_layout.addLayout(bottom_inner_layout)
 
         bottom_layout = QHBoxLayout()
-        bottom_layout.addLayout(comment_layout, stretch=2)
+        bottom_layout.addLayout(comment_layout, stretch=3)
+        bottom_layout.addWidget(self.legend, stretch=1)
         bottom_layout.addWidget(self.calendar, stretch=1)
 
         main_layout = QVBoxLayout()
@@ -559,6 +590,7 @@ class MainWidget(QWidget):
     # выбор дня в календаре
     def choose_day(self):
         global is_table_edit
+
         is_table_edit = False
         self.reset_flags()
         self.note_field.clear()
@@ -698,6 +730,7 @@ class MainWidget(QWidget):
         except Exception as EX:
             print("Ошибка при сохранении файла", EX)
         self.lock_widgets(False)
+        self.save_settings()
 
     def open_file(self):
         try:
@@ -772,17 +805,31 @@ class MainWidget(QWidget):
                             if "Работа на занятии" in value:
                                 base -= 1
                                 work = int(base_price / 2)
+
+                                # pass
+                                # self.table.setStyleSheet("QTableWidget::item(row, col) { background-color: #555;}")
+
                             bon = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["bonus"]
                             extr = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["extra"]
                             rep = self.pupil[pup][str(self.table.horizontalHeaderItem(col).text())]["reprimands"]
                             curr_sum = base * base_price + visited + work + bon * bonus_price + extr * extra_price - rep * 15  # подсчёт суммы астрокоинов из всех данных
                             _sum += curr_sum  # итоговая сумма
                             self.table.setItem(row, col, QTableWidgetItem(str(curr_sum)))
+
+                            if self.toggle.isChecked():
+                                # красный цвет ячейки, если не выполнил основные задания
+                                if"Выполнение основных заданий" not in value:
+                                    self.table.item(row, col).setForeground(QColor("red"))
+
+                                # фон ячейки темнее, если не опоздал
+                                if "Пунктуальность" not in value:
+                                    self.table.item(row, col).setBackground(QColor("#EEDD90"))
                     try:
                         paid = self.pupil[pup]["paid"]
-                    except Exception:
+                    except Exception as EX:
                         paid = 0
                     self.table.setItem(row, col + 1, QTableWidgetItem(str(paid)))  # последний столбец для общей суммы
+
                     self.table.setVerticalHeaderItem(row, QTableWidgetItem(str(_sum - paid) + " - " + pup))
                     row += 1
             except Exception as EX:
@@ -1104,7 +1151,7 @@ class MainWidget(QWidget):
         dlg.setWindowTitle("Создание группы")
         dlg.setLabelText("Ведите название группы:")
         wd = self.calendar.selectedDate().dayOfWeek()
-        dlg.setTextValue(str(list(dates.keys())[wd-1])+" ")
+        dlg.setTextValue(str(list(dates.keys())[wd - 1]) + " ")
         # dlg.unsetCursor()
         # cursor = dlg.text ().textCursor()
         # cursor.setPosition(0)
@@ -1123,7 +1170,7 @@ class MainWidget(QWidget):
                 with open(filename, 'w', encoding='utf-8') as file:
                     json.dump(groups, file, indent=4, ensure_ascii=False)
 
-            filename = group_name+".json"
+            filename = group_name + ".json"
             with open(filename, 'w') as file:
                 json.dump({"": {}}, file, indent=4, sort_keys=True, ensure_ascii=False)
 
@@ -1143,6 +1190,30 @@ class MainWidget(QWidget):
         with open(filename, 'w', encoding='utf-8') as file:
             json.dump(groups, file, indent=4, ensure_ascii=False)
         self.choose_day()
+
+    def save_settings(self):
+        # write_config = configparser.ConfigParser()
+        # write_config.add_section("AppSettings")
+        # print(self.legend.isChecked())
+        # write_config.set("AppSettings", "legend", str(self.legend.isChecked()))
+        # #
+        # cfg_file = open("settings.ini", 'w')
+        # write_config.write(cfg_file)
+        # cfg_file.close()
+        pass
+
+
+
+
+
+        # config = configparser.ConfigParser()
+        # config.read('FILE.INI')
+        # print(config['DEFAULT']['FILE.INI'])  # -> "/path/name/"
+        # config['DEFAULT']['FILE.INI'] = '/var/shared/'  # update
+        # config['DEFAULT']['default_message'] = 'Hey! help me!!'  # create
+        #
+        # with open('FILE.INI', 'w') as configfile:  # save
+        #     config.write(configfile)
 
     def connects(self):
         self.calendar.selectionChanged.connect(self.choose_day)
@@ -1177,6 +1248,14 @@ def show_json():
 
     # app.closeAllWindows()    app.exec_()
 
+def open_settings():
+    read_config = configparser.ConfigParser()
+    read_config.read("settings.ini")
+    if read_config.get("AppSettings", "legend") == "True":
+        main_win.toggle.setChecked(1)
+    else:
+        main_win.toggle.setChecked(0)
+
 
 import os
 
@@ -1192,6 +1271,8 @@ if __name__ == "__main__":
     #     modal.setStandardButtons(QMessageBox.Ok)
     #     modal.showNormal()
     #     modal.buttonClicked.connect(show_json)
+    open_settings()
+
     app.exec_()
 
 """

@@ -43,6 +43,15 @@
             "notes": "",
             "reprimands": 0
         },
+        "13 фев": {
+            "achievements": [
+                "Работа на занятии"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "14 ноя": {
             "achievements": [
                 "Посещение",
@@ -550,6 +559,15 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "13 фев": {
+            "achievements": [
+                "Работа на занятии"
+            ],
+            "bonus": 3,
             "extra": 0,
             "notes": "",
             "reprimands": 0
