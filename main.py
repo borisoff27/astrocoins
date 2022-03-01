@@ -1248,13 +1248,13 @@ def show_json():
 
     # app.closeAllWindows()    app.exec_()
 
-def open_settings():
-    read_config = configparser.ConfigParser()
-    read_config.read("settings.ini")
-    if read_config.get("AppSettings", "legend") == "True":
-        main_win.toggle.setChecked(1)
-    else:
-        main_win.toggle.setChecked(0)
+# def open_settings():
+#     read_config = configparser.ConfigParser()
+#     read_config.read("settings.ini")
+#     if read_config.get("AppSettings", "legend") == "True":
+#         main_win.toggle.setChecked(1)
+#     else:
+#         main_win.toggle.setChecked(0)
 
 
 import os
@@ -1271,7 +1271,7 @@ if __name__ == "__main__":
     #     modal.setStandardButtons(QMessageBox.Ok)
     #     modal.showNormal()
     #     modal.buttonClicked.connect(show_json)
-    open_settings()
+    # open_settings()
 
     app.exec_()
 
