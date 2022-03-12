@@ -130,6 +130,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "05 фев": {
             "achievements": [
                 "Посещение",
@@ -185,6 +195,17 @@
             ],
             "bonus": 0,
             "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -386,6 +407,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 4,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "05 фев": {
             "achievements": [
                 "Посещение",
@@ -441,6 +472,17 @@
             ],
             "bonus": 1,
             "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -697,6 +739,16 @@
             ],
             "bonus": 0,
             "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -1138,6 +1190,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "05 фев": {
             "achievements": [
                 "Посещение",
@@ -1199,6 +1261,17 @@
             "extra": 1,
             "notes": "",
             "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 1
         },
         "12 фев": {
             "achievements": [
@@ -1404,6 +1477,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 4,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "05 фев": {
             "achievements": [
                 "Посещение",
@@ -1457,6 +1540,17 @@
             ],
             "bonus": 0,
             "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -1714,6 +1808,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 0,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
+        "12 мар": {
+            "achievements": [
+                "Посещение",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
             "extra": 1,
             "notes": "",
             "reprimands": 0
