@@ -234,6 +234,18 @@
             "notes": "",
             "reprimands": 0
         },
+        "27 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 1
+        },
         "27 фев": {
             "achievements": [
                 "Посещение",
@@ -500,6 +512,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "27 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 1
+        },
         "27 фев": {
             "achievements": [
                 "Посещение",
@@ -548,6 +571,13 @@
         }
     },
     "Сковородников Глеб": {
+        "03 апр": {
+            "achievements": [],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "03 окт": {
             "achievements": [
                 "Посещение",
@@ -768,6 +798,17 @@
             "extra": 0,
             "notes": "",
             "reprimands": 0
+        },
+        "27 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 1
         },
         "27 фев": {
             "achievements": [
@@ -1040,6 +1081,18 @@
             "notes": "",
             "reprimands": 0
         },
+        "27 мар": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "27 фев": {
             "achievements": [
                 "Посещение",
@@ -1163,6 +1216,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "13 мар": {
+            "achievements": [],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "Отработка",
+            "reprimands": 0
+        },
         "13 фев": {
             "achievements": [
                 "Посещение",
@@ -1205,6 +1265,13 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 мар": {
+            "achievements": [],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "отработка 26.03",
+            "reprimands": 0
+        },
         "20 фев": {
             "achievements": [
                 "Посещение",
@@ -1243,6 +1310,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "27 мар": {
+            "achievements": [
+                "Посещение",
+                "Работа на занятии"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
