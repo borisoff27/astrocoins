@@ -117,6 +117,15 @@
             "notes": "",
             "reprimands": 0
         },
+        "17 апр": {
+            "achievements": [
+                "Посещение"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -393,6 +402,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "17 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -646,6 +665,16 @@
                 "Пунктуальность"
             ],
             "bonus": 19,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "17 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -918,6 +947,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "17 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -1185,6 +1224,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "17 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "17 окт": {
             "achievements": [
                 "Посещение",
@@ -1449,6 +1498,16 @@
                 "Пунктуальность"
             ],
             "bonus": 5,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "17 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
