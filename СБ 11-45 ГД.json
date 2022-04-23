@@ -1513,6 +1513,15 @@
             "notes": "",
             "reprimands": 0
         },
+        "16 апр": {
+            "achievements": [
+                "Работа на занятии"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "16 окт": {
             "achievements": [
                 "Посещение",
@@ -2148,6 +2157,15 @@
             ],
             "bonus": 14,
             "extra": 16,
+            "notes": "",
+            "reprimands": 0
+        },
+        "16 апр": {
+            "achievements": [
+                "Работа на занятии"
+            ],
+            "bonus": 2,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
