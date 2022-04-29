@@ -120,6 +120,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "paid": 0
     },
     "Борисов Андрей": {
@@ -152,6 +162,16 @@
                 "Посещение",
                 "Работа на занятии",
                 "Выполнение основных заданий"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
             ],
             "bonus": 0,
             "extra": 0,
@@ -268,6 +288,16 @@
                 "Работа на занятии"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -399,6 +429,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "paid": 0
     },
     "Еланцев Денис": {
@@ -513,6 +553,15 @@
                 "Работа на занятии"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -637,6 +686,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "paid": 0
     },
     "Кривопустов Данил": {
@@ -747,6 +806,17 @@
                 "Работа на занятии"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Помощь нуждающимся"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -885,6 +955,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -1031,6 +1111,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "paid": 0
     },
     "Финк Марк": {
@@ -1139,6 +1229,16 @@
                 "Турбо режим"
             ],
             "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "29 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
