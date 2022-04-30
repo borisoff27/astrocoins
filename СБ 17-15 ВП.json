@@ -436,6 +436,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "30 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "30 окт": {
             "achievements": [
                 "Посещение",
@@ -803,6 +813,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "30 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "30 окт": {
             "achievements": [
                 "Посещение",
@@ -1097,6 +1117,16 @@
             "reprimands": 0
         },
         "29 янв": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "30 апр": {
             "achievements": [
                 "Посещение",
                 "Пунктуальность"
@@ -1769,6 +1799,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "30 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "30 окт": {
             "achievements": [
                 "Посещение",
@@ -2117,6 +2157,16 @@
                 "Посещение"
             ],
             "bonus": 3,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "30 апр": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
