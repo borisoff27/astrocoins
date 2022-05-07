@@ -2492,6 +2492,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "30 апр": {
+            "achievements": [
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 2,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "30 окт": {
             "achievements": [
                 "Посещение",
