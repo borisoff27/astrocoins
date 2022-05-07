@@ -192,7 +192,7 @@ for d in dates.keys():
 
 
 # дополнительные дни вне расписания
-# dates["СБ"].append("1 мая д.")
+dates["СБ"].append("7 мая д.")
 # dates["ВС"].append("3 мая д.")
 # dates["СБ"].append("8 мая д.")
 # dates["ВС"].append("10 мая д.")
