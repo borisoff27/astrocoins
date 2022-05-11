@@ -415,6 +415,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "14 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "15 янв": {
             "achievements": [
                 "Посещение",
