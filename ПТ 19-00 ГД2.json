@@ -181,6 +181,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "13 май": {
+            "achievements": [
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 2,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "15 апр": {
             "achievements": [
                 "Посещение",
