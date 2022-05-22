@@ -106,6 +106,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "22 апр": {
             "achievements": [
                 "Посещение",
@@ -201,6 +211,18 @@
             "bonus": 0,
             "extra": 0,
             "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Турбо режим"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "Скинуть проект",
             "reprimands": 0
         },
         "22 апр": {
@@ -326,6 +348,16 @@
             ],
             "bonus": 2,
             "extra": 27,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -480,6 +512,16 @@
             ],
             "bonus": 1,
             "extra": 45,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -643,6 +685,16 @@
             "notes": "",
             "reprimands": 1
         },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "22 апр": {
             "achievements": [],
             "bonus": 0,
@@ -791,6 +843,16 @@
             "notes": "",
             "reprimands": 1
         },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "22 апр": {
             "achievements": [
                 "Посещение",
@@ -938,6 +1000,16 @@
             ],
             "bonus": 1,
             "extra": 4,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -1103,6 +1175,18 @@
             ],
             "bonus": 2,
             "extra": 23,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 1,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
@@ -1282,6 +1366,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "22 апр": {
             "achievements": [
                 "Посещение",
@@ -1430,6 +1524,16 @@
             ],
             "bonus": 1,
             "extra": 4,
+            "notes": "",
+            "reprimands": 0
+        },
+        "20 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
             "notes": "",
             "reprimands": 0
         },
