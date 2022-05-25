@@ -219,6 +219,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "18 май": {
+            "achievements": [
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 3,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "20 апр": {
             "achievements": [
                 "Посещение",
@@ -280,6 +290,17 @@
         "24 ноя": {
             "achievements": [],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -613,6 +634,17 @@
                 "Турбо режим"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -989,6 +1021,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "26 янв": {
             "achievements": [
                 "Работа на занятии",
@@ -1343,6 +1386,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "26 янв": {
             "achievements": [
                 "Посещение",
@@ -1675,6 +1729,17 @@
                 "Турбо режим"
             ],
             "bonus": 3,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -2032,6 +2097,17 @@
                 "Турбо режим"
             ],
             "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "25 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
             "extra": 0,
             "notes": "",
             "reprimands": 0
