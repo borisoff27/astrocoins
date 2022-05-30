@@ -262,6 +262,17 @@
             "notes": "",
             "reprimands": 0
         },
+        "27 май": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии"
+            ],
+            "bonus": 1,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "29 апр": {
             "achievements": [
                 "Посещение",
