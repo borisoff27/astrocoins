@@ -2,6 +2,8 @@
 # pyinstaller --onefile --icon=source/ico.ico --noconsole --name "Астрокоины" source/main.py
 
 
+
+
 """
 Доработки:
 !! Создать кнопку добавляения учеников без нажатия на сохранение (множественное добавление)
