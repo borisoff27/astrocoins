@@ -195,7 +195,7 @@ for d in dates.keys():
 dates["СБ"].append("7 мая д.")
 dates["ЧТ"].append("28 мая д.")
 dates["ЧТ"].append("28 мая д2.")
-# dates["СБ"].append("8 мая д.")
+dates["СР"].append("1 июн д.")
 # dates["ВС"].append("10 мая д.")
 # dates["ВС"].append("16 мая д.")
 # dates["СБ"].append("22 мая д.")
