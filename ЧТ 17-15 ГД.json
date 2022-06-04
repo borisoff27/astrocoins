@@ -74,6 +74,18 @@
             "notes": "",
             "reprimands": 0
         },
+        "09 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 6,
+            "extra": 0,
+            "notes": "Очень сильно сматерился. Дважды",
+            "reprimands": 2
+        },
         "10 мар": {
             "achievements": [
                 "Посещение",
@@ -205,7 +217,7 @@
             "bonus": 12,
             "extra": 0,
             "notes": "",
-            "reprimands": 1
+            "reprimands": 2
         },
         "20 янв": {
             "achievements": [
@@ -228,7 +240,7 @@
             "bonus": 10,
             "extra": 0,
             "notes": "",
-            "reprimands": 1
+            "reprimands": 2
         },
         "21 окт": {
             "achievements": [
@@ -778,6 +790,18 @@
             "notes": "",
             "reprimands": 0
         },
+        "09 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 6,
+            "extra": 1,
+            "notes": "",
+            "reprimands": 0
+        },
         "10 мар": {
             "achievements": [
                 "Посещение",
@@ -1067,6 +1091,17 @@
             ],
             "bonus": 5,
             "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "09 июн": {
+            "achievements": [
+                "Посещение",
+                "Работа на занятии",
+                "Выполнение основных заданий"
+            ],
+            "bonus": 6,
+            "extra": 1,
             "notes": "",
             "reprimands": 0
         },

@@ -187,7 +187,7 @@ for d in dates.keys():
     days = []
     _day = start_day
     # while _day.month() > 1: # > 1 - до НГ, < 6 - после НГ
-    while _day.month() < 6:  # > 1 - до НГ, < 6 - после НГ
+    while _day.month() <= 6:  # > 1 - до НГ, < 6 - после НГ
         days.append(_day.toString("dd MMM"))
         _day = _day.addDays(7)
     dates[d] += days
@@ -200,8 +200,8 @@ dates["ЧТ"].append("28 мая д.")
 dates["ЧТ"].append("28 мая д2.")
 dates["СР"].append("1 июн д.")
 dates["ПТ"].append("3 июн д.")
-# dates["ВС"].append("16 мая д.")
-# dates["СБ"].append("22 мая д.")
+dates["СБ"].append("4 июн д.")
+dates["ВС"].append("4 июн д.")
 # dates["ВС"].append("23 мая д.")
 # dates["ВС"].append("30 мая д.")
 
