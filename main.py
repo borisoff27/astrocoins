@@ -202,8 +202,8 @@ dates["СР"].append("1 июн д.")
 dates["ПТ"].append("3 июн д.")
 dates["СБ"].append("4 июн д.")
 dates["ВС"].append("4 июн д.")
-# dates["ВС"].append("23 мая д.")
-# dates["ВС"].append("30 мая д.")
+dates["СБ"].append("5 июн д1.")
+dates["СБ"].append("5 июн д2.")
 
 
 # отступ вначале ячейки таблицы

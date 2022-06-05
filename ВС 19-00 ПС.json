@@ -19,6 +19,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "06 мар": {
             "achievements": [
                 "Посещение",
@@ -363,6 +373,16 @@
                 "Турбо режим"
             ],
             "bonus": 10,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "05 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -724,6 +744,16 @@
             "notes": "",
             "reprimands": 0
         },
+        "05 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
         "06 мар": {
             "achievements": [
                 "Посещение",
@@ -1049,6 +1079,16 @@
                 "Выполнение основных заданий"
             ],
             "bonus": 7,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "05 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
@@ -1739,6 +1779,16 @@
                 "Турбо режим"
             ],
             "bonus": 10,
+            "extra": 0,
+            "notes": "",
+            "reprimands": 0
+        },
+        "05 июн": {
+            "achievements": [
+                "Посещение",
+                "Пунктуальность"
+            ],
+            "bonus": 0,
             "extra": 0,
             "notes": "",
             "reprimands": 0
